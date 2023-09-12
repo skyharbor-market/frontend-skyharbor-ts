@@ -29,12 +29,45 @@ export const CHECK_MINT_ADDRESS = gql`
 `;
 
 export const GET_NFTS = gql`
-  query GetNFTs($limit: Int, $offset: Int) {
-    nfts(limit: $limit, offset: $offset, order_by: { created_at: desc }) {
-      id
-      title
-      image_url
-      // Add any other fields you need
+  query getMarketplaceNFTs($limit: Int, $offset: Int) {
+    sales(
+      where: {
+        _and: {
+          status: { _eq: "active" }
+          token: { token_collection: { verified: { _eq: true } } }
+        }
+      }
+      limit: $limit
+      offset: $offset
+      order_by: { list_time: desc }
+    ) {
+      token_id
+      box_id
+      box_json
+      completion_time
+      sales_address {
+        address
+      }
+      nerg_sale_value
+      seller_address
+      buyer_address
+      spent_tx
+      currency
+      list_time
+      token {
+        nft_name
+        nft_desc
+        royalty_int
+        royalty_address
+        ipfs_art_hash
+        ipfs_art_url
+        nft_type
+        token_collection {
+          name
+          sys_name
+          verified
+        }
+      }
     }
   }
 `;

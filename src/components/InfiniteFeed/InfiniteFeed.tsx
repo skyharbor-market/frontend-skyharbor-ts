@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useQuery } from "@apollo/client";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { GET_NFTS } from "@/lib/gqlQueries";
+import { convertGQLObject } from "@/ergofunctions/helpers";
+import NFTCard from "../NFTCard/NFTCard";
 
 const InfiniteNFTFeed = () => {
   const [hasMore, setHasMore] = useState(true);
@@ -12,22 +14,22 @@ const InfiniteNFTFeed = () => {
     notifyOnNetworkStatusChange: true,
   });
 
-  if (loading) return <p>Loading...</p>;
+  if (loading && !data?.sales) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
   return (
     <InfiniteScroll
-      dataLength={data.nfts.length}
+      dataLength={data.sales.length}
       next={() => {
         fetchMore({
           variables: {
-            offset: data.nfts.length,
+            offset: data.sales.length,
           },
           updateQuery: (prev, { fetchMoreResult }) => {
             if (!fetchMoreResult) return prev;
-            if (fetchMoreResult.nfts.length < limit) setHasMore(false);
+            if (fetchMoreResult.sales.length < limit) setHasMore(false);
             return {
-              nfts: [...prev.nfts, ...fetchMoreResult.nfts],
+              sales: [...prev.sales, ...fetchMoreResult.sales],
             };
           },
         });
@@ -35,13 +37,20 @@ const InfiniteNFTFeed = () => {
       hasMore={hasMore}
       loader={<h4>Loading...</h4>}
     >
-      {data.nfts.map((nft) => (
-        <div key={nft.id}>
-          <h2>{nft.title}</h2>
-          <img src={nft.image_url} alt={nft.title} />
-          {/* Render other NFT details here */}
+      {/* <div className="grid grid-cols-4 gap-4"> */}
+      <div className="">
+        <div className="mx-auto max-w-7xl overflow-hidden sm:px-6 lg:px-8">
+          <h2 className="sr-only">NFTs</h2>
+
+          <div className="grid grid-cols-2 border-l border-gray-200 sm:mx-0 md:grid-cols-3 lg:grid-cols-5">
+            {data.sales.map((nft: any) => {
+              const nftObj = convertGQLObject(nft);
+
+              return <NFTCard product={nftObj} key={nftObj.token_id} />;
+            })}
+          </div>
         </div>
-      ))}
+      </div>
     </InfiniteScroll>
   );
 };
