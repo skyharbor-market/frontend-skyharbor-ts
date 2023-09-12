@@ -36,6 +36,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       return;
     });
 
+    // @ts-ignore
     dispatch(setErgPrice(p.data.ergo.usd));
   }
 

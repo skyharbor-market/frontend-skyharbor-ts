@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
 
 const navigation = [
-  { name: "Product", href: "#" },
-  { name: "Features", href: "#" },
-  { name: "Marketplace", href: "#" },
-  { name: "Company", href: "#" },
+  { name: "Marketplace", href: "/marketplace" },
+  { name: "Collections", href: "/collections" },
+  { name: "Activity", href: "/activity" },
+  // { name: "Company", href: "#" },
 ];
 
 interface NavProps {
@@ -34,13 +35,13 @@ export default function Navbar({ setTheme, theme }: NavProps) {
           </a>
           <div className="hidden lg:flex lg:gap-x-12">
             {navigation.map((item) => (
-              <a
+              <Link
                 key={item.name}
                 href={item.href}
                 className="text-sm font-semibold leading-6 "
               >
                 {item.name}
-              </a>
+              </Link>
             ))}
           </div>
         </div>

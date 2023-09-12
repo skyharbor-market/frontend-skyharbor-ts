@@ -71,3 +71,19 @@ export const GET_NFTS = gql`
     }
   }
 `;
+
+export const GET_COLLECTIONS = gql`
+  query getCollections($limit: Int, $offset: Int) {
+    collections(
+      limit: $limit
+      offset: $offset
+      order_by: { addition_time: desc }
+      where: { verified: { _eq: true } }
+    ) {
+      id
+      card_image
+      description
+      name
+    }
+  }
+`;

@@ -12,6 +12,8 @@ module.exports = {
       "media.discordapp.net",
       "skyharbor-storage.fra1.digitaloceanspaces.com",
       "pbs.twimg.com",
+      "i.ibb.co",
+      "i.imgur.com",
     ],
     formats: ["image/avif", "image/webp"],
   },

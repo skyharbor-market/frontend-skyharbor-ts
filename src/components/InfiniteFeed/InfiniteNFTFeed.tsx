@@ -42,7 +42,7 @@ const InfiniteNFTFeed = () => {
         <div className="mx-auto max-w-7xl overflow-hidden sm:px-6 lg:px-8">
           <h2 className="sr-only">NFTs</h2>
 
-          <div className="grid grid-cols-2 border-l border-gray-200 sm:mx-0 md:grid-cols-3 lg:grid-cols-5">
+          <div className="grid grid-cols-2 sm:mx-0 md:grid-cols-3 lg:grid-cols-5 gap-3">
             {data.sales.map((nft: any) => {
               const nftObj = convertGQLObject(nft);
 
