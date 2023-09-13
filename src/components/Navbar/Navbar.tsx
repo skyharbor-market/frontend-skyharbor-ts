@@ -25,14 +25,14 @@ export default function Navbar({ setTheme, theme }: NavProps) {
         aria-label="Global"
       >
         <div className="flex items-center gap-x-12">
-          <a href="#" className="-m-1.5 p-1.5">
+          <Link href="/" className="-m-1.5 p-1.5">
             <span className="sr-only">SkyHarbor</span>
             <img
               className="h-12 w-auto"
               src="assets/images/skyharborlogo.png"
               alt=""
             />
-          </a>
+          </Link>
           <div className="hidden lg:flex lg:gap-x-12">
             {navigation.map((item) => (
               <Link

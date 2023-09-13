@@ -2,7 +2,7 @@ import { Serializer } from "@coinbarn/ergo-ts/dist/serializer";
 import moment from "moment";
 import { Address, AddressKind } from "@coinbarn/ergo-ts/dist/models/address";
 import { boxById, getIssuingBox, txById } from "./explorer";
-import { supportedCurrencies } from "./consts";
+import { supportedCurrencies, SupportedCurrenciesV2 } from "./consts";
 // import { createStandaloneToast } from "@chakra-ui/react"
 // import { theme } from "../components/theme";
 import axios from "axios";
@@ -547,7 +547,7 @@ export function currencyToLong(val, decimal = 9) {
 
 export function longToCurrency(val, decimal = 9, currencyName = null) {
   if (typeof val !== "number") val = parseInt(val);
-  if (currencyName) decimal = supportedCurrencies[currencyName].decimal;
+  if (currencyName) decimal = SupportedCurrenciesV2[currencyName].decimal;
   return val / Math.pow(10, decimal);
 }
 

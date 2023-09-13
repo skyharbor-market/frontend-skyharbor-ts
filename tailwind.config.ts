@@ -15,6 +15,9 @@ const config: Config = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       display: ["group-hover"],
+      boxShadow: {
+        dark: "0px 3px 13px -10px rgba(255, 255, 255, 1)",
+      },
     },
   },
   plugins: [require("@tailwindcss/forms")],

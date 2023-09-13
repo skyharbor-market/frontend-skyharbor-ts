@@ -38,15 +38,15 @@ const InfiniteNFTFeed = () => {
       loader={<h4>Loading...</h4>}
     >
       {/* <div className="grid grid-cols-4 gap-4"> */}
-      <div className="">
-        <div className="mx-auto max-w-7xl overflow-hidden sm:px-6 lg:px-8">
+      <div className="mt-3">
+        <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
           <h2 className="sr-only">NFTs</h2>
 
-          <div className="grid grid-cols-2 sm:mx-0 md:grid-cols-3 lg:grid-cols-5 gap-3">
+          <div className="grid grid-cols-2 sm:mx-0 md:grid-cols-3 lg:grid-cols-5 gap-x-3 gap-y-6">
             {data.sales.map((nft: any) => {
               const nftObj = convertGQLObject(nft);
 
-              return <NFTCard product={nftObj} key={nftObj.token_id} />;
+              return <NFTCard token={nftObj} key={nftObj.token_id} />;
             })}
           </div>
         </div>
