@@ -15,7 +15,10 @@ const NFTCard = ({ token }: Props) => {
 
   return (
     <div className="relative transition-all group h-full overflow-hidden border dark:border-gray-600 rounded-lg shadow-lg dark:shadow-dark bg-white dark:bg-slate-800 scale-100 hover:scale-[1.05]">
-      <div key={token.id} className="group relative h-full ">
+      <div
+        key={token.id}
+        className="transition-all group relative h-full group-hover:-mt-6"
+      >
         <div className="aspect-square overflow-hidden bg-gray-200 group-hover:opacity-90 bg-white cursor-pointer">
           {/* <img
             src={token.ipfs_art_url}
@@ -25,7 +28,7 @@ const NFTCard = ({ token }: Props) => {
           <ArtworkMedia box={token} />
         </div>
         <div className="pb-6 pt-4 text-left p-4">
-          <h3 className="text-sm font-medium text-gray-900 dark:text-gray-200  line-clamp-2">
+          <h3 className="text-sm font-medium text-gray-900 dark:text-gray-200  line-clamp-1 h-6">
             {/* <span aria-hidden="true" className="absolute inset-0" /> */}
             {token.nft_name}
           </h3>
@@ -54,7 +57,7 @@ const NFTCard = ({ token }: Props) => {
       </div>
 
       <div className="absolute transition-all bottom-0 left-0 bg-blue-500 w-full opacity-0 group-hover:opacity-100 cursor-pointer">
-        <button className="p-3 text-center w-full text-white text-white">
+        <button className="p-2 text-center w-full text-white text-white text-sm">
           Buy
         </button>
       </div>
