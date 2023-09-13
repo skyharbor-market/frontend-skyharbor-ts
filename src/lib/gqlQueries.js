@@ -72,6 +72,93 @@ export const GET_NFTS = gql`
   }
 `;
 
+export const GET_ACTIVITY = gql`
+  query getMarketplaceNFTs($limit: Int, $offset: Int) {
+    sales(
+      where: {
+        _and: {
+          status: { _eq: "complete" }
+          token: { token_collection: { verified: { _eq: true } } }
+        }
+      }
+      limit: $limit
+      offset: $offset
+      order_by: { completion_time: desc }
+    ) {
+      token_id
+      box_id
+      box_json
+      completion_time
+      sales_address {
+        address
+      }
+      nerg_sale_value
+      seller_address
+      buyer_address
+      spent_tx
+      currency
+      list_time
+      token {
+        nft_name
+        nft_desc
+        royalty_int
+        royalty_address
+        ipfs_art_hash
+        ipfs_art_url
+        nft_type
+        token_collection {
+          name
+          sys_name
+          verified
+        }
+      }
+    }
+  }
+`;
+
+export const GET_TOP_SALES = gql`
+  query getMarketplaceNFTs {
+    sales(
+      where: {
+        _and: {
+          status: { _eq: "complete" }
+          token: { token_collection: { verified: { _eq: true } } }
+        }
+      }
+      limit: 20
+      offset: 0
+      order_by: { nerg_sale_value: desc }
+    ) {
+      token_id
+      box_id
+      completion_time
+      sales_address {
+        address
+      }
+      nerg_sale_value
+      seller_address
+      buyer_address
+      spent_tx
+      currency
+      list_time
+      token {
+        nft_name
+        nft_desc
+        royalty_int
+        royalty_address
+        ipfs_art_hash
+        ipfs_art_url
+        nft_type
+        token_collection {
+          name
+          sys_name
+          verified
+        }
+      }
+    }
+  }
+`;
+
 export const GET_COLLECTIONS = gql`
   query getCollections($limit: Int, $offset: Int) {
     collections(

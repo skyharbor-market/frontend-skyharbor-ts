@@ -19,9 +19,9 @@ export default function Navbar({ setTheme, theme }: NavProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="text-gray-900 dark:text-gray-200">
+    <header className="text-gray-900 dark:text-gray-200 backdrop-blur sticky top-0 bg-white/70 dark:bg-slate-800/70 z-20">
       <nav
-        className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
+        className="mx-auto flex max-w-7xl items-center justify-between p-3 lg:px-8"
         aria-label="Global"
       >
         <div className="flex items-center gap-x-12">

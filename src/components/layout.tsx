@@ -16,10 +16,12 @@ interface LayoutProps {
 export default function Layout({ children, setTheme, theme }: LayoutProps) {
   return (
     <div
-      className={`bg-white dark:bg-slate-800 dark:text-white ${robotoslab.className}`}
+      className={`bg-white dark:bg-black dark:text-white ${robotoslab.className}`}
     >
       <Navbar setTheme={setTheme} theme={theme} />
-      <main className="min-h-screen mt-8">{children}</main>
+      <main className="min-h-screen max-w-screen-xl px-2 sm:px-6 lg:px-8 mx-auto mt-8">
+        {children}
+      </main>
       <Footer />
     </div>
   );
