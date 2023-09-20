@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import WalletButton from "../WalletButton/WalletButton";
 
 const navigation = [
   { name: "Marketplace", href: "/marketplace" },
@@ -59,12 +60,12 @@ export default function Navbar({ setTheme, theme }: NavProps) {
           </button>
         </div>
         <div className="hidden lg:flex">
-          <a href="#" className="text-sm font-semibold leading-6 ">
-            Log in <span aria-hidden="true">&rarr;</span>
-          </a>
+          <div className="text-sm font-semibold leading-6 ">
+            <WalletButton />
+          </div>
 
           <button
-            className="text-sm font-semibold leading-6 ml-2"
+            className="text-sm font-semibold leading-6 ml-2 w-8"
             onClick={() => {
               console.log("AAAASSS");
               setTheme(theme === "light" ? "dark" : "light");
@@ -115,12 +116,7 @@ export default function Navbar({ setTheme, theme }: NavProps) {
                 ))}
               </div>
               <div className="py-6">
-                <a
-                  href="#"
-                  className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 hover:bg-gray-50"
-                >
-                  Log in
-                </a>
+                <WalletButton />
               </div>
             </div>
           </div>
