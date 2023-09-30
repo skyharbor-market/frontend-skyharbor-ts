@@ -37,7 +37,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     });
 
     // @ts-ignore
-    dispatch(setErgPrice(p.data.ergo.usd));
+    dispatch(setErgPrice(p?.data?.ergo?.usd));
   }
 
   // Light/dark mode

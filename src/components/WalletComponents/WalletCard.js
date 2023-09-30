@@ -169,21 +169,22 @@ export default function WalletCard({
           selected ? "border-2 border-orange-500" : ""
         }`}
       >
-        <Link href={`/token/${box.tokenId}`}>
-          <a className={`${!currentlySelecting ? "" : "pointer-events-none"}`}>
-            <div
-              className={`overflow-hidden rounded-t-lg ${
-                currentlySelecting ? "" : "card-container"
-              }`}
-            >
-              <ArtworkMedia
-                wallet={true}
-                box={box}
-                cloudinary={false}
-                lazyLoad={true}
-              />
-            </div>
-          </a>
+        <Link
+          href={`/token/${box.tokenId}`}
+          className={`${!currentlySelecting ? "" : "pointer-events-none"}`}
+        >
+          <div
+            className={`overflow-hidden rounded-t-lg aspect-square ${
+              currentlySelecting ? "" : "card-container"
+            }`}
+          >
+            <ArtworkMedia
+              wallet={true}
+              box={box}
+              cloudinary={false}
+              // lazyLoad={true}
+            />
+          </div>
         </Link>
         <div
           className={`p-4 rounded-b-lg ${

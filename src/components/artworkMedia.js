@@ -253,7 +253,9 @@ export default function ArtworkMedia({
             >
               <img
                 key={fileSrc}
-                className={`w-full h-full m-auto object-cover ${
+                className={`w-full h-full m-auto ${
+                  ratio === "square" && `object-cover`
+                } ${
                   imgWidth > 200 ? "display-image" : "display-image-pixelated"
                 }`}
                 // layout='fill'
@@ -265,21 +267,22 @@ export default function ArtworkMedia({
                 // }}
                 loading={lazyLoad ? "lazy" : "eager"}
                 alt={box.token_id}
-                transition="opacity .2s"
-                width={"100%"}
-                minW={ratio === "square" ? 0 : 200}
+                // transition="opacity .2s"
+                // minW={ratio === "square" ? 0 : 200}
                 // minW={300}
-                height={"100%"}
-                onClick={() => setIsOpen(true)}
-                m="auto"
-                onError={() => setIsError(true)}
+                // height={"100%"}
+                // onClick={() => setIsOpen(true)}
+                // m="auto"
+                onError={(e) => {
+                  setIsError(true);
+                }}
                 // borderRadius={ratio === "square" ? 0 : 8}
                 overflow="hidden"
-                fallbackSrc="/assets/images/loadinginfinity.svg"
+                // fallbackSrc="/assets/images/loadinginfinity.svg"
                 // className={
                 //   imgWidth > 200 ? "display-image" : "display-image-pixelated"
                 // }
-                objectFit={ratio === "square" ? "cover" : "contain"}
+                // objectFit={ratio === "square" ? "cover" : "contain"}
                 // className="auctionImg"
                 src={fileSrc ? fileSrc : ""}
               />

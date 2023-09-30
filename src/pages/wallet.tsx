@@ -1,4 +1,4 @@
-import React, { Fragment, useRef, useState } from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import Link from "next/link";
@@ -100,6 +100,7 @@ export default function WalletPage() {
     for (let i = 0; i < ids.length; i++) {
       apiCalls.push(decodeArtwork(null, ids[i], true));
     }
+    console.log("apiCalls", apiCalls);
 
     try {
       const res = await Promise.all(apiCalls);
@@ -110,19 +111,23 @@ export default function WalletPage() {
       throw Error("Couldn't get for sale tokens.");
     }
 
+    console.log("decoded", decoded);
+
     for (let d of decoded) {
       // Exit if not mounted
       if (!mounted) {
         return;
       }
-      if (tokenId) {
+      if (d.tokenId) {
         d.amount = amounts[d.tokenId];
       } else {
         d.amount = undefined;
       }
     }
 
-    filteredDecoded = decoded.filter((bx) => bx.isArtwork);
+    const filteredDecoded = decoded.filter((bx) => bx.isArtwork);
+
+    console.log("filteredDecoded", filteredDecoded);
     // Save to redux even if wallet page isnt loaded anymore
     dispatch(setTokens(filteredDecoded));
 
@@ -173,23 +178,39 @@ export default function WalletPage() {
       throw Error("Couldn't get for sale tokens.");
     }
 
-    for (let d of decoded) {
-      // Exit if not mounted
-      if (!mounted) {
-        return;
+    console.log("DECODED", decoded);
+
+    try {
+      for (let d of decoded) {
+        // Exit if not mounted
+        console.log("mounted", mounted);
+
+        // if (!mounted) {
+        //   return;
+        // }
+        if (d.tokenId) {
+          console.log("amounts[d.tokenId]", amounts[d.tokenId]);
+
+          d.amount = amounts[d.tokenId];
+        }
       }
-      d.amount = amounts[d.tokenId];
+    } catch (err) {
+      console.log("SUPER ERROR", err);
     }
+    console.log("d", decoded);
+
     // Save to redux even if wallet page isnt loaded anymore
     const filteredNFTs = decoded.filter((bx) => bx.isArtwork);
 
+    console.log("filteredNFTs", filteredNFTs);
+
     dispatch(setTokens(filteredNFTs));
 
-    if (mounted) {
-      setArtworks(filteredNFTs);
-      setLoading(false);
-      console.log("done.", filteredNFTs);
-    }
+    // if (mounted) {
+    setArtworks(filteredNFTs);
+    setLoading(false);
+    console.log("done.", filteredNFTs);
+    // }
 
     return;
   }
@@ -235,8 +256,6 @@ export default function WalletPage() {
       mounted = false;
     };
   }, [userAddresses]);
-
-  console.log("LOADING", loading);
 
   const renderTabs = () => {
     if (currentTab === "owned") {

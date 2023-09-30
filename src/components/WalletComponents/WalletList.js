@@ -134,6 +134,8 @@ function WalletList({ artworks, tokensLoading }) {
 
     try {
       const res = await client.query({ query: GET_ALL_MINT_ADDRESSES });
+
+      console.log("RESSSSSS", res);
       // const res = await Promise.all(apiCalls);
       // const data = res.map((res) => res.data.sales);
       setMintAddresses(res.data.mint_addresses);
