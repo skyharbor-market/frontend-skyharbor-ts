@@ -30,9 +30,9 @@ import WalletCard from "./WalletCard";
 
 import { useQuery, gql, useApolloClient } from "@apollo/client";
 // import BurnButton from "../ModalComponents/BurnButton";
-// import LoadingCard from "../LoadingCard";
 import { GET_ALL_MINT_ADDRESSES } from "../../lib/gqlQueries";
 import Fade from "../Fade/Fade";
+import LoadingCard from "../NFTCard/LoadingCard";
 
 function WalletList({ artworks, tokensLoading }) {
   let mounted = true;
@@ -187,7 +187,7 @@ function WalletList({ artworks, tokensLoading }) {
 
   return (
     <div>
-      <div mb={8}>
+      <div>
         {/* <InputGroup variant={"filled"} size="lg">
                     <Input isDisabled={tokensLoading} defaultValue={search} onChange={(e)=>setSearch(e.target.value)} placeholder='Search your NFTs' size='lg' />
                     <InputRightElement ><SearchIcon color={"gray.500"} /></InputRightElement>
@@ -210,7 +210,7 @@ function WalletList({ artworks, tokensLoading }) {
       <div>
         {/* {loading && <Text fontSize={"sm"} color="gray.500" mb="4" textAlign={"center"}>Reloading NFTs... {LoadingCount} loaded.</Text>} */}
         {tokensLoading && (
-          <p my="3" textAlign={"center"} color="gray.500">
+          <p className="my-3 text-center text-gray-500">
             Loading NFTs, this may take a while. You can view the{" "}
             <span as="span" fontWeight={"semibold"}>
               For Sale
@@ -226,7 +226,7 @@ function WalletList({ artworks, tokensLoading }) {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
           {tokensLoading
             ? [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((item) => {
-                return <div>t</div>; //<LoadingCard key={item} />;
+                return <LoadingCard key={item} />;
               })
             : filteredArtworks.map((box) => {
                 let verifObject = mintAddresses.find(

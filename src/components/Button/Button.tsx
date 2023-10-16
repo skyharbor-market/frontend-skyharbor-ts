@@ -85,7 +85,7 @@ export const Button: React.FC<ButtonProps> = ({
     buttonColorScheme = "bg-purple-500";
   }
 
-  const classes = `cursor-pointer transition-all ${buttonColorScheme} hover:shadow-lg m-0 py-2 px-6 text-center dark:text-black rounded-3xl inline-block font-bold transition-all ${className}`;
+  const classes = `cursor-pointer transition-all ${buttonColorScheme} hover:shadow-lg m-0 py-2 px-6 text-center dark:text-black rounded-lg inline-block font-semibold transition-all ${className}`;
 
   if (internal && href?.length) {
     return (

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useQuery, gql } from "@apollo/client";
 import { withApollo } from "../../lib/withApollo";
 import NFTCard from "../NFTCard/NFTCard";
-// import LoadingCard from "../LoadingCard";
+import LoadingCard from "../NFTCard/LoadingCard";
 
 const GET_USER_SALES = gql`
   query getUserSales($addresses: [String!]) {
@@ -76,9 +76,9 @@ function UserListedTokens({ addresses }) {
 
   if (loading) {
     return (
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5">
         {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((item) => {
-          return <div></div>; //<LoadingCard key={item} />;
+          return <LoadingCard key={item} />;
         })}
       </div>
     );
@@ -118,7 +118,7 @@ function UserListedTokens({ addresses }) {
 
   return (
     <div mt="4">
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5">
         {data.sales.map((item, index) => {
           const cardItem = {
             token_id: item.token_id,
@@ -146,8 +146,15 @@ function UserListedTokens({ addresses }) {
             collection_sys_name: item.token.token_collection.sys_name,
             verified_collection: item.token.token_collection.verified,
           };
+          console.log("cardItem ", cardItem);
+
           return (
-            <NFTCard key={index} box={cardItem} isOwner={true} showCollection />
+            <NFTCard
+              key={index}
+              token={cardItem}
+              isOwner={true}
+              showCollection
+            />
           );
         })}
       </div>

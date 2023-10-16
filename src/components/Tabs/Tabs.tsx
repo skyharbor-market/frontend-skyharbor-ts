@@ -62,10 +62,11 @@ export default function Tabs({ tabs, setTab, currentTab }: TabsProps) {
                     tab.value == currentTab
                       ? "border-indigo-500 text-indigo-600"
                       : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
-                    "group inline-flex items-center border-b-2 py-4 px-1 text-sm font-medium"
+                    "group inline-flex items-center border-b-2 py-4 px-1 text-sm font-medium cursor-pointer"
                   )}
-                  onChange={() => setTab(tab.value)}
-                  aria-current={tab.current ? "page" : undefined}
+                  // onChange={() => setTab(tab.value)}
+                  onClick={() => setTab(tab.value)}
+                  aria-current={tab.value ? "page" : undefined}
                 >
                   <tab.icon
                     className={classNames(

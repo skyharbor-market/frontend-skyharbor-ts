@@ -3,6 +3,7 @@ import Link from "next/link";
 import { longToCurrency } from "../../ergofunctions/serializer";
 import ArtworkMedia from "../artworkMedia";
 import { addNumberCommas, friendlyAddress } from "../../ergofunctions/helpers";
+import { supportedCurrencies } from "@/ergofunctions/consts";
 // import NFTInfo from "./NFTInfo";
 
 export default function SoldCard({
@@ -16,7 +17,40 @@ export default function SoldCard({
   const date1 = new Date(item.completion_time);
   const diffTime = new Date() - date1;
 
-  // ... (remaining unchanged code) ...
+  // Copy text
+  const handleCopy = (text) => {
+    navigator.clipboard.writeText(text).then(() =>
+      toast({
+        title: "Copied",
+        // description: "We've created your account for you.",
+        position: "top-right",
+        status: "info",
+        duration: 2000,
+        isClosable: true,
+      })
+    );
+  };
+
+  const gotoAddressExplorer = (address) => {
+    window.open(
+      `https://explorer.ergoplatform.com/en/addresses/${address}`,
+      "_blank" // <- This is what makes it open in a new window.
+    );
+  };
+  const gotoTransaction = (txId) => {
+    window.open(
+      `https://explorer.ergoplatform.com/en/transactions/${txId}`,
+      "_blank" // <- This is what makes it open in a new window.
+    );
+  };
+
+  // Get currency information
+  let currencyObject = supportedCurrencies.find(
+    (l) => l.contractAddress === item.sales_address
+  );
+  if (!currencyObject) {
+    currencyObject = supportedCurrencies[0]; // Automatically set to ERG if there is none
+  }
 
   return (
     <Fragment>
@@ -25,16 +59,18 @@ export default function SoldCard({
           <td>
             <div className="flex items-center space-x-2">
               {!noImage && (
-                <div
-                  className="relative w-16 h-16 bg-white rounded overflow-hidden cursor-pointer"
-                  onClick={() => setIsOpen(true)}
-                >
-                  <ArtworkMedia key={item.ipfs_art_url} box={item} small />
+                <div className="p-2">
+                  <div
+                    className="relative w-16 h-16 bg-white rounded overflow-hidden cursor-pointer"
+                    onClick={() => setIsOpen(true)}
+                  >
+                    <ArtworkMedia key={item.ipfs_art_url} box={item} small />
+                  </div>
                 </div>
               )}
               <div>
                 <p
-                  className="truncate w-60 mb-1 font-bold cursor-pointer"
+                  className="truncate w-60 mb-1 font-semibold cursor-pointer"
                   onClick={() => setIsOpen(true)}
                 >
                   {item.nft_name}
@@ -42,9 +78,7 @@ export default function SoldCard({
 
                 {!noCollection && (
                   <Link href={`/collection/${item.collection_sys_name}`}>
-                    <a className="text-blue-400 font-semibold text-sm">
-                      {item.collection_name}
-                    </a>
+                    {item.collection_name}
                   </Link>
                 )}
               </div>
@@ -52,7 +86,7 @@ export default function SoldCard({
           </td>
         )}
         <td>
-          <p className="font-bold">
+          <p className="font-semibold">
             {addNumberCommas(
               Math.round(
                 longToCurrency(
@@ -83,7 +117,7 @@ export default function SoldCard({
         <td className="font-semibold">
           <div className="flex justify-between">
             <p>{msToTime(diffTime)} ago</p>
-            <svg
+            {/* <svg
               className="h-6 w-6 text-blue-400 cursor-pointer"
               onClick={() => gotoTransaction(item.spent_tx)}
               xmlns="http://www.w3.org/2000/svg"
@@ -103,7 +137,7 @@ export default function SoldCard({
                 strokeWidth={2}
                 d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
               />
-            </svg>
+            </svg> */}
           </div>
 
           {/* You might need a Tailwind modal library or create your own modal with Tailwind styles */}

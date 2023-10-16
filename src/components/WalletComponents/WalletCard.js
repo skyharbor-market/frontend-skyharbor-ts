@@ -20,6 +20,7 @@ import { boxById, getBalance } from "../../ergofunctions/explorer";
 import { supportedCurrencies } from "../../ergofunctions/consts";
 import { currencyToLong } from "../../ergofunctions/serializer";
 import { FaCheckCircle } from "react-icons/fa";
+import SellModal from "./SellModal/SellModal";
 
 export default function WalletCard({
   box,
@@ -39,6 +40,8 @@ export default function WalletCard({
   const [artDetail, setArtDetails] = React.useState(false);
   const [saleId, setSaleId] = React.useState(null);
   const [loadingRoyalty, setLoadingRoyalty] = React.useState(false);
+
+  const [sellModalOpen, setSellModalOpen] = useState(false);
 
   // Change modals
   const handleSellButton = async (tokenId, nft_name, royalty, artist) => {
@@ -75,7 +78,7 @@ export default function WalletCard({
       artist: royaltyInfo.artist ? royaltyInfo.artist : null,
     });
     // onOpen();
-    setOpen(true);
+    setSellModalOpen(true);
   };
   const closeModal = () => {
     // setModalType("info");
@@ -162,7 +165,7 @@ export default function WalletCard({
         currentlySelecting ? "cursor-pointer" : ""
       } max-w-[350px] min-w-[200px] transform transition-transform duration-200 ${
         selected ? "scale-95" : ""
-      } hover:opacity-70`}
+      }`}
     >
       <div
         className={`shadow-lg rounded-lg ${
@@ -191,7 +194,7 @@ export default function WalletCard({
             colorMode === "light" ? "" : "bg-black opacity-40"
           } border-t border-gray-200`}
         >
-          {verified ? (
+          {/* {verified ? (
             <div className="collection-name">
               <p
                 overflow={"hidden"}
@@ -232,7 +235,7 @@ export default function WalletCard({
                 Unverified
               </p>
             </div>
-          )}
+          )} */}
 
           {/* NFT Name */}
           <p
@@ -295,6 +298,12 @@ export default function WalletCard({
       {/* --------MODAL------- */}
 
       {/* </div> */}
+      <SellModal
+        open={sellModalOpen}
+        onClose={() => {
+          setSellModalOpen(false);
+        }}
+      />
 
       {/* --------MODAL------- */}
 

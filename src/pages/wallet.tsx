@@ -28,7 +28,9 @@ import WalletList from "../components/WalletComponents/WalletList";
 import { motion } from "framer-motion";
 import UserActivity from "../components/WalletComponents/UserActivity";
 import Tabs from "@/components/Tabs/Tabs";
-import { FaChevronDown, FaChevronUp, FaUserMd } from "react-icons/fa";
+import { FaChevronDown, FaChevronUp, FaImage, FaUserMd } from "react-icons/fa";
+import { ImPriceTag } from "react-icons/im";
+import { MdOutlineSell, MdSell } from "react-icons/Md";
 
 export default function WalletPage() {
   let mounted = true;
@@ -166,7 +168,7 @@ export default function WalletPage() {
     let apiCalls = [];
 
     for (let i = 0; i < ids.length; i++) {
-      apiCalls.push(decodeArtwork(null, ids[i], true));
+      apiCalls.push(decodeArtwork(null, ids[i], false));
     }
 
     try {
@@ -260,8 +262,7 @@ export default function WalletPage() {
   const renderTabs = () => {
     if (currentTab === "owned") {
       return (
-        <div mb={8}>
-          <p>test </p>
+        <div className="mb-8">
           {!walletSaved && (
             <strong
               style={{
@@ -289,11 +290,54 @@ export default function WalletPage() {
           <WalletList artworks={artworks} tokensLoading={loading} />
         </div>
       );
-    } else if (false) {
+    } else if (currentTab === "for_sale") {
       return <UserListedTokens addresses={userAddresses} />;
     } else {
       return <UserActivity addresses={userAddresses} />;
     }
+  };
+
+  const renderWalletAddresses = () => {
+    return (
+      <div>
+        <p className="mb-4">Your Wallet</p>
+        {userAddresses && (
+          <Fragment>
+            <div
+              className="flex flex-row items-center"
+              mb="2"
+              _hover={{ opacity: 0.5 }}
+              transition="opacity .2s"
+              cursor={"pointer"}
+              onClick={() => setOpenAddresses(!openAddresses)}
+            >
+              <p
+                className="bg-gray-600 rounded-full"
+                borderRadius={"full"}
+                py={1}
+                px={2}
+              >
+                Address: {friendlyAddress(userAddresses[0], 6)}
+              </p>{" "}
+              {openAddresses ? <FaChevronUp /> : <FaChevronDown />}
+            </div>
+            {/* <Collapse in={openAddresses}>
+              {userAddresses.map((item, index) => {
+                if (index === 0) {
+                  return;
+                }
+
+                return (
+                  <Badge key={index} m="1" borderRadius={"full"} py={1} px={2}>
+                    Address: {friendlyAddress(item, 6)}
+                  </Badge>
+                );
+              })}
+            </Collapse> */}
+          </Fragment>
+        )}
+      </div>
+    );
   };
 
   return (
@@ -334,55 +378,22 @@ export default function WalletPage() {
         />
       </Head>
 
-      <div mb="6">
-        <p mb="4">Your Wallet</p>
-        {userAddresses && (
-          <Fragment>
-            <div
-              className="flex flex-row items-center"
-              mb="2"
-              _hover={{ opacity: 0.5 }}
-              transition="opacity .2s"
-              cursor={"pointer"}
-              onClick={() => setOpenAddresses(!openAddresses)}
-            >
-              <p
-                className="bg-gray-600 rounded-full"
-                borderRadius={"full"}
-                py={1}
-                px={2}
-              >
-                Address: {friendlyAddress(userAddresses[0], 6)}
-              </p>{" "}
-              {openAddresses ? <FaChevronUp /> : <FaChevronDown />}
-            </div>
-            {/* <Collapse in={openAddresses}>
-              {userAddresses.map((item, index) => {
-                if (index === 0) {
-                  return;
-                }
-
-                return (
-                  <Badge key={index} m="1" borderRadius={"full"} py={1} px={2}>
-                    Address: {friendlyAddress(item, 6)}
-                  </Badge>
-                );
-              })}
-            </Collapse> */}
-          </Fragment>
-        )}
-      </div>
+      {/* <div className="mb-6">{renderWalletAddresses()}</div> */}
       <hr />
 
       <Tabs
         tabs={[
-          { name: "Owned", value: "owned", icon: FaUserMd },
-          { name: "For Sale", value: "for_sale", icon: FaUserMd },
-          { name: "Sold", value: "sold", icon: FaUserMd },
+          { name: "Owned", value: "owned", icon: FaImage },
+          { name: "For Sale", value: "for_sale", icon: MdOutlineSell },
+          { name: "Sold", value: "sold", icon: MdSell },
         ]}
         currentTab={currentTab}
+        setTab={(val) => {
+          console.log("VAL", val);
+          setCurrentTab(val);
+        }}
       />
-      {renderTabs()}
+      <div className="mt-6">{renderTabs()}</div>
     </div>
   );
 }

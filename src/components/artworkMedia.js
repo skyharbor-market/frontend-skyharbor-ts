@@ -158,6 +158,10 @@ export default function ArtworkMedia({
     };
   }, []);
 
+  useEffect(() => {
+    setIsError(false);
+  }, [box]);
+
   if (tokenType === "audio") {
     return (
       <div className="max-w-40 m-auto flex flex-col">
@@ -330,7 +334,7 @@ export default function ArtworkMedia({
           //     }
           // />
 
-          <div height={"100%"}>
+          <div className="flex items-center text-center">
             {/* <Text
                   h={200}
                   fontWeight={"semibold"}
@@ -346,7 +350,7 @@ export default function ArtworkMedia({
               label="File couldn't load. Refresh or view token page to see NFT."
               shouldWrapChildren
             > */}
-            <MdOutlineImageNotSupported />
+            <MdOutlineImageNotSupported className="w-[70%] h-[70%]" />
             {/* </Tooltip> */}
 
             {/* <br />
