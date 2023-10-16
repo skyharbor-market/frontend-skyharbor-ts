@@ -4,13 +4,21 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { GET_NFTS } from "@/lib/gqlQueries";
 import { convertGQLObject } from "@/ergofunctions/helpers";
 import NFTCard from "../NFTCard/NFTCard";
+import { useSelector } from "react-redux";
+import { DocumentNode } from "graphql";
 
-const InfiniteNFTFeed = () => {
+interface InfiniteNFTFeedProps {
+  gqlQuery: DocumentNode;
+  collection?: string;
+}
+
+const InfiniteNFTFeed = ({ gqlQuery, collection }: InfiniteNFTFeedProps) => {
   const [hasMore, setHasMore] = useState(true);
   const limit = 10; // Number of NFTs to load each time
+  const userAddresses = useSelector((state) => state.wallet.addresses);
 
-  const { data, loading, error, fetchMore } = useQuery(GET_NFTS, {
-    variables: { limit, offset: 0 },
+  const { data, loading, error, fetchMore } = useQuery(gqlQuery, {
+    variables: { limit, offset: 0, collection },
     notifyOnNetworkStatusChange: true,
   });
 
@@ -46,7 +54,17 @@ const InfiniteNFTFeed = () => {
             {data.sales.map((nft: any) => {
               const nftObj = convertGQLObject(nft);
 
-              return <NFTCard token={nftObj} key={nftObj.token_id} />;
+              return (
+                <NFTCard
+                  token={nftObj}
+                  key={nftObj.token_id}
+                  isOwner={
+                    userAddresses
+                      ? userAddresses.includes(nftObj.seller_address)
+                      : false
+                  }
+                />
+              );
             })}
           </div>
         </div>

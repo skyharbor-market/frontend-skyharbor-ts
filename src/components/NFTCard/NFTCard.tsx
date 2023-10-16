@@ -3,12 +3,14 @@ import { longToCurrency } from "@/ergofunctions/serializer";
 import { StarIcon } from "@heroicons/react/24/outline";
 import React from "react";
 import ArtworkMedia from "../artworkMedia";
+import BuyNFTButton from "../BuyNFTButton/BuyNFTButton";
 
 type Props = {
   token: any;
+  isOwner: boolean;
 };
 
-const NFTCard = ({ token }: Props) => {
+const NFTCard = ({ token, isOwner }: Props) => {
   function classNames(...classes: any) {
     return classes.filter(Boolean).join(" ");
   }
@@ -33,21 +35,6 @@ const NFTCard = ({ token }: Props) => {
             {token?.nft_name}
           </h3>
           <div className="mt-2 flex flex-col">
-            {/* <p className="sr-only">{token.rating} out of 5 stars</p> */}
-            {/* <div className="flex items-center">
-              {[0, 1, 2, 3, 4].map((rating) => (
-                <StarIcon
-                  key={rating}
-                  className={classNames(
-                    token.rating > rating
-                      ? "text-yellow-400"
-                      : "text-gray-200",
-                    "h-5 w-5 flex-shrink-0"
-                  )}
-                  aria-hidden="true"
-                />
-              ))}
-            </div> */}
             <p className="mt-1 text-sm text-gray-500 dark:text-gray-300 line-clamp-1">
               {longToCurrency(
                 token?.nerg_sale_value,
@@ -61,9 +48,25 @@ const NFTCard = ({ token }: Props) => {
       </div>
 
       <div className="absolute transition-all bottom-0 left-0 bg-blue-500 w-full opacity-0 group-hover:opacity-100 cursor-pointer">
-        <button className="p-2 text-center w-full text-white text-white text-sm">
-          Buy
-        </button>
+        <BuyNFTButton
+          ownedNFT={false}
+          box={token}
+          buyButton={
+            <button className="p-2 text-center w-full text-white text-sm">
+              Buy
+            </button>
+          }
+          sellButton={
+            <button className="p-2 text-center w-full bg-red-400 text-white text-sm">
+              Edit
+            </button>
+          }
+          loadingButton={
+            <button className="p-2 text-center w-full bg-white text-black  text-sm">
+              Loading...
+            </button>
+          }
+        />
       </div>
     </div>
   );

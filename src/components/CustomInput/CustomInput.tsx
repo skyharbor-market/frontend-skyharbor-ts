@@ -7,7 +7,7 @@ import React, {
 import { MdError } from "react-icons/md";
 
 interface CustomInputProps {
-  value?: string;
+  value?: string | number;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   leftIcon?: ReactElement<any, string | JSXElementConstructor<any>>;

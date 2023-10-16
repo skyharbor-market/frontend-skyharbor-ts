@@ -11,6 +11,8 @@ import { Analytics } from "@vercel/analytics/react";
 import Layout from "@/components/layout";
 import { ApolloProvider } from "@apollo/client";
 import createApolloClient from "@/lib/apolloClient";
+import { resolveValue, Toaster, ToastIcon } from "react-hot-toast";
+import { Transition } from "@headlessui/react";
 
 const client = createApolloClient();
 
@@ -21,6 +23,37 @@ export const store = configureStore({
     market: marketReducer,
   },
 });
+
+const TailwindToaster = () => {
+  return (
+    <Toaster
+      position="bottom-center"
+      toastOptions={{
+        success: {},
+        error: {},
+      }}
+    >
+      {(t) => (
+        <Transition
+          appear
+          show={t.visible}
+          className={`transform p-4 flex rounded shadow-lg ${
+            t.type === "error" ? "bg-red-400 text-white" : ""
+          } ${t.type === "success" ? "bg-white" : ""}`}
+          enter="transition-all duration-150"
+          enterFrom="opacity-0 scale-50"
+          enterTo="opacity-100 scale-100"
+          leave="transition-all duration-150"
+          leaveFrom="opacity-100 scale-100"
+          leaveTo="opacity-0 scale-75"
+        >
+          <ToastIcon toast={t} />
+          <p className={`px-2 mb-0`}>{resolveValue(t.message)}</p>
+        </Transition>
+      )}
+    </Toaster>
+  );
+};
 
 function MyApp({ Component, pageProps }: AppProps) {
   const dispatch = useDispatch();
@@ -75,6 +108,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           </button> */}
           <Component {...pageProps} />
           {/* <Analytics /> */}
+          <TailwindToaster />
         </Layout>
       </ApolloProvider>
     </Provider>

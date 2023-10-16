@@ -171,6 +171,51 @@ export const GET_COLLECTIONS = gql`
       card_image
       description
       name
+      sys_name
+    }
+  }
+`;
+
+export const GET_COLLECTION_NFTS = gql`
+  query getMarketplaceNFTs($limit: Int, $offset: Int, $collection: String) {
+    sales(
+      where: {
+        _and: {
+          status: { _eq: "active" }
+          token: { token_collection: { sys_name: { _eq: $collection } } }
+        }
+      }
+      limit: $limit
+      offset: $offset
+      order_by: { list_time: desc }
+    ) {
+      token_id
+      box_id
+      box_json
+      completion_time
+      sales_address {
+        address
+      }
+      nerg_sale_value
+      seller_address
+      buyer_address
+      spent_tx
+      currency
+      list_time
+      token {
+        nft_name
+        nft_desc
+        royalty_int
+        royalty_address
+        ipfs_art_hash
+        ipfs_art_url
+        nft_type
+        token_collection {
+          name
+          sys_name
+          verified
+        }
+      }
     }
   }
 `;

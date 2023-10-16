@@ -303,6 +303,11 @@ export default function WalletCard({
         onClose={() => {
           setSellModalOpen(false);
         }}
+        tokenId={selectedToken.tokenId}
+        token={selectedToken}
+        createSaleTx={createSaleTx}
+        royalty={selectedToken.royalty}
+        royalty_address={selectedToken.artist}
       />
 
       {/* --------MODAL------- */}
