@@ -1,7 +1,9 @@
 import { SupportedCurrenciesV2 } from "@/ergofunctions/consts";
 import { longToCurrency } from "@/ergofunctions/serializer";
 import { StarIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
 import React from "react";
+import { FaCheckCircle } from "react-icons/fa";
 import ArtworkMedia from "../artworkMedia";
 import BuyNFTButton from "../BuyNFTButton/BuyNFTButton";
 
@@ -34,6 +36,17 @@ const NFTCard = ({ token, isOwner }: Props) => {
             {/* <span aria-hidden="true" className="absolute inset-0" /> */}
             {token?.nft_name}
           </h3>
+          <Link href={`/collection/${token?.collection_sys_name}`}>
+            <div className="flex flex-row items-center hover:opacity-60 transition-all">
+              <FaCheckCircle className="text-blue-400 mr-1" />
+
+              <p className="text-sm -mb-[2px] text-gray-900 dark:text-gray-200 line-clamp-1 h-6 ">
+                {/* <span aria-hidden="true" className="absolute inset-0" /> */}
+                {token?.collection_name}
+              </p>
+            </div>
+          </Link>
+
           <div className="mt-2 flex flex-col">
             <p className="mt-1 text-sm text-gray-500 dark:text-gray-300 line-clamp-1">
               {longToCurrency(
