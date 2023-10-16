@@ -8,6 +8,7 @@ import {
   MdOutlineImageNotSupported,
 } from "react-icons/md";
 import { cloudinaryOptimizerUrl, ipfsGateway } from "../ergofunctions/consts";
+import LoadingCircle from "./LoadingCircle/LoadingCircle";
 // import Lightbox from "react-image-lightbox";
 // import ImgixClient from "@imgix/js-core";
 
@@ -234,17 +235,28 @@ export default function ArtworkMedia({
     return (
       <div className="w-full h-full">
         {!isLoaded && !isError && (
-          <img
-            // layout='fill'
-            // width="600px" height="600px"
-            width={"100%"}
-            maxHeight={maxHeight ? maxHeight : "inherit"}
-            placeholder="/assets/images/loadinginfinity.svg"
-            objectFit={ratio === "square" ? "cover" : "contain"}
-            // style={{objectFit: !objectFitStyle ? 'cover' : objectFitStyle}}
-            // className="image"
-            src="/assets/images/loadinginfinity.svg"
-          />
+          // <img
+          //   // layout='fill'
+          //   // width="600px" height="600px"
+          //   width={"100%"}
+          //   maxHeight={maxHeight ? maxHeight : "inherit"}
+          //   placeholder="/assets/images/loadinginfinity.svg"
+          //   objectFit={ratio === "square" ? "cover" : "contain"}
+          //   // style={{objectFit: !objectFitStyle ? 'cover' : objectFitStyle}}
+          //   // className="image"
+          //   src="/assets/images/loadinginfinity.svg"
+          // />
+          // <div className="flex h-full w-full items-center justify-center p-[30%]">
+          //   <LoadingCircle />
+          // </div>
+          <div className="animate-pulse">
+            <div className="aspect-square">
+              <div className="flex h-full w-full items-center justify-center">
+                <LoadingCircle />
+              </div>
+              <div className="rounded-t-md bg-slate-700 w-full h-full"></div>
+            </div>
+          </div>
         )}
         {
           !isError && (
@@ -334,7 +346,7 @@ export default function ArtworkMedia({
           //     }
           // />
 
-          <div className="flex items-center text-center">
+          <div className="flex h-full items-center justify-center text-center">
             {/* <Text
                   h={200}
                   fontWeight={"semibold"}
