@@ -38,7 +38,6 @@ export default function ArtworkMedia({
   const [imgWidth, setImgWidth] = useState(0);
   const [isError, setIsError] = useState(false);
   const [isLoaded, setIsLoaded] = React.useState(false);
-  const [isOpen, setIsOpen] = React.useState(false);
   const [fileSrc, setFileSrc] = React.useState("");
 
   // const { colorMode, toggleColorMode } = useColorMode();
@@ -94,7 +93,6 @@ export default function ArtworkMedia({
       return url.replace(ipfsPrefix, "https://cloudflare-ipfs.com/ipfs/");
     }
   }
-
   useEffect(() => {
     mounted = true;
 

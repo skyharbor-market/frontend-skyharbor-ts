@@ -51,13 +51,13 @@ const InfiniteNFTFeed = ({ gqlQuery, collection }: InfiniteNFTFeedProps) => {
           <h2 className="sr-only">NFTs</h2>
 
           <div className="grid grid-cols-2 sm:mx-0 md:grid-cols-4 lg:grid-cols-6 gap-x-3 gap-y-6 pb-8">
-            {data.sales.map((nft: any) => {
+            {data.sales.map((nft: any, index: number) => {
               const nftObj = convertGQLObject(nft);
 
               return (
                 <NFTCard
                   token={nftObj}
-                  key={nftObj.token_id}
+                  key={`${nftObj.token_id}-${nftObj.box_id}`}
                   isOwner={
                     userAddresses
                       ? userAddresses.includes(nftObj.seller_address)
