@@ -176,6 +176,25 @@ export const GET_COLLECTIONS = gql`
   }
 `;
 
+export const GET_COLLECTION_INFO = gql`
+  query getCollections($collection: String) {
+    collections(limit: 1, where: { sys_name: { _eq: $collection } }) {
+      id
+      card_image
+      description
+      mint_addresses {
+        address
+        id
+      }
+      name
+      verified
+      discord_link
+      website_link
+      twitter_link
+    }
+  }
+`;
+
 export const GET_COLLECTION_NFTS = gql`
   query getMarketplaceNFTs($limit: Int, $offset: Int, $collection: String) {
     sales(

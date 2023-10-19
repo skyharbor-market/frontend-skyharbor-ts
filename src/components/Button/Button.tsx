@@ -15,6 +15,7 @@ interface ButtonProps {
   internal?: boolean;
   href?: string;
   className?: string;
+  variant?: "primary" | "outline";
   disabled?: boolean;
   loading?: boolean;
   animate?: boolean;
@@ -38,6 +39,7 @@ export const Button: React.FC<ButtonProps> = ({
   href,
   internal = true,
   buttonStyle = "secondary",
+  variant = "primary",
   animate = false,
   icon = "",
   children,
@@ -62,7 +64,13 @@ export const Button: React.FC<ButtonProps> = ({
     buttonColorScheme = "bg-purple-500";
   }
 
-  const classes = `cursor-pointer transition-all ${buttonColorScheme} hover:shadow-lg m-0 py-2 px-6 text-center text-white dark:text-black rounded-lg inline-block font transition-all ${className}`;
+  const classes = `cursor-pointer transition-all ${
+    variant === "primary"
+      ? "text-white dark:text-black"
+      : "text-black dark:text-white"
+  } ${
+    variant == "primary" ? buttonColorScheme : "bg-transparent"
+  } hover:shadow-lg m-0 py-2 px-6 text-center  dark:text-black rounded-lg inline-block font transition-all ${className}`;
 
   if (internal && href?.length) {
     return (
