@@ -15,9 +15,10 @@ import Modal from "../Modal/Modal";
 type Props = {
   token: any;
   isOwner: boolean;
+  noBuy: boolean;
 };
 
-const NFTCard = ({ token, isOwner }: Props) => {
+const NFTCard = ({ token, isOwner = false, noBuy = false }: Props) => {
   const [openInfo, setOpenInfo] = useState<boolean>(false);
   function classNames(...classes: any) {
     return classes.filter(Boolean).join(" ");
@@ -69,27 +70,29 @@ const NFTCard = ({ token, isOwner }: Props) => {
         </div>
       </div>
 
-      <div className="absolute transition-all bottom-0 left-0 bg-blue-500 w-full opacity-0 group-hover:opacity-100 cursor-pointer">
-        <BuyNFTButton
-          ownedNFT={false}
-          box={token}
-          buyButton={
-            <button className="p-2 text-center w-full text-white text-sm">
-              Buy
-            </button>
-          }
-          sellButton={
-            <button className="p-2 text-center w-full bg-red-400 text-white text-sm">
-              Edit
-            </button>
-          }
-          loadingButton={
-            <button className="p-2 text-center w-full bg-white text-black  text-sm">
-              Loading...
-            </button>
-          }
-        />
-      </div>
+      {!noBuy && (
+        <div className="absolute transition-all bottom-0 left-0 bg-blue-500 w-full opacity-0 group-hover:opacity-100 cursor-pointer">
+          <BuyNFTButton
+            ownedNFT={false}
+            box={token}
+            buyButton={
+              <button className="p-2 text-center w-full text-white text-sm">
+                Buy
+              </button>
+            }
+            sellButton={
+              <button className="p-2 text-center w-full bg-red-400 text-white text-sm">
+                Edit
+              </button>
+            }
+            loadingButton={
+              <button className="p-2 text-center w-full bg-white text-black  text-sm">
+                Loading...
+              </button>
+            }
+          />
+        </div>
+      )}
       <Modal
         open={openInfo}
         setOpen={() => {
@@ -140,30 +143,32 @@ const NFTCard = ({ token, isOwner }: Props) => {
                   <FormattedMetadata description={token.nft_desc} />
                 </div>
               </div>
-              <div>
-                <BuyNFTButton
-                  box={token}
-                  sellButton={
-                    <div>
-                      <Button className="w-full mt-8">Cancel</Button>
-                    </div>
-                  }
-                  buyButton={
-                    <div>
-                      <Button className="w-full mt-8">Buy</Button>
-                    </div>
-                  }
-                  loadingButton={
-                    <div>
-                      <div className="animate-pulse">
-                        <Button disabled className="w-full mt-8">
-                          Loading...
-                        </Button>
+              {!noBuy && (
+                <div>
+                  <BuyNFTButton
+                    box={token}
+                    sellButton={
+                      <div>
+                        <Button className="w-full mt-8">Cancel</Button>
                       </div>
-                    </div>
-                  }
-                />
-              </div>
+                    }
+                    buyButton={
+                      <div>
+                        <Button className="w-full mt-8">Buy</Button>
+                      </div>
+                    }
+                    loadingButton={
+                      <div>
+                        <div className="animate-pulse">
+                          <Button disabled className="w-full mt-8">
+                            Loading...
+                          </Button>
+                        </div>
+                      </div>
+                    }
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>

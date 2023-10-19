@@ -2,13 +2,18 @@ import React, { useState } from "react";
 import { useQuery } from "@apollo/client";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { GET_ACTIVITY } from "@/lib/gqlQueries";
-import { convertGQLObject } from "@/ergofunctions/helpers";
+import {
+  convertGQLObject,
+  friendlyAddress,
+  friendlyToken,
+} from "@/ergofunctions/helpers";
 import NFTCard from "../NFTCard/NFTCard";
 import moment from "moment";
+import { longToCurrency } from "@/ergofunctions/serializer";
 
 const InfiniteActivityFeed = () => {
   const [hasMore, setHasMore] = useState(true);
-  const limit = 10; // Number of NFTs to load each time
+  const limit = 30; // Number of NFTs to load each time
 
   const { data, loading, error, fetchMore } = useQuery(GET_ACTIVITY, {
     variables: { limit, offset: 0 },
@@ -45,8 +50,7 @@ const InfiniteActivityFeed = () => {
               Transactions
             </h1>
             <p className="mt-2 text-sm text-gray-700">
-              A table of placeholder stock market data that does not make any
-              sense.
+              History of sales on SkyHarbor.
             </p>
           </div>
           <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
@@ -59,95 +63,95 @@ const InfiniteActivityFeed = () => {
           </div>
         </div>
         <div className="mt-8 flow-root">
-          <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-            <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-              <table className="min-w-full divide-y divide-gray-300">
-                <thead>
-                  <tr>
-                    <th
-                      scope="col"
-                      className="whitespace-nowrap py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
-                    >
-                      Time
-                    </th>
-                    <th
-                      scope="col"
-                      className="whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900"
-                    >
-                      NFT
-                    </th>
-                    <th
-                      scope="col"
-                      className="whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900"
-                    >
-                      Commision
-                    </th>
-                    <th
-                      scope="col"
-                      className="whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900"
-                    >
-                      Price
-                    </th>
-                    <th
-                      scope="col"
-                      className="whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900"
-                    >
-                      Quantity
-                    </th>
-                    <th
-                      scope="col"
-                      className="whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900"
-                    >
-                      Net amount
-                    </th>
-                    <th
-                      scope="col"
-                      className="relative whitespace-nowrap py-3.5 pl-3 pr-4 sm:pr-0"
-                    >
-                      <span className="sr-only">Explorer Link</span>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200 bg-white">
-                  {/* <div className="grid grid-cols-4 gap-4"> */}
-                  {data.sales.map((transaction: any) => {
-                    // get how long ago it happened
-                    const daysAgoText = msToTime(transaction.completion_time);
+          {/* <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8"> */}
+          <table className="min-w-full divide-y divide-gray-300 table-fixed">
+            <thead>
+              <tr>
+                <th
+                  scope="col"
+                  className="whitespace-nowrap py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                >
+                  Item
+                </th>
+                <th
+                  scope="col"
+                  className="whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900"
+                >
+                  Price
+                </th>
+                <th
+                  scope="col"
+                  className="whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900"
+                >
+                  From
+                </th>
+                <th
+                  scope="col"
+                  className="whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900"
+                >
+                  To
+                </th>
+                <th
+                  scope="col"
+                  className="whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900"
+                >
+                  Date
+                </th>
+                <th
+                  scope="col"
+                  className="whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900"
+                >
+                  <span>Transaction</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200 bg-white">
+              {/* <div className="grid grid-cols-4 gap-4"> */}
+              {data.sales.map((transaction: any) => {
+                // get how long ago it happened
+                const daysAgoText = msToTime(transaction.completion_time);
 
-                    return (
-                      <tr key={transaction.id}>
-                        <td className="whitespace-nowrap py-2 pl-4 pr-3 text-sm text-gray-500 sm:pl-0">
-                          {daysAgoText === "" ? "" : `${daysAgoText} ago`}
-                          {/* ago */}
-                          {moment(transaction.completion_time).format(
+                return (
+                  <tr key={transaction.id} className="">
+                    <td className="whitespace-nowrap px-2 py-2 text-sm font-medium text-gray-900 flex flex-row items-center">
+                      <div className="w-1/6 aspect-square rounded overflow-hidden">
+                        <img
+                          className="h-full w-full"
+                          src={transaction.token.ipfs_art_url}
+                          alt={transaction.token.nft_name}
+                        />
+                      </div>
+                      <p className="w-5/6 ml-2 mb-0 font-semibold line-clamp-1">
+                        {transaction.token.nft_name}
+                      </p>
+                    </td>
+
+                    <td className="whitespace-nowrap py-2 pl-4 pr-3 text-sm text-gray-500 sm:pl-0">
+                      {longToCurrency(
+                        transaction.nerg_sale_value,
+                        0,
+                        transaction.currency
+                      )}{" "}
+                      {transaction.currency}
+                    </td>
+                    <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">
+                      {friendlyAddress(transaction.seller_address, 4)}
+                    </td>
+                    <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">
+                      {friendlyAddress(transaction.buyer_address, 4)}
+                    </td>
+                    <td className=" whitespace-nowrap px-2 py-2 text-sm text-gray-900">
+                      {daysAgoText === ""
+                        ? moment(transaction.completion_time).format(
                             "MMM Do, YYYY"
-                          )}{" "}
-                        </td>
-                        <td className="whitespace-nowrap px-2 py-2 text-sm font-medium text-gray-900 flex flex-row items-center">
-                          <div className="w-16 w-16 aspect-square rounded overflow-hidden">
-                            <img
-                              className="h-full w-full"
-                              src={transaction.token.ipfs_art_url}
-                              alt={transaction.token.nft_name}
-                            />
-                          </div>
-                          <p className="ml-2 mb-0 font-semibold">
-                            {transaction.token.nft_name}
-                          </p>
-                        </td>
-                        <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">
-                          {transaction.token.nft_name}
-                        </td>
-                        <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
-                          {transaction.currency}
-                        </td>
-                        <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
-                          {transaction.currency}
-                        </td>
-                        <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
-                          {transaction.currency}
-                        </td>
-                        <td className="relative whitespace-nowrap py-2 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                          )
+                        : `${daysAgoText} ago`}
+                    </td>
+                    <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
+                      {friendlyToken(transaction.box_id, 4)}
+                    </td>
+                    {/* <td className="relative whitespace-nowrap py-2 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                           <a
                             href="#"
                             className="text-indigo-600 hover:text-indigo-900"
@@ -155,15 +159,15 @@ const InfiniteActivityFeed = () => {
                             Edit
                             <span className="sr-only">, {transaction.id}</span>
                           </a>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </div>
+                        </td> */}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
+        {/* </div>
+        </div> */}
       </div>
     </InfiniteScroll>
   );
@@ -183,6 +187,6 @@ function msToTime(completion_time) {
   if (seconds < 60) return seconds + " sec";
   else if (minutes < 60) return minutes + " min";
   else if (hours < 24) return hours + " hrs";
-  else if (days < 2) return hours + " day";
+  else if (days < 2) return hours + " hours";
   else return "";
 }
