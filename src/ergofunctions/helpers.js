@@ -11,6 +11,7 @@ import {
   fakeURL,
   serviceFee,
   supportedCurrencies,
+  SupportedCurrenciesV2,
 } from "./consts";
 import { boxById, getBoxesForAsset } from "./explorer";
 import moment from "moment";
@@ -19,6 +20,7 @@ import { get } from "./rest";
 // import { theme } from "../components/theme";
 import { currencyToLong, getEncodedBoxSer, longToCurrency } from "./serializer";
 // const toast = createStandaloneToast({ theme: theme });
+import toast from "react-hot-toast";
 
 const explorerUrl = "https://explorer.ergoplatform.com/en/";
 // const explorerUrl = 'https://ergo-explorer.getblok.io/';
@@ -83,6 +85,19 @@ export function showMsg(message, isError = false, isWarning = false) {
   let status = "info";
   if (isError) status = "error";
   if (isWarning) status = "warning";
+
+  if(status === "error") {
+    toast.error(message);    
+  }
+  else if(status === "warning") {
+    toast.warning(message);
+  }
+  else {
+    toast(message);    
+  }
+
+
+  
   // toast(message, {
   //     transition: Slide,
   //     closeButton: true,
@@ -452,7 +467,7 @@ export function calculateEarnings(royalty, price, currency) {
     royalty > 0
       ? parseFloat(
           Math.floor(
-            currencyToLong(price, supportedCurrencies[currency].decimal) *
+            currencyToLong(price, SupportedCurrenciesV2[currency].decimal) *
               (royalty / 1000)
           ).toFixed(decimalPlaces)
         )
@@ -464,7 +479,7 @@ export function calculateEarnings(royalty, price, currency) {
   // let previewServiceFee = parseFloat((price * serviceFee).toFixed(decimalPlaces));
   let previewServiceFee = parseFloat(
     Math.floor(
-      currencyToLong(price, supportedCurrencies[currency].decimal) * serviceFee
+      currencyToLong(price, SupportedCurrenciesV2[currency].decimal) * serviceFee
     ).toFixed(decimalPlaces)
   );
 
@@ -474,10 +489,10 @@ export function calculateEarnings(royalty, price, currency) {
 
   let userEarnings = (
     parseFloat(price ? price : 0) -
-    (longToCurrency(previewServiceFee, supportedCurrencies[currency].decimal) +
+    (longToCurrency(previewServiceFee, SupportedCurrenciesV2[currency].decimal) +
       longToCurrency(
         previewArtistRoyalty,
-        supportedCurrencies[currency].decimal
+        SupportedCurrenciesV2[currency].decimal
       ))
   ).toFixed(decimalPlaces);
   if (userEarnings < 0) {
@@ -486,11 +501,11 @@ export function calculateEarnings(royalty, price, currency) {
 
   previewArtistRoyalty = longToCurrency(
     previewArtistRoyalty,
-    supportedCurrencies[currency].decimal
+    SupportedCurrenciesV2[currency].decimal
   );
   previewServiceFee = longToCurrency(
     previewServiceFee,
-    supportedCurrencies[currency].decimal
+    SupportedCurrenciesV2[currency].decimal
   );
 
   return {

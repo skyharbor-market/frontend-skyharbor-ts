@@ -1,9 +1,14 @@
 import Button from "@/components/Button/Button";
+import CustomDropdown from "@/components/CustomDropdown/CustomDropdown";
 import CustomInput from "@/components/CustomInput/CustomInput";
+import LoadingCircle from "@/components/LoadingCircle/LoadingCircle";
 import Modal from "@/components/Modal/Modal";
+import { serviceFee } from "@/ergofunctions/consts";
+import { calculateEarnings } from "@/ergofunctions/helpers";
 import { bulk_list } from "@/ergofunctions/marketfunctions/bulkList";
-import { decodeArtwork } from "@/ergofunctions/serializer";
+import { decodeArtwork, getRoyaltyInfo } from "@/ergofunctions/serializer";
 import React, { useEffect, useState } from "react";
+import toast, { LoaderIcon } from "react-hot-toast";
 
 export interface SellTokenInterface {
   tokenId: string;
@@ -23,21 +28,20 @@ export interface SellModalProps {
 }
 
 const SellModal = ({ open, onClose, token }: SellModalProps) => {
-  const [royalties, setRoyalties] = useState<RoyaltiesInterface | null>();
+  const [royalties, setRoyalties] = useState<RoyaltiesInterface | null>(null);
 
   const [txId, setTxId] = useState<string | null>(null);
 
-  const [price, setPrice] = useState<number | string>(0);
+  const [price, setPrice] = useState<number>();
   const [currency, setCurrency] = useState<string>("erg");
-  useEffect(() => {
-    decodeArtwork(null, token.tokenId, false);
+  // useEffect(() => {
+  //   decodeArtwork(null, token.tokenId, false);
 
-    setRoyalties({
-      address: "",
-      percentage: 5,
-    });
-  }, []);
-
+  //   setRoyalties({
+  //     address: "",
+  //     percentage: 5,
+  //   });
+  // }, []);
   // Create Sale
   const createSaleTx = async () => {
     const tokenId = token.tokenId;
@@ -46,10 +50,6 @@ const SellModal = ({ open, onClose, token }: SellModalProps) => {
       const saleTxId = await bulk_list([
         {
           id: tokenId,
-          // name: name,
-          // ipfs_art_url: box.ipfs_art_url,
-          // nft_type: box.nft_type,
-          // royalty: box.royalty,
           currencyIndex: currencyIndex,
           price: price,
         },
@@ -69,11 +69,39 @@ const SellModal = ({ open, onClose, token }: SellModalProps) => {
       //   duration: 5000,
       //   isClosable: true,
       // });
-      console.log("error", error);
+      toast.error("There was an error submitting the transaction");
     }
 
     return;
   };
+
+  const getTokenRoyalties = async () => {
+    setRoyalties(null);
+
+    const royaltyRes = await getRoyaltyInfo(token.tokenId);
+    console.log("royaltyRes", royaltyRes);
+    setRoyalties({
+      address: royaltyRes?.artist,
+      percentage: royaltyRes?.royalty,
+    });
+  };
+
+  const handleCurrency = (e: any) => {
+    setCurrency(e.value);
+  };
+
+  useEffect(() => {
+    getTokenRoyalties();
+  }, [token]);
+
+  const disableButton = !price || price === 0 || royalties === null;
+
+  const finalEarnings = calculateEarnings(
+    royalties?.percentage,
+    price,
+    currency
+  );
+
   return (
     <div>
       <Modal open={open} setOpen={onClose}>
@@ -95,19 +123,38 @@ const SellModal = ({ open, onClose, token }: SellModalProps) => {
             </div>
             <div className="w-1/4">
               <p className="mb-1">Currency</p>
-              <input className="w-full" />
+              <CustomDropdown
+                value={currency}
+                items={[
+                  {
+                    label: "ERG",
+                    value: "erg",
+                  },
+                  {
+                    label: "SigUSD",
+                    value: "sigusd",
+                  },
+                ]}
+                onChange={handleCurrency}
+              />
             </div>
           </div>
           <div className="flex flex-row justify-between text-sm">
-            <p>Artist Royalties</p>
             <p>
-              {parseInt(price) * ((royalties?.percentage || 0) / 100)}{" "}
-              {currency}
+              Artist Royalties{" "}
+              {royalties?.percentage
+                ? `(${royalties?.percentage / 10}%)`
+                : "(0%)"}
+            </p>
+            <p>
+              {(price || 0) * ((royalties?.percentage || 0) / 100)} {currency}
             </p>
           </div>
           <div className="flex flex-row justify-between text-sm">
-            <p>Service Fee</p>
-            <p>0.5 {currency}</p>
+            <p>Service Fee ({serviceFee * 100}%)</p>
+            <p>
+              {finalEarnings.servicePayment} {currency}
+            </p>
           </div>
           <div className="flex flex-row justify-between">
             <p>Your earnings</p>
@@ -119,8 +166,15 @@ const SellModal = ({ open, onClose, token }: SellModalProps) => {
           <Button
             className="w-full bg-red-400 text-white"
             onClick={() => createSaleTx()}
+            disabled={disableButton}
           >
-            List
+            {royalties === null ? (
+              <div className="text-center flex flex-row items-center justify-center">
+                <LoaderIcon /> <p className="ml-2">Loading royalties</p>
+              </div>
+            ) : (
+              "List"
+            )}
           </Button>
         </div>
       </Modal>

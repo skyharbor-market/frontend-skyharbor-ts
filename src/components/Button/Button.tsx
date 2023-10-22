@@ -64,13 +64,15 @@ export const Button: React.FC<ButtonProps> = ({
     buttonColorScheme = "bg-purple-500";
   }
 
-  const classes = `cursor-pointer transition-all ${
+  const classes = `transition-all ${
     variant === "primary"
       ? "text-white dark:text-black"
       : "text-black dark:text-white"
   } ${
     variant == "primary" ? buttonColorScheme : "bg-transparent"
-  } hover:shadow-lg m-0 py-2 px-6 text-center  dark:text-black rounded-lg inline-block font transition-all ${className}`;
+  } hover:shadow-lg m-0 py-2 px-6 text-center dark:text-black rounded-lg inline-block font transition-all ${
+    disabled ? "opacity-60" : "cursor-pointer"
+  } ${className}`;
 
   if (internal && href?.length) {
     return (
