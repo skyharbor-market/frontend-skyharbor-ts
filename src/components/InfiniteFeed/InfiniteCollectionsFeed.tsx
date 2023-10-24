@@ -22,6 +22,7 @@ const InfiniteCollectionsFeed = () => {
   return (
     <InfiniteScroll
       dataLength={data.collections.length}
+      style={{ overflow: "visible" }}
       next={() => {
         fetchMore({
           variables: {
@@ -44,28 +45,37 @@ const InfiniteCollectionsFeed = () => {
     >
       {/* <div className="grid grid-cols-4 gap-4"> */}
       <div className="">
-        <div className="mx-auto sm:px-6 lg:px-8">
+        <div className="mx-auto">
           <h2 className="sr-only">Collections</h2>
 
           <div className="grid grid-cols-2 sm:mx-0 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-2">
             {data.collections.map((collection: any) => {
               return (
-                <Link href={`/collection/${collection.sys_name}`}>
-                  <div className="w-full transition-all ease-in-out duration-200 overflow-hidden scale-100 hover:scale-[1.05]">
-                    <div className="aspect-square w-full overflow-hidden">
-                      <div className="relative h-full w-full">
-                        <img
-                          src={collection.card_image}
-                          // fill={true}
-                          alt={collection.name}
-                          className="object-cover aspect-square rounded"
-                          // objectFit="contain"
-                        />
+                <div className="h-full border scale-100 hover:scale-[1.03] transition-all ease-in-out duration-200 rounded-lg shadow">
+                  <Link
+                    href={`/collection/${collection.sys_name}`}
+                    className="h-full"
+                  >
+                    <div className="w-full  overflow-hidden h-full">
+                      <div className="aspect-square w-full overflow-hidden">
+                        <div className="relative h-full w-full">
+                          <img
+                            src={collection.card_image}
+                            // fill={true}
+                            alt={collection.name}
+                            className="object-cover aspect-square rounded-t-lg"
+                            // objectFit="contain"
+                          />
+                        </div>
+                      </div>
+                      <div className="py-3 px-2 text-center overflow-hidden">
+                        <p className="line-clamp-2 font-semibold">
+                          {collection.name}
+                        </p>
                       </div>
                     </div>
-                    <p className="text-center mt-2">{collection.name}</p>
-                  </div>
-                </Link>
+                  </Link>
+                </div>
               );
             })}
           </div>

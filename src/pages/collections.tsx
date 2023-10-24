@@ -8,16 +8,18 @@ type Props = {};
 
 const Marketplace = (props: Props) => {
   return (
-    <div>
+    <div className="">
       <div>
         <p className="text-center text-4xl font-semibold">Collections</p>
       </div>
-      <div className="mx-auto mb-6 mt-6">
-        <CustomInput leftIcon={<MdSearch />} placeholder="Search..." />
-      </div>
+      <div className="">
+        <div className="mx-auto my-6">
+          <CustomInput leftIcon={<MdSearch />} placeholder="Search..." />
+        </div>
 
-      <div className="mt-8">
-        <InfiniteCollectionsFeed />
+        <div className="mt-8">
+          <InfiniteCollectionsFeed />
+        </div>
       </div>
     </div>
   );

@@ -12,9 +12,11 @@
   }
   ```
 */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { throttle } from "lodash";
+
 import {
   ArrowPathIcon,
   ChevronRightIcon,
@@ -253,20 +255,31 @@ export default function Landing() {
 
   const imgAnimation = useAnimation();
 
-  const handleMouseMove = (e: any) => {
+  const handleMouseMove = throttle((e: any) => {
     const { clientX, clientY } = e;
     const moveX = clientX - window.innerWidth / 2;
     const moveY = clientY - window.innerHeight / 2;
-    const offsetFactor = 50;
+    const offsetFactor = 20;
     imgAnimation.start({
       x: -moveX / offsetFactor,
       y: -moveY / offsetFactor,
+
+      transition: {
+        type: "spring",
+        damping: 8,
+        stiffness: 120,
+        // ease: "linear",
+        // duration: 0.15,
+      },
     });
-    // imgAnimation.stop({
-    //   x: clientX,
-    //   y: clientY
-    // })
-  };
+  }, 50); // Adjust the second parameter to control the throttling rate
+
+  // Clean up animation on component unmount
+  useEffect(() => {
+    return () => {
+      imgAnimation.stop();
+    };
+  }, [imgAnimation]);
 
   return (
     <div className="">
@@ -355,6 +368,12 @@ export default function Landing() {
               <motion.div
                 animate={imgAnimation}
                 onMouseMove={(e) => handleMouseMove(e)}
+                onMouseOut={(e) => {
+                  imgAnimation.start({
+                    x: 0,
+                    y: 0,
+                  });
+                }}
               >
                 <Image
                   // width={"100%"}
