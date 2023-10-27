@@ -175,15 +175,15 @@ const InfiniteActivityFeed = () => {
 
 export default InfiniteActivityFeed;
 
-function msToTime(completion_time) {
-  const date1 = new Date(completion_time);
-  const date2 = new Date();
+function msToTime(completion_time: string) {
+  const date1: any = new Date(completion_time);
+  const date2: any = new Date();
   const ms = Math.abs(date2 - date1);
 
-  let seconds = (ms / 1000).toFixed(0);
-  let minutes = (ms / (1000 * 60)).toFixed(0);
-  let hours = (ms / (1000 * 60 * 60)).toFixed(0);
-  let days = (ms / (1000 * 60 * 60 * 24)).toFixed(0);
+  let seconds: any = (ms / 1000).toFixed(0);
+  let minutes: any = (ms / (1000 * 60)).toFixed(0);
+  let hours: any = (ms / (1000 * 60 * 60)).toFixed(0);
+  let days: any = (ms / (1000 * 60 * 60 * 24)).toFixed(0);
   if (seconds < 60) return seconds + " sec";
   else if (minutes < 60) return minutes + " min";
   else if (hours < 24) return hours + " hrs";

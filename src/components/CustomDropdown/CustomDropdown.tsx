@@ -70,7 +70,7 @@ const CustomDropdown = ({
   }, [value, items]);
 
   useEffect(() => {
-    const t: "light" | "dark" = localStorage.getItem("theme") || "light";
+    const t: any = localStorage.getItem("theme") || "light";
     setSiteTheme(t);
   }, []);
   const isMobile = true;

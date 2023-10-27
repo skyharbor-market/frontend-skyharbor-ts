@@ -15,7 +15,7 @@ import Modal from "../Modal/Modal";
 type Props = {
   token: any;
   isOwner: boolean;
-  noBuy: boolean;
+  noBuy?: boolean;
 };
 
 const NFTCard = ({ token, isOwner = false, noBuy = false }: Props) => {
@@ -39,6 +39,7 @@ const NFTCard = ({ token, isOwner = false, noBuy = false }: Props) => {
             alt={token.nft_name}
             className="h-full w-full object-cover object-center"
           /> */}
+          {/* @ts-ignore */}
           <ArtworkMedia box={token} ratio="square" />
         </div>
         <div className="pb-6 pt-4 text-left p-4">
@@ -64,6 +65,7 @@ const NFTCard = ({ token, isOwner = false, noBuy = false }: Props) => {
                 undefined,
                 token?.currency
               )}{" "}
+              {/* @ts-ignore */}
               {SupportedCurrenciesV2?.[token?.currency]?.displayName || ""}
             </p>
           </div>
@@ -146,6 +148,7 @@ const NFTCard = ({ token, isOwner = false, noBuy = false }: Props) => {
               {!noBuy && (
                 <div>
                   <BuyNFTButton
+                    ownedNFT={false}
                     box={token}
                     sellButton={
                       <div>

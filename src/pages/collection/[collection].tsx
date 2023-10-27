@@ -129,9 +129,10 @@ const Collection = () => {
             {viewMintAddresses && (
               <Fade fadeKey={"mint-addresses-click"} fadeDuration={0.2}>
                 <div className="flex flex-wrap">
-                  {colData.mint_addresses.map((item) => {
+                  {colData.mint_addresses.map((item: any, index: number) => {
                     return (
                       <div
+                        key={index}
                         className="m-1"
                         onClick={() => {
                           copyToClipboard(item.address);
@@ -166,6 +167,7 @@ const Collection = () => {
         <div>
           <InfiniteNFTFeed
             gqlQuery={GET_COLLECTION_NFTS}
+            // @ts-ignore
             collection={collection}
           />
         </div>

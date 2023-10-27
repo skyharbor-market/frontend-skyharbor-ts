@@ -7,7 +7,7 @@ import { serviceFee } from "@/ergofunctions/consts";
 import { calculateEarnings } from "@/ergofunctions/helpers";
 import { bulk_list } from "@/ergofunctions/marketfunctions/bulkList";
 import { decodeArtwork, getRoyaltyInfo } from "@/ergofunctions/serializer";
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import toast, { LoaderIcon } from "react-hot-toast";
 
 export interface SellTokenInterface {
@@ -16,8 +16,8 @@ export interface SellTokenInterface {
 }
 
 interface RoyaltiesInterface {
-  address: string | string[];
-  percentage: number;
+  address: string | string[] | null | undefined;
+  percentage: number | null | undefined;
 }
 
 export interface SellModalProps {
@@ -116,8 +116,10 @@ const SellModal = ({ open, onClose, token }: SellModalProps) => {
               <CustomInput
                 value={price}
                 type={"number"}
-                onChange={(e) => {
-                  setPrice(e.target.value);
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                  if (e.target.value) {
+                    setPrice(parseInt(e.target.value));
+                  }
                 }}
               />
             </div>

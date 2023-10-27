@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
@@ -30,7 +32,7 @@ import UserActivity from "../components/WalletComponents/UserActivity";
 import Tabs from "@/components/Tabs/Tabs";
 import { FaChevronDown, FaChevronUp, FaImage, FaUserMd } from "react-icons/fa";
 import { ImPriceTag } from "react-icons/im";
-import { MdOutlineSell, MdSell } from "react-icons/Md";
+import { MdOutlineSell, MdSell } from "react-icons/md";
 
 export default function WalletPage() {
   let mounted = true;

@@ -69,6 +69,7 @@ export default function Tabs({ tabs, setTab, currentTab }: TabsProps) {
                   aria-current={tab.value ? "page" : undefined}
                 >
                   <tab.icon
+                    // @ts-ignore
                     className={classNames(
                       tab.value == currentTab
                         ? "text-indigo-500"

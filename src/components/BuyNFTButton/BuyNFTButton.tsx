@@ -2,7 +2,7 @@ import React, { Children, Fragment, useEffect, useState } from "react";
 import { supportedCurrencies, v1ErgAddress } from "../../ergofunctions/consts";
 import { buyTokenNFT } from "../../ergofunctions/marketfunctions/buyTokenNFT";
 import { FaShoppingCart, FaCartPlus, FaCartArrowDown } from "react-icons/fa";
-import { setCartItems } from "../../redux/reducers/marketSlice";
+// import { setCartItems } from "../../redux/reducers/marketSlice";
 
 import { buyNFT } from "../../ergofunctions/marketfunctions/buyNFT";
 import { refund } from "../../ergofunctions/marketfunctions/refund";
@@ -35,11 +35,11 @@ export default function BuyNFTButton({
   loadingButton,
 }: BuyNFTButtonProps) {
   // Cart items
-  const cartItems = useSelector((state) => state.market.cartItems);
-  const inCart = cartItems
-    ? cartItems.find((l) => l.box_id === box.box_id)
-    : false;
-  const dispatch = useDispatch();
+  // const cartItems = useSelector((state) => state.market.cartItems);
+  // const inCart = cartItems
+  //   ? cartItems.find((l) => l.box_id === box.box_id)
+  //   : false;
+  // const dispatch = useDispatch();
 
   const [submitting, setSubmitting] = useState(false);
   const [modalType, setModalType] = React.useState("edit");
@@ -58,7 +58,7 @@ export default function BuyNFTButton({
     if (box.currency === "erg") {
       try {
         buyTxId = await buyNFT(box);
-      } catch (err) {
+      } catch (err: any) {
         console.log(err?.message);
         toast.error("There was an error buying the NFT, try again later.");
         setSubmitting(false);
@@ -93,7 +93,9 @@ export default function BuyNFTButton({
       console.log("cancelTxId", cancelTxId);
       setModalType("submitted");
       setTransactionId(cancelTxId);
-      onOpen();
+
+      // open transaction ID of delisting
+      // onOpen();
     }
     setSubmitting(false);
 
@@ -105,9 +107,15 @@ export default function BuyNFTButton({
   // Edit price
   const handleEditPrice = () => {
     setModalType("edit");
-    onOpen();
+
+    // Set edit modal open
+    // onOpen();
   };
-  const handleEditSubmit = async (tokenId, price, currencyIndex) => {
+  const handleEditSubmit = async (
+    tokenId: string,
+    price: number,
+    currencyIndex: number
+  ) => {
     setSubmitting(true);
 
     const relistTxId = await relist_NFT(box, price, currencyIndex);
@@ -123,56 +131,31 @@ export default function BuyNFTButton({
     return;
   };
 
-  const handleCart = () => {
-    if (cartItems.length >= 50) {
-      // toast({
-      //   title: "Cart can't have more than 50 items.",
-      //   variant: "subtle",
-      //   position: "bottom",
-      //   status: "error",
-      //   duration: 1000,
-      //   isClosable: true,
-      // })
-      return;
-    }
+  // const handleCart = () => {
+  //   if (cartItems.length >= 50) {
+  //     return;
+  //   }
 
-    if (inCart) {
-      var filtered = cartItems.filter(function (el) {
-        return el.box_id != box.box_id;
-      });
-      dispatch(setCartItems(filtered));
-      localStorage.setItem(
-        "cart",
-        JSON.stringify({
-          items: filtered,
-        })
-      );
-      // toast({
-      //   title: "Removed from cart.",
-      //   variant: "subtle",
-      //   position: "bottom",
-      //   status: "error",
-      //   duration: 1000,
-      //   isClosable: true,
-      // })
-    } else {
-      dispatch(setCartItems([...cartItems, box]));
-      localStorage.setItem(
-        "cart",
-        JSON.stringify({
-          items: [...cartItems, box],
-        })
-      );
-      // toast({
-      //   title: "Added to cart.",
-      //   variant: "subtle",
-      //   position: "bottom",
-      //   status: "success",
-      //   duration: 1000,
-      //   isClosable: true,
-      // })
-    }
-  };
+  //   if (inCart) {
+  //     var filtered = cartItems.filter(function (el) {
+  //       return el.box_id != box.box_id;
+  //     });
+  //     dispatch(setCartItems(filtered));
+  //     localStorage.setItem(
+  //       "cart",
+  //       JSON.stringify({
+  //         items: filtered,
+  //       })
+  //     );
+  //     dispatch(setCartItems([...cartItems, box]));
+  //     localStorage.setItem(
+  //       "cart",
+  //       JSON.stringify({
+  //         items: [...cartItems, box],
+  //       })
+  //     );
+  //   }
+  // };
 
   function gotoTransaction() {
     window.open(
@@ -208,7 +191,7 @@ export default function BuyNFTButton({
       //if modalType === "submitted"
       return (
         <Modal open={!!transactionId} setOpen={() => setTransactionId(null)}>
-          <TxSubmitted txId={transactionId} box={box} ergopay={true} />
+          <TxSubmitted txId={transactionId} box={box} />
         </Modal>
 
         // <Box mb="4">
@@ -280,10 +263,9 @@ export default function BuyNFTButton({
             // mb={4}
             // disabled
             onClick={handleCancel}
-            variant={"outline"}
-            fontSize={"lg"}
-            colorScheme={"red"}
-            isLoading={submitting}
+            // fontSize={"lg"}
+            // colorScheme={"red"}
+            // isLoading={submitting}
           >
             Cancel
           </button>

@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React, { useState, useEffect, Fragment } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -41,6 +43,8 @@ import { skyHarborApiRoot } from "../../ergofunctions/consts";
 import Modal from "../Modal/Modal";
 import Button from "../Button/Button";
 
+type WalletTypes = "nautilus" | "safew";
+
 function InitializeWallet({}) {
   const router = useRouter();
   const client = useApolloClient();
@@ -64,6 +68,7 @@ function InitializeWallet({}) {
   const [activeTab, setActiveTab] = useState(type);
   // const [walletState, setWalletState] = useState(walletSt);
 
+  //@ts-ignore
   const walletState = reduxState.wallet.walletState;
 
   const [userAddress, setUserAddress] = useState(userAddr);
@@ -101,14 +106,6 @@ function InitializeWallet({}) {
     dispatch(setWalletSelectOpen(false));
   }
 
-  function toggleTab(index) {
-    if (index === 0) {
-      setActiveTab("yoroi");
-    } else {
-      setActiveTab("assembler");
-    }
-  }
-
   function clearWallet(message = true) {
     // const walletState// = getWalletType();
 
@@ -133,8 +130,9 @@ function InitializeWallet({}) {
     }
 
     if (walletState === "safew" || walletState === "nautilus") {
+      // @ts-ignore
       ergoConnector[walletState].disconnect();
-      window.location.reload(false);
+      window.location.reload();
     }
 
     setErgopayUUID(uuidv4());
@@ -154,89 +152,7 @@ function InitializeWallet({}) {
     return;
   }
 
-  async function connectNautilus() {
-    let res = await setupWallet(true, "nautilus");
-    // If Nautilus is denied
-    if (res === "denied") {
-      localStorage.removeItem("wallet");
-
-      dispatch(setWallet(undefined));
-      // setWalletState("Configure");
-      dispatch(setWalletState("Configure"));
-
-      return;
-    }
-    let address = await getConnectorAddress();
-    setUserAddress(address);
-
-    let addresses = await getWalletAddresses();
-
-    if (res && address) {
-      localStorage.setItem(
-        "wallet",
-        JSON.stringify({
-          type: "nautilus",
-          address: address,
-        })
-      );
-
-      dispatch(setWallet(addresses));
-
-      // Get total ERGs in wallet
-      // getWalletErgs().then(res => {
-      //     setWalletBalance((Math.round(friendlyERG(res) * 1000) / 1000));
-      // });
-
-      dispatch(setWalletState("nautilus"));
-    }
-    setProcessing(false);
-    toggle();
-    return;
-  }
-
-  async function connectSAFEW() {
-    let res = await setupWallet(true, "safew");
-    // If Nautilus is denied
-    if (res === "denied") {
-      localStorage.removeItem("wallet");
-
-      dispatch(setWallet(undefined));
-      // setWalletState("Configure");
-      dispatch(setWalletState("Configure"));
-
-      return;
-    }
-    if (res) {
-      localStorage.setItem(
-        "wallet",
-        JSON.stringify({
-          type: "safew",
-          address: address,
-        })
-      );
-    }
-
-    let address = await getConnectorAddress();
-    setUserAddress(address);
-    let addresses = await getWalletAddresses();
-
-    if (res && address) {
-      dispatch(setWallet(addresses));
-
-      // Get total ERGs in wallet
-      // getWalletErgs().then(res => {
-      //     setWalletBalance((Math.round(friendlyERG(res) * 1000) / 1000));
-      // });
-
-      // setWalletState("safew");
-      dispatch(setWalletState("safew"));
-    }
-    setProcessing(false);
-    toggle();
-    return;
-  }
-
-  async function handleWalletConnect(wallet) {
+  async function handleWalletConnect(wallet: WalletTypes) {
     //wallet can equal = ["safew", "nautilus"]
 
     let address;

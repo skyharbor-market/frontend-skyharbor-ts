@@ -48,6 +48,7 @@ const TailwindToaster = () => {
           leaveTo="opacity-0 scale-75"
         >
           <ToastIcon toast={t} />
+          {/* @ts-ignore */}
           <p className={`px-2 mb-0`}>{resolveValue(t.message)}</p>
         </Transition>
       )}
