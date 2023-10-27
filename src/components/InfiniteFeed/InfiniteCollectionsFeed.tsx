@@ -52,7 +52,10 @@ const InfiniteCollectionsFeed = () => {
           <div className="grid grid-cols-2 sm:mx-0 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-2">
             {data.collections.map((collection: any) => {
               return (
-                <div className="h-full border scale-100 hover:scale-[1.03] transition-all ease-in-out duration-200 rounded-lg shadow">
+                <div
+                  key={collection?.sys_name}
+                  className="h-full border scale-100 hover:scale-[1.03] transition-all ease-in-out duration-200 rounded-lg shadow"
+                >
                   <Link
                     href={`/collection/${collection.sys_name}`}
                     className="h-full"

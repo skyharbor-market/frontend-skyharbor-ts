@@ -14,6 +14,7 @@ export default function CustomButtonGroup({ buttons }: CustomButtonGroupProps) {
       {buttons.map((b: ButtonGProps, index: number) => {
         return (
           <button
+            key={b.label}
             type="button"
             className={`relative inline-flex items-center ${
               index === 0 ? "rounded-l-md" : "-ml-px"

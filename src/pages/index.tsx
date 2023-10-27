@@ -32,6 +32,7 @@ import Fade from "@/components/Fade/Fade";
 import { addNumberCommas, maxDP } from "@/ergofunctions/helpers";
 import { longToCurrency } from "@/ergofunctions/serializer";
 import { supportedCurrencies } from "@/ergofunctions/consts";
+import Link from "next/link";
 
 const GET_WEEKLY_VOLUME = gql`
   query getWeeklyHourVolume {
@@ -328,8 +329,8 @@ export default function Landing() {
               <p className="mt-4 text-lg leading-8 text-gray-600">
                 Buy and sell NFTs with ease. Experience seamless transactions,
                 top-tier security, and a platform dedicated to innovation.
-                Whether you're buying, selling, or showcasing, SkyHarbor is your
-                trusted gateway to the NFT world.
+                Whether you&apos;re buying, selling, or showcasing, SkyHarbor is
+                your trusted gateway to the NFT world.
               </p>
               <div>
                 <Fade fadeKey={"volume"}>
@@ -350,18 +351,18 @@ export default function Landing() {
                 </Fade>
               </div>
               <div className="mt-10 flex items-center gap-x-6">
-                <a
+                <Link
                   href="/marketplace"
                   className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
                   Get started
-                </a>
-                <a
+                </Link>
+                <Link
                   href="#"
                   className="text-sm font-semibold leading-6 text-gray-900"
                 >
                   Learn more <span aria-hidden="true">→</span>
-                </a>
+                </Link>
               </div>
             </div>
             <div className="mt-16 sm:mt-24 lg:mt-0 lg:flex-shrink-0 lg:flex-grow">
@@ -559,12 +560,12 @@ export default function Landing() {
                   <dd className="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-600">
                     <p className="flex-auto">{feature.description}</p>
                     <p className="mt-6">
-                      <a
+                      <Link
                         href={feature.href}
                         className="text-sm font-semibold leading-6 text-indigo-600"
                       >
                         Learn more <span aria-hidden="true">→</span>
-                      </a>
+                      </Link>
                     </p>
                   </dd>
                 </div>

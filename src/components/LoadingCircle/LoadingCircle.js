@@ -5,7 +5,7 @@ export default function LoadingCircle(props) {
   return (
     <div className="relative" style={{ width: 80, height: 80 }}>
       <motion.div
-        className="origin-center"
+        // className="origin-center"
         animate={{ rotate: 360 }}
         transition={{ ease: "linear", duration: 8, repeat: Infinity }}
         className="rounded-[50%]"
