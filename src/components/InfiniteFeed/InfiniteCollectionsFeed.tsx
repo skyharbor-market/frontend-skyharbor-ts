@@ -6,6 +6,7 @@ import { convertGQLObject } from "@/ergofunctions/helpers";
 import NFTCard from "../NFTCard/NFTCard";
 import Image from "next/image";
 import Link from "next/link";
+import { FaCheckCircle } from "react-icons/fa";
 
 const InfiniteCollectionsFeed = () => {
   const [hasMore, setHasMore] = useState(true);
@@ -68,10 +69,14 @@ const InfiniteCollectionsFeed = () => {
                           />
                         </div>
                       </div>
-                      <div className="py-3 px-2 text-center overflow-hidden">
-                        <p className="line-clamp-2 font-semibold">
-                          {collection.name}
-                        </p>
+                      <div className="py-3 px-3 overflow-hidden">
+                        <div className="flex flex-row items-center h-full hover:opacity-60 transition-all">
+                          <FaCheckCircle className="w-2/12 h-5 text-blue-400 mr-1" />
+
+                          <p className="line-clamp-2 w-10/12 font-semibold">
+                            {collection.name}
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </Link>
