@@ -14,12 +14,16 @@ export default function LoadingCircle(props) {
         //     "radial-gradient(closest-side, white 79%, transparent 80% 100%),conic-gradient(#9966cc 75%, #b284be 0) ",
         // }}
       >
-        <svg class="progress-ring" width="80" height="80" viewBox="0 0 120 120">
+        <svg
+          className="progress-ring"
+          width="80"
+          height="80"
+          viewBox="0 0 120 120"
+        >
           <circle
             className=""
-            style={{ strokeDasharray: "10 20" }}
+            style={{ strokeDasharray: "10 20", strokeWidth: 2 }}
             stroke="#9966cc"
-            stroke-width="2"
             fill="transparent"
             r="52"
             cx="60"

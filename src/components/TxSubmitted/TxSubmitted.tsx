@@ -7,12 +7,11 @@ import { getWalletAddress, getWalletType } from "../../ergofunctions/helpers";
 import ArtworkMedia from "../artworkMedia";
 import Button from "../Button/Button";
 // import ErgoPayCheckSigned from '../ErgoPay/ErgoPayCheckSigned';
+import toast, { Toaster } from "react-hot-toast";
 
 export default function TxSubmitted({ txId, box }) {
-  const { colorMode, toggleColorMode } = useColorMode();
   const [userAddress, setUserAddress] = useState(null);
   const [usingErgoPay, setUsingErgoPay] = useState(null);
-  const toast = useToast();
 
   // required to check if ergopay user signed tx
   const [signedTransaction, setSignedTransaction] = useState(false);
@@ -36,17 +35,7 @@ export default function TxSubmitted({ txId, box }) {
       .writeText(
         `ergopay://${skyHarborApiRoot}/api/ergopay/getTx/${txId}/${userAddress}`
       )
-      .then(() =>
-        toast({
-          title: "Copied",
-          variant: "subtle",
-          // description: "We've created your account for you.",
-          position: "bottom",
-          status: "info",
-          duration: 2000,
-          isClosable: true,
-        })
-      );
+      .then(() => toast("There was an error buying the NFT, try again later."));
   }
 
   async function getErgoPayWalletAddress() {
@@ -65,41 +54,26 @@ export default function TxSubmitted({ txId, box }) {
     if (usingErgoPay && !signedTransaction) {
       return (
         <div key={"ergopay"}>
-          <div mb="4">
+          <div>
             {/* <Heading fontSize="lg" mb="3" color={colorMode === "light" ? "black" : "white"}>Sign the transaction to continue</Heading> */}
-            <p fontSize={"md"}>
+            <p>
               Scan the QR code below with an ErgoPay compatible wallet to sign
               the transaction.
             </p>
           </div>
-          <div textAlign={"center"} mb="2">
-            <p fontSize={"sm"}>QR Code</p>
+          <div>
+            <p>QR Code</p>
           </div>
-          <div
-            w={148}
-            margin="auto"
-            mb="4"
-            overflow="hidden"
-            borderRadius={"lg"}
-            bgColor="white"
-            p="10px"
-          >
+          <div>
             <QRCode
               size={128}
               value={`ergopay://${skyHarborApiRoot}/api/ergopay/getTx/${txId}/${userAddress}`}
             />
           </div>
-          <div mb="4">
-            <p textAlign={"center"} fontSize="sm">
-              or
-            </p>
+          <div>
+            <p>or</p>
           </div>
-          <div
-            mb="4"
-            spacing={2}
-            columns={{ base: 1, md: 2 }}
-            textAlign={"center"}
-          >
+          <div>
             <Button size={"lg"} onClick={copyErgoPay}>
               Copy request
             </Button>
@@ -107,9 +81,9 @@ export default function TxSubmitted({ txId, box }) {
               Open wallet
             </Button>
           </div>
-          <div textAlign={"center"}>
-            <p fontSize={"sm"}>Waiting for the transaction to be signed</p>
-            <div mt="3">
+          <div>
+            <p>Waiting for the transaction to be signed</p>
+            <div>
               {/* <CircularProgress isIndeterminate color='#3182ce'/> */}
               {/* <Progress borderRadius={"xl"} size="xs" isIndeterminate color='#3182ce'/> */}
             </div>
@@ -119,17 +93,9 @@ export default function TxSubmitted({ txId, box }) {
     } else {
       return (
         <div key={"submitted"}>
-          <div maxW={300} mx="auto" my="6">
-            <div overflow={"hidden"} borderRadius={"lg"} position="relative">
-              <div
-                textAlign={"center"}
-                width="100%"
-                position={"absolute"}
-                zIndex={10}
-                top="0"
-                left="0"
-                height={"100%"}
-              >
+          <div className="max-w-2xl">
+            <div>
+              <div>
                 <MdCheckCircleOutline fontSize={"6xl"} color="green.400" />
               </div>
               {box && (
@@ -138,17 +104,7 @@ export default function TxSubmitted({ txId, box }) {
                 </div>
               )}
             </div>
-            {box?.nft_name && (
-              <p
-                fontWeight={"semibold"}
-                mt="2"
-                textAlign={"center"}
-                noOfLines={1}
-                width={"100%"}
-              >
-                {box.nft_name}
-              </p>
-            )}
+            {box?.nft_name && <p>{box.nft_name}</p>}
             {/* <p mt="1" textAlign={"center"} noOfLines={1} width={"100%"} color={colorMode === "light" ? "black" : "white"}>{nftPrice} {currencyObject.displayName}</p> */}
           </div>
 
@@ -164,13 +120,10 @@ export default function TxSubmitted({ txId, box }) {
           >
             View Tx on Explorer
           </Button>
-          <p mb="1" fontWeight={"semibold"} fontSize={"lg"}>
-            Transaction ID:{" "}
-            <p as="span" color="green.400">
-              {txId}
-            </p>
+          <p>
+            Transaction ID: <p>{txId}</p>
           </p>
-          <p fontSize={"sm"} color={"gray.400"}>
+          <p>
             Now we wait until it is confirmed on the blockchain. It should take
             about 2-10 minutes.
           </p>

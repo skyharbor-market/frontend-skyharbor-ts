@@ -238,40 +238,16 @@ export default function WalletCard({
           )} */}
 
           {/* NFT Name */}
-          <p
-            overflow={"hidden"}
-            whiteSpace={"nowrap"}
-            textOverflow="ellipsis"
-            mb="1"
-            fontSize={"lg"}
-          >
-            {box.nft_name}
-          </p>
+          <p>{box.nft_name}</p>
 
           {/* NFT ID */}
           {/* <Tooltip label="Copy" hasArrow isDisabled={currentlySelecting}> */}
-          <p
-            overflow={"hidden"}
-            whiteSpace={"nowrap"}
-            textOverflow="ellipsis"
-            cursor={"pointer"}
-            onClick={() => handleCopy(box.tokenId)}
-            color="grey"
-            fontSize={"sm"}
-          >
+          <p onClick={() => handleCopy(box.tokenId)}>
             Token ID: {friendlyToken(box.tokenId, 8)}
           </p>
           {/* </Tooltip> */}
 
-          <p
-            overflow={"hidden"}
-            whiteSpace={"nowrap"}
-            textOverflow="ellipsis"
-            cursor={"pointer"}
-            onClick={() => handleCopy(box.tokenId)}
-            color="grey"
-            fontSize={"sm"}
-          >
+          <p onClick={() => handleCopy(box.tokenId)}>
             {box.amount || "-"} of {box.totalIssued}
           </p>
           {/* ... [Other UI Elements] ... */}

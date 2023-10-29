@@ -50,9 +50,7 @@ function WalletButton({ changeTheme, darkMode }) {
         {reduxState.wallet.walletState !== "Configure" ? (
           <div>
             <div
-              // size='lg'
-              isAttached
-              variant="solid"
+            // size='lg'
             >
               <Button
                 colorScheme="orange"
