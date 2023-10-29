@@ -18,10 +18,9 @@ module.exports = {
     formats: ["image/avif", "image/webp"],
   },
   reactStrictMode: true,
-  webpack(config) {
+  webpack(config, { isServer }) {
     const experiments = config.experiments || {};
     config.experiments = { ...experiments, asyncWebAssembly: true };
-    config.output.webassemblyModuleFilename = "static/wasm/[modulehash].wasm";
 
     config.resolve.fallback = {
       ...config.resolve.fallback, // if you miss it, all the other options in fallback, specified
@@ -29,6 +28,19 @@ module.exports = {
       fs: false, // the solution
     };
 
+    config.module.rules.push({
+      test: /\.wasm$/,
+      type: "webassembly/async",
+    });
+
+    config.resolve.extensions = [".wasm", ...config.resolve.extensions];
+
+    if (isServer) {
+      config.output.webassemblyModuleFilename =
+        "./../static/wasm/[modulehash].wasm";
+    } else {
+      config.output.webassemblyModuleFilename = "static/wasm/[modulehash].wasm";
+    }
     return config;
   },
   presets: ["next/babel"],

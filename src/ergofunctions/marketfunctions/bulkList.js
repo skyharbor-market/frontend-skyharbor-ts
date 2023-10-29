@@ -10,10 +10,15 @@ import { min_value } from "../conf";
 import { currentBlock, boxById } from "../explorer";
 import { encodeHex, encodeNum, getEncodedBoxSer } from "../serializer";
 import { Address } from "@coinbarn/ergo-ts";
-let ergolib = import("ergo-lib-wasm-browser");
+// let ergolib = import("ergo-lib-wasm-browser");
+
+import dynamic from "next/dynamic";
+
+let ergolib = dynamic(() => import("ergo-lib-wasm-browser"), { ssr: false });
+
 import { getConnectorAddress, getTokens } from "../walletUtils";
 import { get_utxos } from "../ergolibUtils";
-import {signWalletTx} from '../utxos'
+import { signWalletTx } from "../utxos";
 
 const backupNodeUrl = "https://paidincrypto.io";
 // const nodeUrl = "https://www.test-skyharbor-server.net:9053/";
@@ -46,18 +51,18 @@ export async function bulk_list(nfts) {
   let ins = [];
   const keys = Object.keys(have);
 
-//   const allBal = await getTokens();
-//   if (
-//     keys
-//       .filter((key) => key !== "ERG")
-//       .filter(
-//         (key) =>
-//           !Object.keys(allBal).includes(key) || allBal[key].amount < have[key]
-//       ).length > 0
-//   ) {
-//     showMsg("Not enough balance in the wallet! See FAQ for more info.", true);
-//     return;
-//   }
+  //   const allBal = await getTokens();
+  //   if (
+  //     keys
+  //       .filter((key) => key !== "ERG")
+  //       .filter(
+  //         (key) =>
+  //           !Object.keys(allBal).includes(key) || allBal[key].amount < have[key]
+  //       ).length > 0
+  //   ) {
+  //     showMsg("Not enough balance in the wallet! See FAQ for more info.", true);
+  //     return;
+  //   }
 
   for (let i = 0; i < keys.length; i++) {
     if (have[keys[i]] <= 0) continue;

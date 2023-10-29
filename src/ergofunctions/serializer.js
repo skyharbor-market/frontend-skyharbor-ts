@@ -20,7 +20,11 @@ export const explorerApiV1 = "https://api.ergoplatform.com/api/v1";
 // export const explorerApi = 'https://explorer.skyharbor.io/api/v0'
 // export const explorerApiV1 = 'https://explorer.skyharbor.io/api/v1'
 
-let ergolib = import("ergo-lib-wasm-browser");
+// let ergolib = import("ergo-lib-wasm-browser");
+import dynamic from 'next/dynamic';
+
+let ergolib = dynamic(() => import('ergo-lib-wasm-browser'), { ssr: false });
+
 
 const floatRe = new RegExp("^([0-9]*[.])?[0-9]*$");
 const naturalRe = new RegExp("^[0-9]+$");
