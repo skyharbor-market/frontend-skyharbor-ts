@@ -76,74 +76,6 @@ export default function WalletPage() {
     );
   }
 
-  async function loadArtworks() {
-    setLoading(true);
-    let ids = [];
-    let amounts = {};
-
-    const dappConnector = getWalletConnector();
-    if (dappConnector === "nautilus" || dappConnector === "safew") {
-      const tokens = await getTokens();
-      ids = Object.keys(tokens);
-      ids.forEach((key) => (amounts[key] = tokens[key].amount));
-    } else {
-      ids = (await getBalance(getWalletAddress())).tokens.map((tok) => {
-        amounts[tok.tokenId] = tok.amount;
-        return tok.tokenId;
-      });
-    }
-
-    // Set total amounts of NFTs owned
-    if (mounted) {
-      setTotalArtworks(ids.length);
-    }
-
-    let decoded = [];
-    let apiCalls = [];
-
-    for (let i = 0; i < ids.length; i++) {
-      apiCalls.push(decodeArtwork(null, ids[i], true));
-    }
-    console.log("apiCalls", apiCalls);
-
-    try {
-      const res = await Promise.all(apiCalls);
-      const data = res.map((res) => res);
-
-      decoded = data.flat();
-    } catch {
-      throw Error("Couldn't get for sale tokens.");
-    }
-
-    console.log("decoded", decoded);
-
-    for (let d of decoded) {
-      // Exit if not mounted
-      if (!mounted) {
-        return;
-      }
-      if (d.tokenId) {
-        d.amount = amounts[d.tokenId];
-      } else {
-        d.amount = undefined;
-      }
-    }
-
-    const filteredDecoded = decoded.filter((bx) => bx.isArtwork);
-
-    console.log("filteredDecoded", filteredDecoded);
-    // Save to redux even if wallet page isnt loaded anymore
-    dispatch(setTokens(filteredDecoded));
-
-    if (mounted) {
-      setArtworks(filteredDecoded);
-      // if(search === "") {
-      //     setFilteredArtworks(decoded.filter(bx => bx.isArtwork));
-      // }
-      setLoading(false);
-    }
-  }
-
   async function gqlGetTokens() {
     setLoading(true);
     let ids = [];
@@ -169,17 +101,25 @@ export default function WalletPage() {
     let decoded = [];
     let apiCalls = [];
 
+    console.log("IDSSSS", ids);
+
     for (let i = 0; i < ids.length; i++) {
       apiCalls.push(decodeArtwork(null, ids[i], false));
     }
 
     try {
-      const res = await Promise.all(apiCalls);
-      const data = res.map((res) => res);
+      console.log("test");
+      const res = await Promise.allSettled(apiCalls);
+      console.log("walletRES", res);
+
+      const data = res
+        .filter((r) => r.status === "fulfilled") // Filter out rejected promises
+        .map((r) => r.value); // Map to the value of fulfilled promises
+      console.log("dataaaa", data);
 
       decoded = data.flat();
-    } catch {
-      throw Error("Couldn't get for sale tokens.");
+    } catch (e) {
+      throw Error("Couldn't process wallet tokens: ", e);
     }
 
     console.log("DECODED", decoded);

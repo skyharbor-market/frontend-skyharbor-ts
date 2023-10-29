@@ -1,4 +1,4 @@
-import "@/styles/globals.css";
+import "../styles/globals.css";
 import { configureStore } from "@reduxjs/toolkit";
 import type { AppProps } from "next/app";
 import walletReducer from "../redux/reducers/walletSlice";
