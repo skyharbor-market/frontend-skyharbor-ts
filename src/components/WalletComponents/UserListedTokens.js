@@ -102,7 +102,7 @@ function UserListedTokens({ addresses }) {
     );
   } else if (data.sales.length === 0) {
     return (
-      <div textAlign={"center"}>
+      <div>
         <strong
           style={{
             display: "flex",
@@ -117,7 +117,7 @@ function UserListedTokens({ addresses }) {
   }
 
   return (
-    <div mt="4">
+    <div>
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5">
         {data.sales.map((item, index) => {
           const cardItem = {

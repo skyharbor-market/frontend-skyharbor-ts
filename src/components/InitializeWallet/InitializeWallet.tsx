@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import React, { useState, useEffect, Fragment } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -317,9 +315,8 @@ function InitializeWallet({}) {
           <div>
             {modalPage === "main" ? "Select your wallet" : "How To Disconnect"}
           </div>
-          <div px="6">
+          <div>
             <Button
-              variant="ghost"
               isFullWidth
               size={"lg"}
               leftIcon={<GiSubmarine size={28} />}
@@ -327,7 +324,7 @@ function InitializeWallet({}) {
               onClick={() => handleWalletConnect("nautilus")}
               colorScheme="blue"
               disabled={
-                walletState !== "Configure" && userAddress ? "(Connected)" : ""
+                walletState !== "Configure" && userAddress ? true : false
               }
             >
               Nautilus{" "}
@@ -335,16 +332,14 @@ function InitializeWallet({}) {
             </Button>
 
             <Button
-              variant="ghost"
               isFullWidth
               size={"lg"}
               mt="3"
               leftIcon={<FaWallet size={22} />}
               rightIcon={<FaWallet size={22} />}
               onClick={() => handleWalletConnect("safew")}
-              colorScheme="pink"
               disabled={
-                walletState !== "Configure" && userAddress ? "(Connected)" : ""
+                walletState !== "Configure" && userAddress ? true : false
               }
             >
               SAFEW{" "}
@@ -352,15 +347,13 @@ function InitializeWallet({}) {
             </Button>
 
             <Button
-              mt={2}
-              variant="ghost"
               isFullWidth
               size={"lg"}
               leftIcon={<MdPhoneAndroid size={20} />}
               onClick={connectErgopay}
               colorScheme="purple"
               disabled={
-                walletState !== "Configure" && userAddress ? "(Connected)" : ""
+                walletState !== "Configure" && userAddress ? true : false
               }
             >
               ErgoPay{" "}
@@ -375,33 +368,18 @@ function InitializeWallet({}) {
       return (
         <Fragment>
           <div>{"Connect ErgoPay"}</div>
-          <div px="6">
+          <div>
             <p>Scan the QR or press the button below to connect ErgoPay.</p>
 
-            <div textAlign={"center"}>
-              <div
-                w={148}
-                margin="auto"
-                mb="4"
-                mt="4"
-                overflow="hidden"
-                borderRadius={"lg"}
-                bgColor="white"
-                p="10px"
-              >
+            <div>
+              <div>
                 <QRCode
                   size={128}
                   value={`ergopay://${skyHarborApiRoot}/api/ergopay/setAddr/${disErgopayUUID}/#P2PK_ADDRESS#`}
                 />
               </div>
 
-              <div
-                className="flex flex-col flex-cols-1 md:flex-cols-2"
-                mt="6"
-                spacing={2}
-                columns={{ base: 1, md: 2 }}
-                textAlign={"center"}
-              >
+              <div className="flex flex-col flex-cols-1 md:flex-cols-2">
                 <Button onClick={copyErgoPay}>Copy request</Button>
                 <Button colorScheme={"blue"} onClick={openErgoPay}>
                   Open wallet
@@ -414,11 +392,12 @@ function InitializeWallet({}) {
     } else if (modalPage === "clear") {
       return (
         <Fragment>
-          <div pb="1">
+          <div>
+            {/* @ts-ignore */}
             {modalPage === "main" ? "Select your wallet" : "Disconnect"}
           </div>
-          <div mb="4">
-            <p mb="4">
+          <div>
+            <p>
               Are you sure you want to disconnect?{" "}
               {walletState === "ergopay" ? "" : "This will refresh the page."}
             </p>
@@ -489,24 +468,20 @@ function InitializeWallet({}) {
           </Button>
         )} */}
 
-        <Modal open={reduxState.wallet.walletSelectOpen} setOpen={toggle}>
-          <div color="black" margin="4">
+        {/* @ts-ignore */}
+        <Modal open={reduxState?.wallet?.walletSelectOpen} setOpen={toggle}>
+          <div>
             {modalCurrentPage()}
 
             {modalPage !== "clear" && (
               <div>
                 <Button
                   disabled={walletState === "Configure"}
-                  variant="ghost"
-                  colorScheme={"red"}
-                  mr={4}
                   onClick={handleClearButton}
                 >
                   Disconnect Wallet
                 </Button>
-                <Button width={24} variant="ghost" onClick={toggle}>
-                  Close
-                </Button>
+                <Button onClick={toggle}>Close</Button>
               </div>
             )}
           </div>

@@ -212,14 +212,7 @@ function WalletList({ artworks, tokensLoading }) {
         {tokensLoading && (
           <p className="my-3 text-center text-gray-500">
             Loading NFTs, this may take a while. You can view the{" "}
-            <span as="span" fontWeight={"semibold"}>
-              For Sale
-            </span>{" "}
-            and{" "}
-            <span fontWeight={"semibold"} as="span">
-              Sold
-            </span>{" "}
-            tabs while you wait.
+            <span>For Sale</span> and <span>Sold</span> tabs while you wait.
           </p>
         )}
 

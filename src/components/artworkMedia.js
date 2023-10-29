@@ -168,7 +168,6 @@ export default function ArtworkMedia({
           // layout='fill'
           onLoad={onImgLoad}
           style={{
-            maxHeight: maxHeight ? maxHeight : "inherit",
             width: "100%",
             height: "100%",
             minWidth: ratio === "square" ? 0 : 200,
@@ -274,7 +273,6 @@ export default function ArtworkMedia({
                 }`}
                 // layout='fill'
                 onLoad={onImgLoad}
-                maxHeight={maxHeight ? maxHeight : "inherit"}
                 // _hover={{
                 //   opacity: lightbox ? 0.5 : 1,
                 //   cursor: lightbox ? "pointer" : "inherit",

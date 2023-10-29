@@ -247,18 +247,9 @@ export default function WalletPage() {
           <Fragment>
             <div
               className="flex flex-row items-center"
-              mb="2"
-              _hover={{ opacity: 0.5 }}
-              transition="opacity .2s"
-              cursor={"pointer"}
               onClick={() => setOpenAddresses(!openAddresses)}
             >
-              <p
-                className="bg-gray-600 rounded-full"
-                borderRadius={"full"}
-                py={1}
-                px={2}
-              >
+              <p className="bg-gray-600 rounded-full">
                 Address: {friendlyAddress(userAddresses[0], 6)}
               </p>{" "}
               {openAddresses ? <FaChevronUp /> : <FaChevronDown />}
