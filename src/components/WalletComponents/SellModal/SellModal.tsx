@@ -91,8 +91,11 @@ const SellModal = ({ open, onClose, token }: SellModalProps) => {
   };
 
   useEffect(() => {
-    getTokenRoyalties();
-  }, [token]);
+    console.log("Is open?", open);
+    if (open) {
+      getTokenRoyalties();
+    }
+  }, [open]);
 
   const disableButton = !price || price === 0 || royalties === null;
 

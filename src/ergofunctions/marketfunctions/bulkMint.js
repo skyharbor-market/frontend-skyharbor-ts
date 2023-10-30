@@ -11,10 +11,9 @@ import blake from "blakejs";
 const fromHexString = (hexString) =>
   Uint8Array.from(hexString.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)));
 
-// let ergolib = import('ergo-lib-wasm-browser')
-import dynamic from "next/dynamic";
-
-let ergolib = dynamic(() => import("ergo-lib-wasm-browser"), { ssr: false });
+let ergolib = import("ergo-lib-wasm-browser");
+// import dynamic from "next/dynamic";
+// let ergolib = dynamic(() => import("ergo-lib-wasm-browser"), { ssr: false });
 
 // const nodeUrl = "https://paidincrypto.io";
 // const nodeUrl = "https://www.test-skyharbor-server.net:9053/";

@@ -101,28 +101,21 @@ export default function WalletPage() {
     let decoded = [];
     let apiCalls = [];
 
-    console.log("IDSSSS", ids);
-
     for (let i = 0; i < ids.length; i++) {
       apiCalls.push(decodeArtwork(null, ids[i], false));
     }
 
     try {
-      console.log("test");
       const res = await Promise.allSettled(apiCalls);
-      console.log("walletRES", res);
 
       const data = res
         .filter((r) => r.status === "fulfilled") // Filter out rejected promises
         .map((r) => r.value); // Map to the value of fulfilled promises
-      console.log("dataaaa", data);
 
       decoded = data.flat();
     } catch (e) {
       throw Error("Couldn't process wallet tokens: ", e);
     }
-
-    console.log("DECODED", decoded);
 
     try {
       for (let d of decoded) {
@@ -133,15 +126,12 @@ export default function WalletPage() {
         //   return;
         // }
         if (d.tokenId) {
-          console.log("amounts[d.tokenId]", amounts[d.tokenId]);
-
           d.amount = amounts[d.tokenId];
         }
       }
     } catch (err) {
       console.log("SUPER ERROR", err);
     }
-    console.log("d", decoded);
 
     // Save to redux even if wallet page isnt loaded anymore
     const filteredNFTs = decoded.filter((bx) => bx.isArtwork);

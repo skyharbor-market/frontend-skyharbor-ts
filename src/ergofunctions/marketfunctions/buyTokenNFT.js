@@ -12,10 +12,9 @@ import { encodeHex, getRoyaltyInfo } from "../serializer";
 import { minBoxValue } from "@coinbarn/ergo-ts";
 import { getConnectorAddress, getTokens } from "../walletUtils";
 
-// let ergolib = import('ergo-lib-wasm-browser')
-import dynamic from "next/dynamic";
-
-let ergolib = dynamic(() => import("ergo-lib-wasm-browser"), { ssr: false });
+let ergolib = import("ergo-lib-wasm-browser");
+// import dynamic from "next/dynamic";
+// let ergolib = dynamic(() => import("ergo-lib-wasm-browser"), { ssr: false });
 
 // const nodeUrl = "https://paidincrypto.io";
 // const nodeUrl = "https://www.test-skyharbor-server.net:9053/";
