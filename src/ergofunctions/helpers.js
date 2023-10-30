@@ -86,18 +86,14 @@ export function showMsg(message, isError = false, isWarning = false) {
   if (isError) status = "error";
   if (isWarning) status = "warning";
 
-  if(status === "error") {
-    toast.error(message);    
-  }
-  else if(status === "warning") {
+  if (status === "error") {
+    toast.error(message);
+  } else if (status === "warning") {
     toast.warning(message);
-  }
-  else {
-    toast(message);    
+  } else {
+    toast(message);
   }
 
-
-  
   // toast(message, {
   //     transition: Slide,
   //     closeButton: true,
@@ -236,7 +232,7 @@ export function getCartItems() {
 // }
 
 export async function copyToClipboard(text) {
-  return navigator.clipboard.writeText(text).then((_) => showMsg("Copied!"));
+  return navigator.clipboard.writeText(text);
 }
 
 export function isAddressValid(address) {
@@ -479,7 +475,8 @@ export function calculateEarnings(royalty, price, currency) {
   // let previewServiceFee = parseFloat((price * serviceFee).toFixed(decimalPlaces));
   let previewServiceFee = parseFloat(
     Math.floor(
-      currencyToLong(price, SupportedCurrenciesV2[currency].decimal) * serviceFee
+      currencyToLong(price, SupportedCurrenciesV2[currency].decimal) *
+        serviceFee
     ).toFixed(decimalPlaces)
   );
 
@@ -489,7 +486,10 @@ export function calculateEarnings(royalty, price, currency) {
 
   let userEarnings = (
     parseFloat(price ? price : 0) -
-    (longToCurrency(previewServiceFee, SupportedCurrenciesV2[currency].decimal) +
+    (longToCurrency(
+      previewServiceFee,
+      SupportedCurrenciesV2[currency].decimal
+    ) +
       longToCurrency(
         previewArtistRoyalty,
         SupportedCurrenciesV2[currency].decimal

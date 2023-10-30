@@ -11,6 +11,7 @@ import Fade from "../Fade/Fade";
 import FormattedMetadata from "../FormattedMetadata/FormattedMetadata";
 import LoadingCircle from "../LoadingCircle/LoadingCircle";
 import Modal from "../Modal/Modal";
+import NFTInfo from "./NFTInfo";
 
 type Props = {
   token: any;
@@ -100,81 +101,14 @@ const NFTCard = ({ token, isOwner = false, noBuy = false }: Props) => {
         setOpen={() => {
           setOpenInfo(false);
         }}
-        className="md:max-w-5xl"
+        // className="max-w-5xl w-full"
+        size="max-w-5xl"
       >
-        <div key={`${token.token_id}-info`}>
-          <div
-            className="absolute top-4 right-4 cursor-pointer hover:opacity-60 animate-all"
-            onClick={() => setOpenInfo(false)}
-          >
-            <XMarkIcon className="w-7 h-7" />
-          </div>
-          <div className="flex flex-row space-x-8">
-            <div className="w-1/3 h-full aspect-square overflow-hidden bg-gray-200 group-hover:opacity-90 bg-white rounded">
-              {/* <img
-            src={token.ipfs_art_url}
-            alt={token.nft_name}
-            className="h-full w-full object-cover object-center"
-          /> */}
-              {/* {openInfo && (
-                <Fade fadeKey={"info-box-fade"} fadeDuration={0.15}>
-                  <div className="h-full w-full">
-                    <ArtworkMedia box={token} />
-                  </div>
-                </Fade>
-              )} */}
-              {/* <ArtworkMedia
-                box={token}
-                key={`${token.token_id}-info-full`}
-                mustLoad={true}
-                ratio="regular"
-              /> */}
-              <img
-                className="h-full w-full object-contain"
-                src={
-                  token.ipfs_art_hash
-                    ? `${ipfsGateway}/${token.ipfs_art_hash}`
-                    : token.ipfs_art_url
-                }
-              />
-            </div>
-            <div className="w-2/3 flex flex-col justify-between">
-              <div>
-                <p className="text-xl">{token.nft_name}</p>
-                <div className="my-4">
-                  <FormattedMetadata description={token.nft_desc} />
-                </div>
-              </div>
-              {!noBuy && (
-                <div>
-                  <BuyNFTButton
-                    ownedNFT={false}
-                    box={token}
-                    sellButton={
-                      <div>
-                        <Button className="w-full mt-8">Cancel</Button>
-                      </div>
-                    }
-                    buyButton={
-                      <div>
-                        <Button className="w-full mt-8">Buy</Button>
-                      </div>
-                    }
-                    loadingButton={
-                      <div>
-                        <div className="animate-pulse">
-                          <Button disabled className="w-full mt-8">
-                            Loading...
-                          </Button>
-                        </div>
-                      </div>
-                    }
-                  />
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
+        <NFTInfo
+          token={token}
+          noBuy={noBuy}
+          onClose={() => setOpenInfo(false)}
+        />
       </Modal>
     </div>
   );
