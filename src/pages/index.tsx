@@ -351,17 +351,16 @@ export default function Landing() {
                 </Fade>
               </div>
               <div className="mt-10 flex items-center gap-x-6">
-                <Link
-                  href="/marketplace"
-                  className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                >
-                  Get started
+                <Link href="/marketplace">
+                  <div className="rounded-md cursor-pointer bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                    Get started
+                  </div>
                 </Link>
                 <Link
                   href="#"
                   className="text-sm font-semibold leading-6 text-gray-900"
                 >
-                  Learn more <span aria-hidden="true">→</span>
+                  Learn more →
                 </Link>
               </div>
             </div>
@@ -564,7 +563,7 @@ export default function Landing() {
                         href={feature.href}
                         className="text-sm font-semibold leading-6 text-indigo-600"
                       >
-                        Learn more <span aria-hidden="true">→</span>
+                        Learn more →
                       </Link>
                     </p>
                   </dd>

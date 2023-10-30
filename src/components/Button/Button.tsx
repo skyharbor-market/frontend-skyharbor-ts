@@ -76,10 +76,8 @@ export const Button: React.FC<ButtonProps> = ({
 
   if (internal && href?.length) {
     return (
-      <Link href={href}>
-        <a className={classes + " " + className} {...rest}>
-          {children}
-        </a>
+      <Link href={href} className={classes + " " + className} {...rest}>
+        {children}
       </Link>
     );
   }

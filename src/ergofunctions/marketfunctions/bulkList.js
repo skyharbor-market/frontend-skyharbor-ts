@@ -10,11 +10,11 @@ import { min_value } from "../conf";
 import { currentBlock, boxById } from "../explorer";
 import { encodeHex, encodeNum, getEncodedBoxSer } from "../serializer";
 import { Address } from "@coinbarn/ergo-ts";
-// let ergolib = import("ergo-lib-wasm-browser");
+let ergolib = import("ergo-lib-wasm-browser");
 
-import dynamic from "next/dynamic";
+// import dynamic from "next/dynamic";
 
-let ergolib = dynamic(() => import("ergo-lib-wasm-browser"), { ssr: false });
+// let ergolib = dynamic(() => import("ergo-lib-wasm-browser"), { ssr: false });
 
 import { getConnectorAddress, getTokens } from "../walletUtils";
 import { get_utxos } from "../ergolibUtils";

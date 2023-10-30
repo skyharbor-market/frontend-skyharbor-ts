@@ -54,7 +54,7 @@ function WalletButton({ changeTheme, darkMode }) {
             >
               <Button
                 colorScheme="orange"
-                minW={100}
+                // minW={100}
                 // isLoading={!userAddress}
                 className="flex flex-row items-center relative overflow-hidden"
               >

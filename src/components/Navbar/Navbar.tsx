@@ -27,14 +27,16 @@ export default function Navbar({ setTheme, theme }: NavProps) {
       >
         <div className="flex items-center gap-x-12">
           <Link href="/" className="-m-1.5 p-1.5">
-            <span className="sr-only">SkyHarbor</span>
-            <div className="flex flex-row items-center">
-              <img
-                className="h-8 mr-2 transition-all w-auto dark:invert"
-                src="assets/images/skyharborlogo.png"
-                alt=""
-              />
-              <p className="font-semibold">SkyHarbor</p>
+            <div>
+              <span className="sr-only">SkyHarbor</span>
+              <div className="flex flex-row items-center">
+                <img
+                  className="h-8 mr-2 transition-all w-auto dark:invert"
+                  src="assets/images/skyharborlogo.png"
+                  alt=""
+                />
+                <p className="font-semibold">SkyHarbor</p>
+              </div>
             </div>
           </Link>
           <div className="hidden lg:flex lg:gap-x-12">
@@ -85,13 +87,15 @@ export default function Navbar({ setTheme, theme }: NavProps) {
         <Dialog.Panel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white dark:bg-slate-800 px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
           <div className="flex items-center justify-between">
             <Link href="#" className="-m-1.5 p-1.5">
-              <span className="sr-only">SkyHarbor</span>
-              {/* <img
+              <div>
+                <span className="sr-only">SkyHarbor</span>
+                {/* <img
                 className="h-8 w-auto"
                 src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
                 alt=""
               /> */}
-              <p className="">SkyHarbor</p>
+                <p className="">SkyHarbor</p>
+              </div>
             </Link>
             <button
               type="button"
