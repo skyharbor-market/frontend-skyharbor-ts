@@ -1,4 +1,4 @@
-import { SupportedCurrenciesV2 } from "@/ergofunctions/consts";
+import { SupportedCurrenciesV2 } from "@/ergofunctions/Currencies";
 import React, { useEffect, useState } from "react";
 import Select, {
   ActionMeta,

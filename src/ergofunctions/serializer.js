@@ -2,7 +2,8 @@ import { Serializer } from "@coinbarn/ergo-ts/dist/serializer";
 import moment from "moment";
 import { Address, AddressKind } from "@coinbarn/ergo-ts/dist/models/address";
 import { boxById, getIssuingBox, txById } from "./explorer";
-import { supportedCurrencies, SupportedCurrenciesV2 } from "./consts";
+import { supportedCurrencies } from "./consts";
+import { SupportedCurrenciesV2 } from "./Currencies";
 // import { createStandaloneToast } from "@chakra-ui/react"
 // import { theme } from "../components/theme";
 import axios from "axios";

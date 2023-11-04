@@ -95,8 +95,11 @@ export default function TxSubmitted({ txId, box }) {
         <div key={"submitted"}>
           <div className="max-w-2xl">
             <div>
-              <div>
-                <MdCheckCircleOutline fontSize={"6xl"} color="green.400" />
+              <div className="text-center w-full">
+                <MdCheckCircleOutline
+                  className="h-32 w-32 text-green-500 m-auto"
+                  color="green.400"
+                />
               </div>
               {box && (
                 <div className="aspect-square">
@@ -111,19 +114,20 @@ export default function TxSubmitted({ txId, box }) {
           {/* <div textAlign={"center"} w="100%" mb="8" mt="8">
                         <CheckCircleIcon fontSize={"6xl"} color="green.400"/>
                     </div> */}
+
+          <div className="mt-4">
+            <p className="w-full break-words p-2 border rounded-lg">
+              Transaction ID: <span className="text-gray-700">{txId}</span>
+            </p>
+          </div>
           <Button
-            mb="3"
-            isFullWidth
             colorScheme="green"
-            variant={"outline"}
+            className="w-full bg-green-500 mt-3"
             onClick={() => gotoTransaction(txId)}
           >
             View Tx on Explorer
           </Button>
-          <p>
-            Transaction ID: <p>{txId}</p>
-          </p>
-          <p>
+          <p className="text-sm text-gray-600 mt-2">
             Now we wait until it is confirmed on the blockchain. It should take
             about 2-10 minutes.
           </p>

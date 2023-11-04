@@ -11,8 +11,8 @@ import {
   fakeURL,
   serviceFee,
   supportedCurrencies,
-  SupportedCurrenciesV2,
 } from "./consts";
+import { SupportedCurrenciesV2 } from "./Currencies";
 import { boxById, getBoxesForAsset } from "./explorer";
 import moment from "moment";
 // import ahIcon from "../assets/images/Ergo_auction_house_logo.png";

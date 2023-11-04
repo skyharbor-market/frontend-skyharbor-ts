@@ -3,10 +3,16 @@ import CustomDropdown from "@/components/CustomDropdown/CustomDropdown";
 import CustomInput from "@/components/CustomInput/CustomInput";
 import LoadingCircle from "@/components/LoadingCircle/LoadingCircle";
 import Modal from "@/components/Modal/Modal";
+import TxSubmitted from "@/components/TxSubmitted/TxSubmitted";
 import { serviceFee } from "@/ergofunctions/consts";
+import { SupportedCurrenciesV2 } from "@/ergofunctions/Currencies";
 import { calculateEarnings } from "@/ergofunctions/helpers";
 import { bulk_list } from "@/ergofunctions/marketfunctions/bulkList";
-import { decodeArtwork, getRoyaltyInfo } from "@/ergofunctions/serializer";
+import {
+  currencyToLong,
+  decodeArtwork,
+  getRoyaltyInfo,
+} from "@/ergofunctions/serializer";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import toast, { LoaderIcon } from "react-hot-toast";
 
@@ -32,7 +38,7 @@ const SellModal = ({ open, onClose, token }: SellModalProps) => {
 
   const [txId, setTxId] = useState<string | null>(null);
 
-  const [price, setPrice] = useState<number>();
+  const [price, setPrice] = useState<number | string>();
   const [currency, setCurrency] = useState<string>("erg");
   // useEffect(() => {
   //   decodeArtwork(null, token.tokenId, false);
@@ -46,12 +52,17 @@ const SellModal = ({ open, onClose, token }: SellModalProps) => {
   const createSaleTx = async () => {
     const tokenId = token.tokenId;
     const currencyIndex = 0; //currency
+
+    const thePrice = typeof price === "string" ? parseInt(price) : price;
     try {
       const saleTxId = await bulk_list([
         {
           id: tokenId,
           currencyIndex: currencyIndex,
-          price: price,
+          price: currencyToLong(
+            thePrice,
+            SupportedCurrenciesV2[currency].decimal
+          ),
         },
       ]);
       if (saleTxId) {
@@ -105,9 +116,9 @@ const SellModal = ({ open, onClose, token }: SellModalProps) => {
     currency
   );
 
-  return (
-    <div>
-      <Modal open={open} setOpen={onClose}>
+  const renderForm = () => {
+    return (
+      <div>
         <div>
           <div className="text-xl">List NFT: {token.nft_name}</div>
         </div>
@@ -121,7 +132,7 @@ const SellModal = ({ open, onClose, token }: SellModalProps) => {
                 type={"number"}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => {
                   if (e.target.value) {
-                    setPrice(parseInt(e.target.value));
+                    setPrice(e.target.value);
                   }
                 }}
               />
@@ -182,6 +193,14 @@ const SellModal = ({ open, onClose, token }: SellModalProps) => {
             )}
           </Button>
         </div>
+      </div>
+    );
+  };
+
+  return (
+    <div>
+      <Modal open={open} setOpen={onClose}>
+        {txId ? <TxSubmitted txId={txId} /> : renderForm()}
       </Modal>
     </div>
   );

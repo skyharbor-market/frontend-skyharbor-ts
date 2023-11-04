@@ -1,4 +1,4 @@
-import { ipfsGateway, SupportedCurrenciesV2 } from "@/ergofunctions/consts";
+import { SupportedCurrenciesV2 } from "@/ergofunctions/Currencies";
 import { longToCurrency } from "@/ergofunctions/serializer";
 import { StarIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
