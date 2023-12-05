@@ -53,7 +53,7 @@ const Collection = () => {
   const renderCollectionInfo = () => {
     if (loading) {
       return (
-        <div>
+        <div className="m-auto w-12">
           <LoadingCircle />
         </div>
       );

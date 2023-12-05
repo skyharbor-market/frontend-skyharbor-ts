@@ -24,7 +24,7 @@ const InfiniteActivityFeed = () => {
   });
 
 
-  function gotoTransaction(txId) {
+  function gotoTransaction(txId: string) {
     window.open(
       `https://explorer.ergoplatform.com/en/transactions/${txId}`,
       "_blank" // <- This is what makes it open in a new window.

@@ -1,6 +1,7 @@
 import { gql, useSubscription } from '@apollo/client';
 // import { useToast } from '@chakra-ui/react';
 import React, { Fragment, useEffect } from 'react'
+import toast from 'react-hot-toast';
 
 const SUBSCRIBE_ERGOPAY = gql`
 subscription checkSigned ($txId: String!) {
@@ -26,13 +27,7 @@ function ErgoPayCheckSigned({txId, userSignedTx}) {
             if(data.pay_requests[0].signed) {
                 // User has signed the transaction
                 userSignedTx();
-                // toast({
-                //     title: "Transaction has been signed",
-                //     position: "bottom",
-                //     status: "success",
-                //     duration: 2000,
-                //     isClosable: true,
-                // })
+                toast.success("Transaction has been signed");
             }
         }
     }, [data, txId])
