@@ -10,7 +10,7 @@ import Button from "../Button/Button";
 import toast, { Toaster } from "react-hot-toast";
 import ErgoPayCheckSigned from "../InitializeWallet/ErgoPay/ErgoPayCheckSigned";
 
-export default function TxSubmitted({ txId, box }) {
+export default function TxSubmitted({ txId, box }: { txId: any; box?: any }) {
   const [userAddress, setUserAddress] = useState(null);
   const [usingErgoPay, setUsingErgoPay] = useState(null);
 
@@ -139,10 +139,13 @@ export default function TxSubmitted({ txId, box }) {
 
   return (
     <div>
-      {
-                usingErgoPay && 
-                <ErgoPayCheckSigned key={txId} txId={txId} userSignedTx={()=>setSignedTransaction(true)}/>
-            }
+      {usingErgoPay && (
+        <ErgoPayCheckSigned
+          key={txId}
+          txId={txId}
+          userSignedTx={() => setSignedTransaction(true)}
+        />
+      )}
       <SubmitDisplay />
     </div>
   );

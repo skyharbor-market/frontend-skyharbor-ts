@@ -163,7 +163,7 @@ const SellModal = ({ open, onClose, token }: SellModalProps) => {
                 : "(0%)"}
             </p>
             <p>
-              {(price || 0) * ((royalties?.percentage || 0) / 100)} {currency}
+              {Number(price || 0) * (Number(royalties?.percentage || 0) / 100)} {currency}
             </p>
           </div>
           <div className="flex flex-row justify-between text-sm">
