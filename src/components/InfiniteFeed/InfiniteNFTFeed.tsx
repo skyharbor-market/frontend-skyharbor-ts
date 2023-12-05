@@ -29,6 +29,7 @@ const InfiniteNFTFeed = ({ gqlQuery, collection }: InfiniteNFTFeedProps) => {
   return (
     <InfiniteScroll
       dataLength={data.sales.length}
+      style={{ overflow: "visible" }}
       next={() => {
         fetchMore({
           variables: {

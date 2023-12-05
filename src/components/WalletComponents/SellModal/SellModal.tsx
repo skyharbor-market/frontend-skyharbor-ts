@@ -13,6 +13,9 @@ import {
   decodeArtwork,
   getRoyaltyInfo,
 } from "@/ergofunctions/serializer";
+import { getWalletAddresses } from "@/ergofunctions/walletUtils";
+import { listNft } from "api-calls/list";
+import { Currency } from "interfaces/ListInterface";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import toast, { LoaderIcon } from "react-hot-toast";
 
@@ -38,8 +41,8 @@ const SellModal = ({ open, onClose, token }: SellModalProps) => {
 
   const [txId, setTxId] = useState<string | null>(null);
 
-  const [price, setPrice] = useState<number | string>();
-  const [currency, setCurrency] = useState<string>("erg");
+  const [price, setPrice] = useState<string>("");
+  const [currency, setCurrency] = useState<Currency>("erg");
   // useEffect(() => {
   //   decodeArtwork(null, token.tokenId, false);
 
@@ -55,16 +58,24 @@ const SellModal = ({ open, onClose, token }: SellModalProps) => {
 
     const thePrice = typeof price === "string" ? parseInt(price) : price;
     try {
-      const saleTxId = await bulk_list([
-        {
+      // const saleTxId = await bulk_list([
+      //   {
+      //     id: tokenId,
+      //     currencyIndex: currencyIndex,
+      //     price: currencyToLong(
+      //       thePrice,
+      //       SupportedCurrenciesV2[currency].decimal
+      //     ),
+      //   },
+      // ]);
+      const saleTxId = await listNft({
+        nfts: {
+          currency: currency as Currency,
+          price: thePrice,
           id: tokenId,
-          currencyIndex: currencyIndex,
-          price: currencyToLong(
-            thePrice,
-            SupportedCurrenciesV2[currency].decimal
-          ),
         },
-      ]);
+        userAddresses: await getWalletAddresses(),
+      });
       if (saleTxId) {
         setTxId(saleTxId);
         return;
@@ -163,7 +174,8 @@ const SellModal = ({ open, onClose, token }: SellModalProps) => {
                 : "(0%)"}
             </p>
             <p>
-              {Number(price || 0) * (Number(royalties?.percentage || 0) / 100)} {currency}
+              {Number(price || 0) * (Number(royalties?.percentage || 0) / 100)}{" "}
+              {currency}
             </p>
           </div>
           <div className="flex flex-row justify-between text-sm">

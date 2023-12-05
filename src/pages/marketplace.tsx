@@ -14,10 +14,10 @@ const Marketplace = (props: Props) => {
         <p className="text-center text-4xl font-semibold">Marketplace</p>
       </div>
       <div className="mt-8">
-        <div className="max-w-5xl mx-auto mb-6">
+        <div className="mx-auto mb-6">
           <CustomInput leftIcon={<MdSearch />} placeholder="Search..." />
         </div>
-        <div>
+        <div className="">
           <InfiniteNFTFeed gqlQuery={GET_NFTS} />
         </div>
       </div>
