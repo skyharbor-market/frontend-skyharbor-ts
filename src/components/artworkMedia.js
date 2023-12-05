@@ -245,7 +245,7 @@ export default function ArtworkMedia({
           // </div>
           <div className="animate-pulse">
             <div className="aspect-square">
-              <div className="flex h-full w-full items-center justify-center">
+              <div className="flex h-full w-full items-center justify-center p-8">
                 <LoadingCircle />
               </div>
               <div className="rounded-t-md bg-slate-700 w-full h-full"></div>
