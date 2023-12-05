@@ -1,9 +1,12 @@
 import { ipfsGateway } from "@/ergofunctions/consts";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../Button/Button";
 import BuyNFTButton from "../BuyNFTButton/BuyNFTButton";
 import FormattedMetadata from "../FormattedMetadata/FormattedMetadata";
+import ArtworkMedia from "../artworkMedia";
+import { delay } from "lodash";
+import Fade from "../Fade/Fade";
 
 interface NFTInfoProps {
   token: any;
@@ -12,6 +15,16 @@ interface NFTInfoProps {
 }
 
 const NFTInfo = ({ token, noBuy, onClose }: NFTInfoProps) => {
+  const [showImg, setShowImg] = useState<boolean>(false)
+
+  const activateImage = async()=> {
+    await delay(()=>setShowImg(true), 50)
+
+  }
+  useEffect(()=> {
+    activateImage();
+  }, [])
+
   return (
     <div key={`${token.token_id}-info`} className="w-full">
       <div
@@ -40,14 +53,21 @@ const NFTInfo = ({ token, noBuy, onClose }: NFTInfoProps) => {
           mustLoad={true}
           ratio="regular"
         /> */}
-          <img
+          {/* <img
             className="h-full w-full object-contain"
             src={
               token.ipfs_art_hash
                 ? `${ipfsGateway}/${token.ipfs_art_hash}`
                 : token.ipfs_art_url
             }
-          />
+          /> */}
+          {
+            showImg &&
+            <Fade fadeDuration={0.1} fadeKey={`tokenpopup-${token.token_id}`}>
+              <ArtworkMedia box={token}/>
+
+            </Fade>
+          }
         </div>
         <div className="w-2/3 flex flex-col justify-between">
           <div>
