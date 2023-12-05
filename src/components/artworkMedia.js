@@ -19,16 +19,13 @@ import LoadingCircle from "./LoadingCircle/LoadingCircle";
 
 export default function ArtworkMedia({
   box,
-  maxHeight,
   cloudinary = true,
   ratio = "square",
   thumbnail = true,
   lazyLoad = false,
-  lightbox = false,
   small = false,
   wallet = false,
   autoPlay = false,
-  mustLoad,
   borderRad = 0,
 }) {
   let mounted = true;

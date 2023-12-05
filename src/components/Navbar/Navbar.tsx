@@ -29,10 +29,10 @@ export default function Navbar({ setTheme, theme }: NavProps) {
           <Link href="/" className="-m-1.5 p-1.5">
             <div>
               <span className="sr-only">SkyHarbor</span>
-              <div className="flex flex-row items-center">
+              <div className="flex flex-row items-center cursor-pointer hover:opacity-70 transition-all">
                 <img
-                  className="h-8 mr-2 transition-all w-auto dark:invert"
-                  src="assets/images/skyharborlogo.png"
+                  className="h-8 w-8 mr-2 transition-all dark:invert"
+                  src="/assets/images/skyharborlogo.png"
                   alt=""
                 />
                 <p className="font-semibold">SkyHarbor</p>
@@ -44,7 +44,7 @@ export default function Navbar({ setTheme, theme }: NavProps) {
               <Link
                 key={item.name}
                 href={item.href}
-                className="text-sm font-semibold leading-6 "
+                className="text-sm font-semibold leading-6"
               >
                 {item.name}
               </Link>

@@ -65,7 +65,6 @@ const NFTInfo = ({ token, noBuy, onClose }: NFTInfoProps) => {
             showImg &&
             <Fade fadeDuration={0.1} fadeKey={`tokenpopup-${token.token_id}`}>
               <ArtworkMedia box={token}/>
-
             </Fade>
           }
         </div>
