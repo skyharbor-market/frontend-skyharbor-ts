@@ -1,7 +1,6 @@
 import { gql, useSubscription } from '@apollo/client';
-import { useToast } from '@chakra-ui/react';
+// import { useToast } from '@chakra-ui/react';
 import React, { Fragment, useEffect } from 'react'
-import { withApollo } from '../../lib/withApollo';
 
 const SUBSCRIBE_ERGOPAY = gql`
 subscription checkSigned ($txId: String!) {
@@ -13,8 +12,8 @@ subscription checkSigned ($txId: String!) {
 }
 `
 
-function ErgoPaySubscription({txId, userSignedTx}) {
-    const toast = useToast()
+function ErgoPayCheckSigned({txId, userSignedTx}) {
+    // const toast = useToast()
 
     const { loading, error, data } = useSubscription(SUBSCRIBE_ERGOPAY, {
         variables: {
@@ -27,13 +26,13 @@ function ErgoPaySubscription({txId, userSignedTx}) {
             if(data.pay_requests[0].signed) {
                 // User has signed the transaction
                 userSignedTx();
-                toast({
-                    title: "Transaction has been signed",
-                    position: "bottom",
-                    status: "success",
-                    duration: 2000,
-                    isClosable: true,
-                })
+                // toast({
+                //     title: "Transaction has been signed",
+                //     position: "bottom",
+                //     status: "success",
+                //     duration: 2000,
+                //     isClosable: true,
+                // })
             }
         }
     }, [data, txId])
@@ -44,4 +43,4 @@ function ErgoPaySubscription({txId, userSignedTx}) {
     )
 }
 
-export default withApollo()(ErgoPaySubscription)
+export default ErgoPayCheckSigned

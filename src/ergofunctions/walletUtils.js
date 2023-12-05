@@ -3,7 +3,7 @@
 import { setWallet } from "../redux/reducers/walletSlice";
 import axios from "axios";
 import { store } from "../pages/_app";
-import { showMsg, isWalletSaved, getWalletType } from "./helpers";
+import { showMsg, isWalletSaved, getWalletType, getWalletAddress } from "./helpers";
 import { getBalance } from "./explorer";
 
 // const fromHexString = (hexString) =>
@@ -161,6 +161,7 @@ export async function getConnectorAddress(setup = false) {
 
   return null;
 }
+
 export async function getWalletAddresses(setup = false) {
   if (setup) {
     let res = await setupWallet();
@@ -175,12 +176,16 @@ export async function getWalletAddresses(setup = false) {
       }
     }
   } else {
-    try {
-      return (await ergo.get_used_addresses()).concat(
-        await ergo.get_unused_addresses()
-      );
-    } catch {
-      return "error";
+    if (getWalletType() !== "ergopay") {
+      try {
+        return (await ergo.get_used_addresses()).concat(
+          await ergo.get_unused_addresses()
+        );
+      } catch {
+        return "error";
+      }
+    } else {
+      return [getWalletAddress()];
     }
   }
 

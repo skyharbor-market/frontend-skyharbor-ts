@@ -17,6 +17,8 @@ import { SellTokenInterface } from "../WalletComponents/SellModal/SellModal";
 import { MdEditDocument } from "react-icons/md";
 import Button from "../Button/Button";
 import toast, { Toaster } from "react-hot-toast";
+import { buyNft, buyNftApi } from "api-calls/buy";
+import { getWalletAddresses } from "@/ergofunctions/walletUtils";
 
 interface BuyNFTButtonProps {
   ownedNFT: boolean;
@@ -57,7 +59,8 @@ export default function BuyNFTButton({
     let buyTxId;
     if (box.currency === "erg") {
       try {
-        buyTxId = await buyNFT(box);
+        // buyTxId = await buyNFT(box);
+        buyTxId = await buyNft({buyBox: box, userAddresses: await getWalletAddresses()});
       } catch (err: any) {
         console.log(err?.message);
         toast.error("There was an error buying the NFT, try again later.");
