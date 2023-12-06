@@ -7,6 +7,8 @@ import FormattedMetadata from "../FormattedMetadata/FormattedMetadata";
 import ArtworkMedia from "../artworkMedia";
 import { delay } from "lodash";
 import Fade from "../Fade/Fade";
+import { longToCurrency } from "@/ergofunctions/serializer";
+import { SupportedCurrenciesV2 } from "@/ergofunctions/Currencies";
 
 interface NFTInfoProps {
   token: any;
@@ -61,12 +63,11 @@ const NFTInfo = ({ token, noBuy, onClose }: NFTInfoProps) => {
                 : token.ipfs_art_url
             }
           /> */}
-          {
-            showImg &&
+          {showImg && (
             <Fade fadeDuration={0.1} fadeKey={`tokenpopup-${token.token_id}`}>
-              <ArtworkMedia box={token}/>
+              <ArtworkMedia box={token} />
             </Fade>
-          }
+          )}
         </div>
         <div className="w-2/3 flex flex-col justify-between">
           <div>
@@ -76,24 +77,34 @@ const NFTInfo = ({ token, noBuy, onClose }: NFTInfoProps) => {
             </div>
           </div>
           {!noBuy && (
-            <div>
+            <div className="mt-8">
+              <div className="mb-3">
+                <p className="text-right text-xl text-gray-700">
+                  {" "}
+                  {longToCurrency(
+                    token.nerg_sale_value,
+                    SupportedCurrenciesV2[token.currency].decimal
+                  )} {" "}
+                  {SupportedCurrenciesV2[token.currency].displayName}
+                </p>
+              </div>
               <BuyNFTButton
                 ownedNFT={false}
                 box={token}
                 sellButton={
                   <div>
-                    <Button className="w-full mt-8">Cancel</Button>
+                    <Button className="w-full">Cancel</Button>
                   </div>
                 }
                 buyButton={
                   <div>
-                    <Button className="w-full mt-8">Buy</Button>
+                    <Button className="w-full">Buy</Button>
                   </div>
                 }
                 loadingButton={
                   <div>
                     <div className="animate-pulse">
-                      <Button disabled className="w-full mt-8">
+                      <Button disabled className="w-full">
                         Loading...
                       </Button>
                     </div>

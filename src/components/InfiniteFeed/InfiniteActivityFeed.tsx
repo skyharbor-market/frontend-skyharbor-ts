@@ -13,6 +13,7 @@ import { longToCurrency } from "@/ergofunctions/serializer";
 import ArtworkMedia from "../artworkMedia";
 import { BsLink } from "react-icons/bs";
 import { FaExternalLinkAlt } from "react-icons/fa";
+import LoadingCircle from "../LoadingCircle/LoadingCircle";
 
 const InfiniteActivityFeed = () => {
   const [hasMore, setHasMore] = useState(true);
@@ -31,7 +32,11 @@ const InfiniteActivityFeed = () => {
     );
   }
 
-  if (loading && !data?.sales) return <p>Loading...</p>;
+  if (loading && !data?.sales) return (
+    <div className="m-auto w-12">
+          <LoadingCircle />
+        </div>
+  );
   if (error) return <p>Error: {error.message}</p>;
 
   return (
