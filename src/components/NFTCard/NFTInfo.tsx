@@ -89,7 +89,6 @@ const NFTInfo = ({ token, noBuy, onClose }: NFTInfoProps) => {
                 </p>
               </div>
               <BuyNFTButton
-                ownedNFT={false}
                 box={token}
                 sellButton={
                   <div>
