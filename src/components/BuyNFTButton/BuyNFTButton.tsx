@@ -265,7 +265,7 @@ export default function BuyNFTButton({
   // }, [])
 
   const renderBuyButton = () => {
-    let ownedNFT = userAddresses.includes(box.seller_address) ? true : false;
+    let ownedNFT = userAddresses?.includes(box.seller_address) ? true : false;
 
     if (ownedNFT) {
       return submitting ? (
