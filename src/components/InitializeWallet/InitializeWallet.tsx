@@ -175,6 +175,7 @@ function InitializeWallet({}) {
         JSON.stringify({
           type: wallet,
           address: address,
+          addresses: addresses
         })
       );
     }
