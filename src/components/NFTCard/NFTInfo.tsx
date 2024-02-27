@@ -90,10 +90,15 @@ const NFTInfo = ({ token, noBuy, onClose }: NFTInfoProps) => {
               </div>
               <BuyNFTButton
                 box={token}
-                sellButton={
-                  <div>
-                    <Button className="w-full">Cancel</Button>
-                  </div>
+                // sellButton={
+                //   <div>
+                //     <Button className="w-full">Cancel</Button>
+                //   </div>
+                // }
+                editButton={
+                  <button className="p-2 text-center h-full w-full bg-red-500 text-white dark:bg-red-300 dark:text-black text-sm">
+                  Cancel
+                </button>
                 }
                 buyButton={
                   <div>
