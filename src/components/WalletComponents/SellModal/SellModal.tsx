@@ -119,7 +119,7 @@ const SellModal = ({ open, onClose, token }: SellModalProps) => {
     }
   }, [open]);
 
-  const disableButton = !price || price === 0 || royalties === null;
+  const disableButton = !price || Number(price) === 0 || royalties === null;
 
   const finalEarnings = calculateEarnings(
     royalties?.percentage,
