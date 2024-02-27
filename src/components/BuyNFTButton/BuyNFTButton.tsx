@@ -19,21 +19,22 @@ import Button from "../Button/Button";
 import toast, { Toaster } from "react-hot-toast";
 import { buyNft, buyNftApi } from "api-calls/buy";
 import { getWalletAddresses } from "@/ergofunctions/walletUtils";
+import { getStoredWalletAddresses } from "../../ergofunctions/helpers";
+import Tooltip from "../Tooltip/Tooltip";
+import { delistNft } from "api-calls/delist";
 
 interface BuyNFTButtonProps {
-  ownedNFT: boolean;
   box: any;
 
   buyButton: JSX.Element;
-  sellButton: JSX.Element;
+  editButton: JSX.Element;
   loadingButton: JSX.Element;
 }
 
 export default function BuyNFTButton({
-  ownedNFT,
   box,
   buyButton,
-  sellButton,
+  editButton,
   loadingButton,
 }: BuyNFTButtonProps) {
   // Cart items
@@ -42,6 +43,8 @@ export default function BuyNFTButton({
   //   ? cartItems.find((l) => l.box_id === box.box_id)
   //   : false;
   // const dispatch = useDispatch();
+
+  const userAddresses = getStoredWalletAddresses();
 
   const [submitting, setSubmitting] = useState(false);
   const [modalType, setModalType] = React.useState("edit");
@@ -60,10 +63,13 @@ export default function BuyNFTButton({
     if (box.currency === "erg") {
       try {
         // buyTxId = await buyNFT(box);
-        buyTxId = await buyNft({buyBox: box, userAddresses: await getWalletAddresses()});
+        buyTxId = await buyNft({
+          buyBox: box,
+          userAddresses: await getWalletAddresses(),
+        });
       } catch (err: any) {
         console.log(err?.message);
-        toast.error("There was an error buying the NFT, try again later.");
+        toast.error(`Error: ${err?.message}`);
         setSubmitting(false);
       }
     } else {
@@ -91,14 +97,15 @@ export default function BuyNFTButton({
     // onOpen();
     setSubmitting(true);
 
-    const cancelTxId = await refund(box);
+    const cancelTxId = await delistNft({
+      buyBox: box,
+      userAddresses: await getWalletAddresses(),
+    });
     if (cancelTxId) {
       console.log("cancelTxId", cancelTxId);
       setModalType("submitted");
+      setOpen(true);
       setTransactionId(cancelTxId);
-
-      // open transaction ID of delisting
-      // onOpen();
     }
     setSubmitting(false);
 
@@ -258,24 +265,25 @@ export default function BuyNFTButton({
   // }, [])
 
   const renderBuyButton = () => {
+    let ownedNFT = userAddresses.includes(box.seller_address) ? true : false;
+
     if (ownedNFT) {
-      return (
-        <div className="mt-2 flex flex-row">
-          <button
-            // mt={2}
-            // mb={4}
-            // disabled
-            onClick={handleCancel}
-            // fontSize={"lg"}
-            // colorScheme={"red"}
-            // isLoading={submitting}
-          >
-            Cancel
-          </button>
+      return submitting ? (
+        loadingButton
+      ) : (
+        <div className="flex flex-row">
+          <div onClick={handleCancel} className="flex h-full w-4/5">
+            {editButton}
+          </div>
           {box.sales_address === v1ErgAddress && box.currency === "erg" && (
-            <button onClick={handleEditPrice}>
-              <MdEditDocument />
-            </button>
+            <Tooltip label="Edit price" key={"editdoctooltipkey"}>
+              <button
+                onClick={handleEditPrice}
+                className="flex w-1/5 text-center justify-center items-center bg-orange-500 text-white dark:bg-orange-300 dark:text-black"
+              >
+                <MdEditDocument className="w-4 h-4" />
+              </button>
+            </Tooltip>
           )}
         </div>
       );

@@ -12,6 +12,8 @@ import FormattedMetadata from "../FormattedMetadata/FormattedMetadata";
 import LoadingCircle from "../LoadingCircle/LoadingCircle";
 import Modal from "../Modal/Modal";
 import NFTInfo from "./NFTInfo";
+import { addNumberCommas } from "@/ergofunctions/helpers";
+import { formatValueWithDP } from "@/ergofunctions/frontend_helpers";
 
 type Props = {
   token: any;
@@ -61,11 +63,11 @@ const NFTCard = ({ token, isOwner = false, noBuy = false }: Props) => {
 
           <div className="mt-2 flex flex-col">
             <p className="mt-1 text-sm text-gray-500 dark:text-gray-300 line-clamp-1">
-              {longToCurrency(
+              {formatValueWithDP(longToCurrency(
                 token?.nerg_sale_value,
                 undefined,
                 token?.currency
-              )}{" "}
+              ))}{" "}
               {/* @ts-ignore */}
               {SupportedCurrenciesV2?.[token?.currency]?.displayName || ""}
             </p>
@@ -74,18 +76,17 @@ const NFTCard = ({ token, isOwner = false, noBuy = false }: Props) => {
       </div>
 
       {!noBuy && (
-        <div className="absolute transition-all bottom-0 left-0 bg-blue-500 w-full opacity-0 group-hover:opacity-100 cursor-pointer">
+        <div className="absolute transition-all bottom-0 left-0  w-full opacity-0 group-hover:opacity-100 cursor-pointer">
           <BuyNFTButton
-            ownedNFT={false}
             box={token}
             buyButton={
-              <button className="p-2 text-center w-full text-white text-sm">
+              <button className="p-2 text-center h-full w-full text-white text-sm bg-blue-500">
                 Buy
               </button>
             }
-            sellButton={
-              <button className="p-2 text-center w-full bg-red-400 text-white text-sm">
-                Edit
+            editButton={
+              <button className="p-2 text-center h-full w-full bg-red-500 text-white dark:bg-red-300 dark:text-black text-sm">
+                Cancel
               </button>
             }
             loadingButton={

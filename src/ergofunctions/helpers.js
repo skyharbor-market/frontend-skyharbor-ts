@@ -182,7 +182,7 @@ export function getWalletAddress() {
   return JSON.parse(localStorage.getItem("wallet")).address;
 }
 export function getStoredWalletAddresses() {
-  return JSON.parse(localStorage.getItem("wallets")).addresses;
+  return JSON.parse(localStorage.getItem("wallet")).addresses;
 }
 
 export function getWalletType() {
@@ -572,20 +572,6 @@ export async function ableToBuyUSD() {
     ((sigUsdBox.value * 100) / oracleBox.additionalRegisters.R4.renderedValue) *
       sigUsdBox.assets[0].amount
   );
-}
-
-export function maxDP(value, dp = 3) {
-  // *** Check for different types if needed ***
-
-  // if(typeof value === "string") {
-
-  // }
-
-  // *** Also add a ceiling or floor parameter ***
-
-  let finalValue = value;
-
-  return parseFloat(parseFloat(finalValue).toFixed(dp));
 }
 
 // Adds commas to number values

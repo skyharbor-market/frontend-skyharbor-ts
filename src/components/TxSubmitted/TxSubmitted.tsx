@@ -93,45 +93,46 @@ export default function TxSubmitted({ txId, box }: { txId: any; box?: any }) {
       );
     } else {
       return (
-        <div key={"submitted"}>
-          <div className="max-w-2xl">
-            <div>
-              <div className="text-center w-full">
+        <div key={"submitted"} className="flex flex-row space-x-2">
+          <div className="w-1/3">
+            <div className="relative">
+              <div className="absolute text-center w-full">
                 <MdCheckCircleOutline
                   className="h-32 w-32 text-green-500 m-auto"
                   color="green.400"
                 />
               </div>
               {box && (
-                <div className="aspect-square">
+                <div className="aspect-square rounded overflow-hidden">
                   <ArtworkMedia box={box} />
                 </div>
               )}
             </div>
-            {box?.nft_name && <p>{box.nft_name}</p>}
-            {/* <p mt="1" textAlign={"center"} noOfLines={1} width={"100%"} color={colorMode === "light" ? "black" : "white"}>{nftPrice} {currencyObject.displayName}</p> */}
+            {box?.nft_name && (
+              <p className="text-center text-gray-500 text-sm mt-1">
+                {box.nft_name}
+              </p>
+            )}
           </div>
-
-          {/* <div textAlign={"center"} w="100%" mb="8" mt="8">
-                        <CheckCircleIcon fontSize={"6xl"} color="green.400"/>
-                    </div> */}
-
-          <div className="mt-4">
-            <p className="w-full break-words p-2 border rounded-lg">
-              Transaction ID: <span className="text-gray-700">{txId}</span>
+          <div className="w-2/3">
+            <div>
+              <div className="w-full break-words p-2 border rounded">
+                <p className="text-sm">Transaction ID</p>
+                <p className="text-gray-700 font-semibold">{txId}</p>
+              </div>
+            </div>
+            <Button
+              colorScheme="green"
+              className="w-full bg-green-500 mt-3"
+              onClick={() => gotoTransaction(txId)}
+            >
+              View Tx on Explorer
+            </Button>
+            <p className="text-sm text-gray-600 mt-2">
+              Now we wait until it is confirmed on the blockchain. It should
+              take about 2-10 minutes.
             </p>
           </div>
-          <Button
-            colorScheme="green"
-            className="w-full bg-green-500 mt-3"
-            onClick={() => gotoTransaction(txId)}
-          >
-            View Tx on Explorer
-          </Button>
-          <p className="text-sm text-gray-600 mt-2">
-            Now we wait until it is confirmed on the blockchain. It should take
-            about 2-10 minutes.
-          </p>
         </div>
       );
     }

@@ -78,7 +78,9 @@ export default function SoldCard({
 
                 {!noCollection && (
                   <Link href={`/collection/${item.collection_sys_name}`}>
-                    {item.collection_name}
+                    <p>
+                      {item.collection_name}
+                    </p>
                   </Link>
                 )}
               </div>

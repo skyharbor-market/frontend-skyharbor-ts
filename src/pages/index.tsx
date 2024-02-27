@@ -29,10 +29,11 @@ import { motion, useAnimation } from "framer-motion";
 import { withApollo } from "../lib/withApollo";
 import { useQuery, gql } from "@apollo/client";
 import Fade from "@/components/Fade/Fade";
-import { addNumberCommas, maxDP } from "@/ergofunctions/helpers";
+import { addNumberCommas } from "@/ergofunctions/helpers";
 import { longToCurrency } from "@/ergofunctions/serializer";
 import { supportedCurrencies } from "@/ergofunctions/consts";
 import Link from "next/link";
+import { maxDP } from "@/ergofunctions/frontend_helpers";
 
 const GET_WEEKLY_VOLUME = gql`
   query getWeeklyHourVolume {
@@ -250,6 +251,7 @@ function classNames(...classes: any[]) {
 }
 
 export default function Landing() {
+  let mounted = true;
   const { loading, error, data } = useQuery(GET_WEEKLY_VOLUME);
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -279,6 +281,7 @@ export default function Landing() {
   useEffect(() => {
     return () => {
       imgAnimation.stop();
+      mounted = false
     };
   }, [imgAnimation]);
 
@@ -369,10 +372,12 @@ export default function Landing() {
                 animate={imgAnimation}
                 onMouseMove={(e) => handleMouseMove(e)}
                 onMouseOut={(e) => {
-                  imgAnimation.start({
-                    x: 0,
-                    y: 0,
-                  });
+                  if(mounted) {
+                    imgAnimation.start({
+                      x: 0,
+                      y: 0,
+                    });
+                  }
                 }}
               >
                 <Image
