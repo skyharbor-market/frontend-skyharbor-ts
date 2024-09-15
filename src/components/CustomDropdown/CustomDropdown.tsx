@@ -128,7 +128,7 @@ const CustomDropdown = ({
         }),
         option: (baseStyles, state) => ({
           ...baseStyles,
-          fontSize: size === "md" ? 18 : 14,
+          fontSize: size === "md" ? 14 : 12,
           background: state.isFocused ? `rgba(0,0,0,0.1)` : `none`,
           ":active": {
             backgroundColor:
