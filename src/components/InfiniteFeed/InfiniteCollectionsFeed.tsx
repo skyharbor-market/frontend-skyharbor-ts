@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery } from "@apollo/client";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { GET_COLLECTIONS } from "@/lib/gqlQueries";
@@ -7,17 +7,24 @@ import NFTCard from "../NFTCard/NFTCard";
 import Image from "next/image";
 import Link from "next/link";
 import { FaCheckCircle } from "react-icons/fa";
+import LoadingCircle from "../LoadingCircle/LoadingCircle";
 
-const InfiniteCollectionsFeed = () => {
+const InfiniteCollectionsFeed = ({searchTerm}: {searchTerm: string}) => {
   const [hasMore, setHasMore] = useState(true);
-  const limit = 10; // Number of NFTs to load each time
+  const limit = 10; // Number of collections to load each time
 
-  const { data, loading, error, fetchMore } = useQuery(GET_COLLECTIONS, {
-    variables: { limit, offset: 0 },
+  const { data, loading, error, fetchMore, refetch } = useQuery(GET_COLLECTIONS, {
+    variables: { limit, offset: 0, search: `%${searchTerm}%` },
     notifyOnNetworkStatusChange: true,
   });
 
-  if (loading && !data?.collections) return <p>Loading...</p>;
+  useEffect(() => {
+    refetch({ search: `%${searchTerm}%` });
+    setHasMore(true)
+  }, [searchTerm, refetch]);
+
+  if (loading && !data?.collections) return <div className="w-24 h-24 mx-auto"><LoadingCircle /></div>;
+  if (!loading && data?.collections?.length <= 0) return <div className="text-center"><p>No collections found under {'"'}{searchTerm}{'"'}</p></div>;
   if (error) return <p>Error: {error.message}</p>;
 
   return (
@@ -28,6 +35,7 @@ const InfiniteCollectionsFeed = () => {
         fetchMore({
           variables: {
             offset: data.collections.length,
+            search: `%${searchTerm}%`,
           },
           updateQuery: (prev, { fetchMoreResult }) => {
             if (!fetchMoreResult) return prev;
@@ -42,9 +50,8 @@ const InfiniteCollectionsFeed = () => {
         });
       }}
       hasMore={hasMore}
-      loader={<h4>Loading...</h4>}
+      loader={ <div className="w-12 h-12 mx-auto mt-6"><LoadingCircle /></div>}
     >
-      {/* <div className="grid grid-cols-4 gap-4"> */}
       <div className="">
         <div className="mx-auto">
           <h2 className="sr-only">Collections</h2>
@@ -65,10 +72,8 @@ const InfiniteCollectionsFeed = () => {
                         <div className="relative h-full w-full">
                           <img
                             src={collection.card_image}
-                            // fill={true}
                             alt={collection.name}
                             className="object-cover aspect-square rounded-t-lg"
-                            // objectFit="contain"
                           />
                         </div>
                       </div>

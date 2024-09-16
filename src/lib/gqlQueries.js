@@ -158,14 +158,23 @@ export const GET_TOP_SALES = gql`
     }
   }
 `;
-
 export const GET_COLLECTIONS = gql`
-  query getCollections($limit: Int, $offset: Int) {
+  query getCollections($limit: Int, $offset: Int, $search: String) {
     collections(
       limit: $limit
       offset: $offset
       order_by: { addition_time: desc }
-      where: { verified: { _eq: true } }
+      where: {
+        _and: [
+          { verified: { _eq: true } },
+          {
+            _or: [
+              { name: { _ilike: $search } },
+              { sys_name: { _ilike: $search } }
+            ]
+          }
+        ]
+      }
     ) {
       id
       card_image
