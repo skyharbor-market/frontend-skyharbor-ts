@@ -16,7 +16,7 @@ interface InfiniteNFTFeedProps {
 
 const InfiniteNFTFeed = ({ gqlQuery, collection, searchTerm }: InfiniteNFTFeedProps) => {
   const [hasMore, setHasMore] = useState(true);
-  const limit = 10; // Number of NFTs to load each time
+  const limit = 12; // Number of NFTs to load each time
   // @ts-ignore
   const userAddresses = useSelector((state) => state.wallet.addresses);
   console.log("searchTerm", searchTerm)

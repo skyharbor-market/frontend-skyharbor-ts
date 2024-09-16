@@ -67,11 +67,11 @@ const NFTInfo = ({ token, noBuy, onClose, artistIsSeller, ownedNFT }: NFTInfoPro
       </div>
       <div className="flex flex-col md:flex-row md:space-x-8">
         <div className="w-full md:w-1/3">
-        <div className="aspect-square bg-gray-200 overflow-hidden dark:bg-gray-700 rounded-lg mb-4 md:mb-0">
+        <div className=" bg-gray-200 overflow-hidden dark:bg-gray-700 rounded-lg mb-4 md:mb-0">
 
           {showImg && (
             <Fade fadeDuration={0.1} fadeKey={`tokenpopup-${token.token_id}`}>
-              <ArtworkMedia box={token} thumbnail={false} ratio="regular" mustLoad={true} />
+              <ArtworkMedia box={token} thumbnail={false} ratio="regular" />
             </Fade>
           )}
         </div>
@@ -128,7 +128,7 @@ const NFTInfo = ({ token, noBuy, onClose, artistIsSeller, ownedNFT }: NFTInfoPro
               <>
                 <BuyNFTButton
                   box={token}
-                  ownedNFT={ownedNFT}
+                  // ownedNFT={ownedNFT}
                   buyButton={<Button className="w-full hover:opacity-60 bg-blue-500 text-white dark:bg-blue-600 dark:text-gray-100">Buy</Button>}
                   editButton={
                     <button className="p-2 text-center h-full w-full bg-red-500 text-white dark:bg-red-600 dark:text-gray-100 text-sm hover:opacity-60">
