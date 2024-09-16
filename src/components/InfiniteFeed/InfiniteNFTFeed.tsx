@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery } from "@apollo/client";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { GET_NFTS } from "@/lib/gqlQueries";
@@ -6,24 +6,44 @@ import { convertGQLObject } from "@/ergofunctions/helpers";
 import NFTCard from "../NFTCard/NFTCard";
 import { useSelector } from "react-redux";
 import { DocumentNode } from "graphql";
+import LoadingCircle from "../LoadingCircle/LoadingCircle";
 
 interface InfiniteNFTFeedProps {
   gqlQuery: DocumentNode;
   collection?: string;
+  searchTerm: string;
 }
 
-const InfiniteNFTFeed = ({ gqlQuery, collection }: InfiniteNFTFeedProps) => {
+const InfiniteNFTFeed = ({ gqlQuery, collection, searchTerm }: InfiniteNFTFeedProps) => {
   const [hasMore, setHasMore] = useState(true);
   const limit = 10; // Number of NFTs to load each time
   // @ts-ignore
   const userAddresses = useSelector((state) => state.wallet.addresses);
+  console.log("searchTerm", searchTerm)
 
-  const { data, loading, error, fetchMore } = useQuery(gqlQuery, {
-    variables: { limit, offset: 0, collection },
+  const isSearchActive = searchTerm && searchTerm.trim() !== "";
+
+  const { data, loading, error, fetchMore, refetch } = useQuery(gqlQuery, {
+    variables: { 
+      limit, 
+      offset: 0, 
+      collection, 
+      ...(isSearchActive && { search: `%${searchTerm}%` })
+    },
     notifyOnNetworkStatusChange: true,
   });
 
-  if (loading && !data?.sales) return <p>Loading...</p>;
+  useEffect(() => {
+    if (isSearchActive) {
+      refetch({ search: `%${searchTerm}%` });
+    } else {
+      refetch();
+    }
+    setHasMore(true);
+  }, [searchTerm, refetch, isSearchActive]);
+
+  if (loading && !data?.sales) return <div className="w-24 h-24 mx-auto"><LoadingCircle /></div>;
+  if (!loading && data?.sales?.length <= 0) return <div className="text-center"><p>No NFTs found {isSearchActive ? `under "${searchTerm}"` : ""}</p></div>;
   if (error) return <p>Error: {error.message}</p>;
 
   return (
@@ -34,6 +54,7 @@ const InfiniteNFTFeed = ({ gqlQuery, collection }: InfiniteNFTFeedProps) => {
         fetchMore({
           variables: {
             offset: data.sales.length,
+            ...(isSearchActive && { search: `%${searchTerm}%` })
           },
           updateQuery: (prev, { fetchMoreResult }) => {
             if (!fetchMoreResult) return prev;
@@ -45,9 +66,8 @@ const InfiniteNFTFeed = ({ gqlQuery, collection }: InfiniteNFTFeedProps) => {
         });
       }}
       hasMore={hasMore}
-      loader={<h4>Loading...</h4>}
+      loader={<div className="w-12 h-12 mx-auto mt-6"><LoadingCircle /></div>}
     >
-      {/* <div className="grid grid-cols-4 gap-4"> */}
       <div className="mt-3">
         <div className="mx-auto ">
           <h2 className="sr-only">NFTs</h2>
