@@ -26,6 +26,7 @@ import { delistNft } from "api-calls/delist";
 interface BuyNFTButtonProps {
   box: any;
 
+  userAddresses?: string[]
   buyButton: JSX.Element;
   editButton: JSX.Element;
   loadingButton: JSX.Element;
@@ -33,6 +34,7 @@ interface BuyNFTButtonProps {
 
 export default function BuyNFTButton({
   box,
+  userAddresses,
   buyButton,
   editButton,
   loadingButton,
@@ -44,7 +46,7 @@ export default function BuyNFTButton({
   //   : false;
   // const dispatch = useDispatch();
 
-  const userAddresses = getStoredWalletAddresses();
+  // const userAddresses = getStoredWalletAddresses();
 
   const [submitting, setSubmitting] = useState(false);
   const [modalType, setModalType] = React.useState("edit");
@@ -266,24 +268,28 @@ export default function BuyNFTButton({
 
   const renderBuyButton = () => {
     let ownedNFT = userAddresses?.includes(box.seller_address) ? true : false;
-
+    console.log("selllrrrrr", box.seller_address)
+    console.log("userAddresses", userAddresses)
     if (ownedNFT) {
       return submitting ? (
         loadingButton
       ) : (
-        <div className="flex flex-row">
-          <div onClick={handleCancel} className="flex h-full w-4/5">
-            {editButton}
+        <div className="flex flex-row space-x-2">
+          <div onClick={handleCancel} className="flex-grow">
+            {/* {editButton} */}
+            <button className="w-full py-2 px-4 bg-red-600 text-white font-semibold rounded-md hover:bg-red-700 transition-colors">
+              Delist
+            </button>
           </div>
           {box.sales_address === v1ErgAddress && box.currency === "erg" && (
-            <Tooltip label="Edit price" key={"editdoctooltipkey"}>
+            // <Tooltip label="Edit price" key={"editdoctooltipkey"}>
               <button
                 onClick={handleEditPrice}
-                className="flex w-1/5 text-center justify-center items-center bg-orange-500 text-white dark:bg-orange-300 dark:text-black"
+                className="py-2 px-3 bg-orange-600 text-white font-semibold rounded-md hover:bg-orange-700 transition-colors flex items-center justify-center whitespace-nowrap"
               >
                 <MdEditDocument className="w-4 h-4" />
               </button>
-            </Tooltip>
+            // </Tooltip>
           )}
         </div>
       );

@@ -14,14 +14,15 @@ type Props = {
   token: any;
   isOwner: boolean;
   noBuy?: boolean;
+  userAddresses?: string[]
 };
 
-const NFTCard = ({ token, isOwner = false, noBuy = false }: Props) => {
+const NFTCard = ({ token, isOwner = false, noBuy = false, userAddresses = [] }: Props) => {
   const [openInfo, setOpenInfo] = useState<boolean>(false);
 
   return (
-    <div className="relative group h-full overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-200 bg-white dark:bg-gray-800">
-      <div className="h-full flex flex-col transition-all duration-200 group-hover:-translate-y-2">
+    <div className="relative group h-full overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-150 bg-white dark:bg-gray-800">
+      <div className="h-full flex flex-col transition-all duration-150 group-hover:-translate-y-2">
         <div
           onClick={() => setOpenInfo(true)}
           className="aspect-square overflow-hidden cursor-pointer"
@@ -55,9 +56,10 @@ const NFTCard = ({ token, isOwner = false, noBuy = false }: Props) => {
       </div>
 
       {!noBuy && (
-        <div className="absolute inset-x-0 bottom-0 p-4 dark:from-black bg-gradient-to-t from-gray-200 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+        <div className="absolute inset-x-0 bottom-0 p-4 dark:from-black bg-gradient-to-t from-gray-200 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-150">
           <BuyNFTButton
             box={token}
+            userAddresses={userAddresses}
             buyButton={
               <button className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-colors">
                 Buy Now
@@ -65,7 +67,7 @@ const NFTCard = ({ token, isOwner = false, noBuy = false }: Props) => {
             }
             editButton={
               <button className="w-full py-2 px-4 bg-red-600 text-white font-semibold rounded-md hover:bg-red-700 transition-colors">
-                Cancel Listing
+                Delist
               </button>
             }
             loadingButton={
@@ -85,6 +87,7 @@ const NFTCard = ({ token, isOwner = false, noBuy = false }: Props) => {
         <NFTInfo
           token={token}
           noBuy={noBuy}
+          userAddresses={userAddresses}
           onClose={() => setOpenInfo(false)}
         />
       </Modal>

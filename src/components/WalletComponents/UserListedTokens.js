@@ -153,6 +153,7 @@ function UserListedTokens({ addresses }) {
               key={index}
               token={cardItem}
               isOwner={true}
+              userAddresses={addresses}
               showCollection
             />
           );

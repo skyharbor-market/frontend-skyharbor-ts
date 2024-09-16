@@ -248,7 +248,7 @@ export default function ArtworkMedia({
               <div className="flex h-full w-full items-center justify-center p-8">
                 <LoadingCircle />
               </div>
-              <div className="rounded-t-md bg-slate-700 w-full h-full"></div>
+              {/* <div className="rounded-t-md bg-slate-700 w-full h-full"></div> */}
             </div>
           </div>
         )}

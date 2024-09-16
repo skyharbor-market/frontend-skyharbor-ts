@@ -43,9 +43,10 @@ export default function WalletPage() {
   // const toast = useToast()
 
   // Redux
-  const userTokens = useSelector((state) => state.wallet.tokens);
+  const {addresses: userAddresses, tokens: userTokens} = useSelector((state) => state.wallet);
   const dispatch = useDispatch();
-  const userAddresses = useSelector((state) => state.wallet.addresses);
+  // const userAddresses = useSelector((state) => state.wallet.addresses);
+  console.log("userAddresses,", userAddresses)
 
   const [loading, setLoading] = React.useState(false);
   const [artworks, setArtworks] = React.useState(userTokens);

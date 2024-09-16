@@ -4,12 +4,14 @@ import { GET_NFTS, GET_NFTS_SEARCH } from "@/lib/gqlQueries";
 import React, { useState, useCallback } from "react";
 import { MdSearch } from "react-icons/md";
 import debounce from "lodash/debounce";
+import { useSelector } from "react-redux";
 
 type Props = {};
 
 const Marketplace = (props: Props) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+  // const userAddresses = useSelector((state: any) => state.wallet.addresses);
 
   const debouncedSearch = useCallback(
     debounce((value: string) => {

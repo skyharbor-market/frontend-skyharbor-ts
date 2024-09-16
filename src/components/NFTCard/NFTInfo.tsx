@@ -25,9 +25,10 @@ interface NFTInfoProps {
   onClose: () => void;
   artistIsSeller?: boolean;
   ownedNFT?: boolean;
+  userAddresses: string[]
 }
 
-const NFTInfo = ({ token, noBuy, onClose, artistIsSeller, ownedNFT }: NFTInfoProps) => {
+const NFTInfo = ({ token, noBuy, onClose, artistIsSeller, ownedNFT, userAddresses }: NFTInfoProps) => {
   const [showImg, setShowImg] = useState<boolean>(false);
   const [propertiesOpen, setPropertiesOpen] = useState<boolean>(true);
   const router = useRouter();
@@ -128,11 +129,12 @@ const NFTInfo = ({ token, noBuy, onClose, artistIsSeller, ownedNFT }: NFTInfoPro
               <>
                 <BuyNFTButton
                   box={token}
+                  userAddresses={userAddresses}
                   // ownedNFT={ownedNFT}
                   buyButton={<Button className="w-full hover:opacity-60 bg-blue-500 text-white dark:bg-blue-600 dark:text-gray-100">Buy</Button>}
                   editButton={
-                    <button className="p-2 text-center h-full w-full bg-red-500 text-white dark:bg-red-600 dark:text-gray-100 text-sm hover:opacity-60">
-                      Cancel
+                    <button className="w-full py-2 px-4 bg-red-600 text-white font-semibold rounded-md hover:bg-red-700 transition-colors">
+                      Delist
                     </button>
                   }
                   loadingButton={

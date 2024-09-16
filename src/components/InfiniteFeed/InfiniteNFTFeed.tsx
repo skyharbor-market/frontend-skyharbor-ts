@@ -79,6 +79,7 @@ const InfiniteNFTFeed = ({ gqlQuery, collection, searchTerm }: InfiniteNFTFeedPr
               return (
                 <NFTCard
                   token={nftObj}
+                  userAddresses={userAddresses}
                   key={`${nftObj.token_id}-${nftObj.box_id}`}
                   isOwner={
                     userAddresses
