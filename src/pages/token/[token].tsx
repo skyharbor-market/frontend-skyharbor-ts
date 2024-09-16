@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect } from "react";
 import { useRouter } from "next/router";
 import "react-h5-audio-player/lib/styles.css";
-import TokenPage from "../../components/TokenPage/TokenPage";
+// import TokenPage from "../../components/TokenPage/TokenPage";
 import LoadingCircle from "../../components/LoadingCircle/LoadingCircle";
 
 function Token() {
