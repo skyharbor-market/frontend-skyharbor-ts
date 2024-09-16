@@ -9,14 +9,10 @@ import {
   setWalletSelectOpen,
   setWalletState,
 } from "../../redux/reducers/walletSlice";
-// import { useNavigate } from "react-router-dom";
 import { FaWallet } from "react-icons/fa";
 import { GiSubmarine } from "react-icons/gi";
 import QRCode from "react-qr-code";
 import { v4 as uuidv4 } from "uuid";
-
-// import logoImage from '/assets/images/Ergosaurslogo.png'
-// import yoroiWallet from '/assets/images/yoroi-logo-shape-blue.inline.svg';
 
 import {
   getWalletAddress,
@@ -46,43 +42,17 @@ type WalletTypes = "nautilus" | "safew";
 function InitializeWallet({}) {
   const router = useRouter();
   const client = useApolloClient();
-
   const reduxState = useSelector((state) => state);
-
-  console.log("reduxState", reduxState);
-
-  let type = "yoroi";
-  let walletSt = "Configure";
-  let userAddr = "";
-
-  // Redux
-  // const walletAddress = useSelector((state) => state.wallet.address)
   const dispatch = useDispatch();
 
-  //For Modal
-  const finalRef = React.useRef();
-
   const [processing, setProcessing] = useState(false);
-  const [activeTab, setActiveTab] = useState(type);
-  // const [walletState, setWalletState] = useState(walletSt);
-
-  //@ts-ignore
+  const [activeTab, setActiveTab] = useState("yoroi");
   const walletState = reduxState.wallet.walletState;
-
-  const [userAddress, setUserAddress] = useState(userAddr);
+  const [userAddress, setUserAddress] = useState("");
   const [apiKey, setApiKey] = useState("");
   const [walletBalance, setWalletBalance] = useState(-1);
-
   const [ergopayUUID, setErgopayUUID] = useState<string | null>(null);
-
   const [modalPage, setModalPage] = useState("main");
-
-  function gotoHome() {
-    // navigate("/")
-  }
-  function gotoAbout() {
-    // navigate("/info");
-  }
 
   function gotoWallet() {
     router.push(`/wallet`);
@@ -105,24 +75,18 @@ function InitializeWallet({}) {
   }
 
   function clearWallet(message = true) {
-    // const walletState// = getWalletType();
-
     sessionStorage.removeItem("wallet");
     localStorage.removeItem("wallet");
     dispatch(setWallet(undefined));
     dispatch(setTokens([]));
-
-    // setWalletState("Configure");
     dispatch(setWalletState("Configure"));
-
     setUserAddress("");
     dispatch(setDefaultAddress(""));
-
     setWalletBalance(-1);
+
     if (message) {
       console.log("disconnect wallet");
-
-      setActiveTab(type);
+      setActiveTab("yoroi");
       setProcessing(false);
       setApiKey("");
     }
@@ -134,38 +98,21 @@ function InitializeWallet({}) {
     }
 
     setErgopayUUID(uuidv4());
-
     toggle();
-
-    // setModalPage("main")
-  }
-
-  async function getUserAddress() {
-    let addresses = await getWalletAddresses();
-    if (addresses === "error") {
-      dispatch(setWallet(undefined));
-    }
-    dispatch(setWallet(addresses));
-
-    return;
   }
 
   async function handleWalletConnect(wallet: WalletTypes) {
-    //wallet can equal = ["safew", "nautilus"]
-
     let address;
     let addresses;
     let res = await setupWallet(true, wallet);
-    // If Nautilus is denied
+    
     if (res === "denied") {
       localStorage.removeItem("wallet");
-
       dispatch(setWallet(undefined));
-      // setWalletState("Configure");
       dispatch(setWalletState("Configure"));
-
       return;
     }
+    
     if (res) {
       address = await getConnectorAddress();
       addresses = await getWalletAddresses();
@@ -185,35 +132,24 @@ function InitializeWallet({}) {
 
     if (res && address) {
       dispatch(setWallet(addresses));
-
-      // Get total ERGs in wallet
-      // getWalletErgs().then(res => {
-      //     setWalletBalance((Math.round(friendlyERG(res) * 1000) / 1000));
-      // });
-
-      // setWalletState(wallet);
       dispatch(setWalletState(wallet));
     }
+    
     setProcessing(false);
     toggle();
-    return;
   }
 
   async function connectErgopay() {
-    // setWalletState("ergopay");
     setModalPage("ergopay");
   }
 
   async function getWalletInfo() {
     if (isWalletSaved()) {
       const walletType = getWalletType();
-      setWalletState(walletType);
       dispatch(setWalletState(walletType));
 
-      // get user addresses to input into redux
       let addresses = undefined;
 
-      // Add if statement if wallet is nautilus only do this.
       if (walletType === "nautilus" || walletType === "safew") {
         let res = await setupWallet();
 
@@ -228,8 +164,6 @@ function InitializeWallet({}) {
         setUserAddress(changeAddress);
         dispatch(setDefaultAddress(changeAddress));
       } else if (walletType === "ergopay") {
-        // Get wallet address of ergopay
-        // addresses = ""
         const wholeWallet = await getWholeWallet();
         const walletUUID = wholeWallet?.uuid;
         if (!walletUUID) {
@@ -240,17 +174,8 @@ function InitializeWallet({}) {
       }
 
       dispatch(setWallet(addresses));
-
-      // const ergRes = await getWalletErgs();
-      // if(!ergRes) {
-      //     setWalletState('Configure');
-      //     return
-      // }
-      // setWalletBalance(friendlyERG(ergRes));
-
       return;
     } else {
-      // const walletUUID = await getWalletUUID();
       setErgopayUUID(uuidv4());
       clearWallet(false);
     }
@@ -261,15 +186,12 @@ function InitializeWallet({}) {
       setUserAddress(tempAddress);
       return;
     }
-
-    // setWalletState('Configure');
-    // setWalletBalance(0);
   }
 
   function openErgoPay() {
     window.open(
       `ergopay://${skyHarborApiRoot}/api/ergopay/setAddr/${ergopayUUID}/#P2PK_ADDRESS#`,
-      "_blank" // <- This is what makes it open in a new window.
+      "_blank"
     );
   }
 
@@ -278,30 +200,14 @@ function InitializeWallet({}) {
       .writeText(
         `ergopay://${skyHarborApiRoot}/api/ergopay/setAddr/${ergopayUUID}/#P2PK_ADDRESS#`
       )
-      .then(
-        () => console.log("Copied")
-        // toast({
-        //   title: "Copied",
-        //   variant: "subtle",
-        //   // description: "We've created your account for you.",
-        //   position: "bottom",
-        //   status: "info",
-        //   duration: 2000,
-        //   isClosable: true,
-        // })
-      );
+      .then(() => console.log("Copied"));
   }
 
   function setErgopayState(ergopayAddress: string, epayUUI: string) {
-    // Set default user address
     setUserAddress(ergopayAddress);
     dispatch(setDefaultAddress(ergopayAddress));
-
-    // Set all user addresses
     dispatch(setWallet([ergopayAddress]));
-
     setErgopayUUID(epayUUI);
-    // setWalletState("ergopay");
     dispatch(setWalletState("ergopay"));
   }
 
@@ -312,126 +218,143 @@ function InitializeWallet({}) {
   const modalCurrentPage = () => {
     if (modalPage === "main") {
       return (
-        <div>
-          <div>
+        <div className="">
+          <p className="text-xl dark:text-white mb-4">
             {modalPage === "main" ? "Select your wallet" : "How To Disconnect"}
-          </div>
-          <div>
-            <Button
-              isFullWidth
-              size={"lg"}
-              leftIcon={<GiSubmarine size={28} />}
-              rightIcon={<GiSubmarine size={28} />}
-              onClick={() => handleWalletConnect("nautilus")}
-              colorScheme="blue"
-              disabled={
-                walletState !== "Configure" && userAddress ? true : false
-              }
-            >
-              Nautilus{" "}
-              {walletState === "nautilus" && userAddress ? "(Connected)" : ""}
-            </Button>
+          </p>
+          <div className="">
+            <div className="space-y-3">
+              <button
+                className={`w-full py-4 px-6 mb-3 flex justify-between items-center rounded-lg border border-gray-200 hover:border-blue-500 transition-colors ${
+                  walletState !== "Configure" && userAddress
+                    ? "opacity-50 cursor-not-allowed"
+                    : "cursor-pointer"
+                }`}
+                onClick={() => handleWalletConnect("nautilus")}
+                disabled={walletState !== "Configure" && userAddress}
+              >
+                <div className="flex items-center">
+                  <div className="relative w-8 h-8 mr-3">
+                    <Image
+                      layout="fill"
+                      className="w-full h-full object-contain"
+                      src="/assets/images/nautiluswallet.png"
+                      alt="Nautilus Wallet"
+                    />
+                  </div>
+                  <span className="font-medium">Nautilus</span>
+                </div>
+                {walletState === "nautilus" && userAddress && (
+                  <span className="text-sm text-green-500">Connected</span>
+                )}
+              </button>
 
-            <Button
-              isFullWidth
-              size={"lg"}
-              mt="3"
-              leftIcon={<FaWallet size={22} />}
-              rightIcon={<FaWallet size={22} />}
-              onClick={() => handleWalletConnect("safew")}
-              disabled={
-                walletState !== "Configure" && userAddress ? true : false
-              }
-            >
-              SAFEW{" "}
-              {walletState === "safew" && userAddress ? "(Connected)" : ""}
-            </Button>
+              <button
+                className={`w-full py-4 px-6 mb-3 flex justify-between items-center rounded-lg border border-gray-200 hover:border-orange-500 transition-colors ${
+                  walletState !== "Configure" && userAddress
+                    ? "opacity-50 cursor-not-allowed"
+                    : "cursor-pointer"
+                }`}
+                onClick={() => handleWalletConnect("safew")}
+                disabled={walletState !== "Configure" && userAddress}
+              >
+                <div className="flex items-center">
+                  <div className="mr-3">
+                    <FaWallet size={24} className="text-orange-500" />
+                  </div>
+                  <span className="font-medium">SAFEW</span>
+                </div>
+                {walletState === "safew" && userAddress && (
+                  <span className="text-sm text-green-500">Connected</span>
+                )}
+              </button>
 
-            <Button
-              isFullWidth
-              size={"lg"}
-              leftIcon={<MdPhoneAndroid size={20} />}
-              onClick={connectErgopay}
-              colorScheme="purple"
-              disabled={
-                walletState !== "Configure" && userAddress ? true : false
-              }
-            >
-              ErgoPay{" "}
-              {walletState === "ergopay" && userAddress ? "(Connected)" : ""}
-            </Button>
+              <button
+                className={`w-full py-4 px-6 flex justify-between items-center rounded-lg border border-gray-200 hover:border-purple-500 transition-colors ${
+                  walletState !== "Configure" && userAddress
+                    ? "opacity-50 cursor-not-allowed"
+                    : "cursor-pointer"
+                }`}
+                onClick={connectErgopay}
+                disabled={walletState !== "Configure" && userAddress}
+              >
+                <div className="flex items-center">
+                  <div className="mr-3">
+                    <MdPhoneAndroid size={24} className="text-purple-500" />
+                  </div>
+                  <span className="font-medium">ErgoPay</span>
+                </div>
+                {walletState === "ergopay" && userAddress && (
+                  <span className="text-sm text-green-500">Connected</span>
+                )}
+              </button>
+            </div>
           </div>
         </div>
       );
     } else if (modalPage === "ergopay") {
-      let disErgopayUUID = ergopayUUID;
-
       return (
-        <Fragment>
-          <div>{"Connect ErgoPay"}</div>
+        <div>
+          <div className="text-xl mb-2">{"Connect ErgoPay"}</div>
           <div>
-            <p>Scan the QR or press the button below to connect ErgoPay.</p>
+            <p>
+              Scan the QR or press the button below to connect ErgoPay. Do not
+              close out of this popup while connecting.
+            </p>
 
-            <div>
-              <div>
+            <div className="text-center">
+              <div className="w-40 h-40 mx-auto mb-4 mt-4 overflow-hidden rounded-lg bg-white p-2.5">
                 <QRCode
-                  size={128}
-                  value={`ergopay://${skyHarborApiRoot}/api/ergopay/setAddr/${disErgopayUUID}/#P2PK_ADDRESS#`}
+                  size={138}
+                  value={`ergopay://${skyHarborApiRoot}/api/ergopay/setAddr/${ergopayUUID}/#P2PK_ADDRESS#`}
                 />
               </div>
+              <div></div>
 
-              <div className="flex flex-col flex-cols-1 md:flex-cols-2">
-                <Button onClick={copyErgoPay}>Copy request</Button>
-                <Button colorScheme={"blue"} onClick={openErgoPay}>
+              <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-2 text-center">
+                <button
+                  className="py-2 border-2 rounded-lg"
+                  onClick={copyErgoPay}
+                >
+                  Copy request
+                </button>
+                <button
+                  className="py-2 border-2 rounded-lg text-blue-500"
+                  onClick={openErgoPay}
+                >
                   Open wallet
-                </Button>
+                </button>
               </div>
             </div>
           </div>
-        </Fragment>
+        </div>
       );
     } else if (modalPage === "clear") {
       return (
-        <Fragment>
-          <div>
-            {/* @ts-ignore */}
-            {modalPage === "main" ? "Select your wallet" : "Disconnect"}
-          </div>
-          <div>
-            <p>
+        <div>
+          <p className="text-xl dark:text-white mb-4">
+          {modalPage === "main" ? "Select your wallet" : "Disconnect"}
+          </p>
+          <div className="mb-4">
+            <p className="mb-4">
               Are you sure you want to disconnect?{" "}
-              {walletState === "ergopay" ? "" : "This will refresh the page."}
+              {walletState === "ergopay"
+                ? ""
+                : "This will refresh the page."}
             </p>
 
             <Button
-              width={"100%"}
-              onClick={clearWallet}
-              mt="1"
-              colorScheme={"red"}
-              variant="outline"
+              className="w-full py-2 border-2 rounded-lg text-red-500 border-red-500"
+              onClick={() => clearWallet()}
+              colorScheme="red"
             >
               Disconnect Wallet
             </Button>
-
-            {/* <Text fontWeight={"bold"} mb="4">Make Sure To Follow These Steps to Disconnect your wallet properly.</Text>
-                        <OrderedList mt="2" spacing={4}>
-                            <ListItem mb="2">
-                                Click {`"Clear Wallet From Site"`} below. <br />
-                                <Button width={"100%"} onClick={clearWallet} mt="1" colorScheme={"red"} variant="outline">Clear Wallet From Site</Button>
-                            </ListItem>
-                            <ListItem mb="2">
-                                Then disconnect from SkyHarbor on Nautilus by opening the Nautilus Chrome extension, clicking on your wallet name, going into the {`"Connected Dapps"`} tab, and deleting SkyHarbor.io from connected Dapps.
-                            </ListItem>
-                            <ListItem>
-                                Finally, <Text as="span" fontWeight={"semibold"}>refresh the site</Text>. You can then connect your new wallet. Make sure to check preview address in top-right corner before making any transactions to make sure your new wallet it being used.
-                            </ListItem>
-                        </OrderedList> */}
           </div>
-        </Fragment>
+        </div>
       );
     }
   };
-
   return (
     <Fragment>
       {(walletState === "ergopay" || modalPage === "ergopay") && client && (
@@ -442,52 +365,29 @@ function InitializeWallet({}) {
         />
       )}
 
-      <div>
-        {/* {walletState !== "Configure" ? (
-          <div>
-            <ButtonGroup
-              isAttached
-              variant="solid"
-            >
-              <Button
-                onClick={gotoWallet}
-                colorScheme="orange"
-                minW={100}
-                isLoading={!userAddress}
+      <Modal open={reduxState?.wallet?.walletSelectOpen} setOpen={toggle}>
+        <div className="max-w-md w-full mx-auto">
+          {modalCurrentPage()}
+
+          {modalPage !== "clear" && (
+            <div className="mt-6 flex justify-between">
+              <button
+                className="py-2 px-4 bg-red-600 cursor-pointer hover:bg-red-700 rounded text-white transition duration-300"
+                disabled={walletState === "Configure"}
+                onClick={handleClearButton}
               >
-                <Icon as={FaWallet} boxSize={5} mr="2" />
-                <Text noOfLines={1} textOverflow="ellipsis">
-                  {friendlyAddress(userAddress, 4)}
-                </Text>
-              </Button>
-              <IconButton onClick={onOpen} icon={<SettingsIcon />} />
-            </ButtonGroup>
-          </Box>
-        ) : (
-          <Button onClick={onOpen} colorScheme="orange" w={16}>
-            <Icon as={FaWallet} boxSize={5} />
-          </Button>
-        )} */}
-
-        {/* @ts-ignore */}
-        <Modal open={reduxState?.wallet?.walletSelectOpen} setOpen={toggle}>
-          <div>
-            {modalCurrentPage()}
-
-            {modalPage !== "clear" && (
-              <div>
-                <Button
-                  disabled={walletState === "Configure"}
-                  onClick={handleClearButton}
-                >
-                  Disconnect Wallet
-                </Button>
-                <Button onClick={toggle}>Close</Button>
-              </div>
-            )}
-          </div>
-        </Modal>
-      </div>
+                Disconnect Wallet
+              </button>
+              <button
+                className="py-2 px-4 bg-gray-700 cursor-pointer hover:bg-gray-600 rounded text-white transition duration-300"
+                onClick={toggle}
+              >
+                Close
+              </button>
+            </div>
+          )}
+        </div>
+      </Modal>
     </Fragment>
   );
 }

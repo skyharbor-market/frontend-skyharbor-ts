@@ -53,16 +53,21 @@ export const Button: React.FC<ButtonProps> = ({
   //     classes.push('cursor-not-allowed bg-dark-300 hover:bg-dark-300 active:bg-dark-300 text-dark-350');
   // }
 
-  let buttonColorScheme = "bg-blue-400";
+  let buttonColorScheme = "bg-blue-500";
   if (colorScheme === "orange") {
-    buttonColorScheme = "bg-orange-500";
+    buttonColorScheme = "bg-orange-600";
   }
   if (colorScheme === "green") {
-    buttonColorScheme = "bg-green-500";
+    buttonColorScheme = "bg-green-600";
   }
   if (colorScheme === "purple") {
-    buttonColorScheme = "bg-purple-500";
+    buttonColorScheme = "bg-purple-600";
   }
+
+  if (colorScheme === "red") {
+    buttonColorScheme = "bg-red-500 hover:bg-red-600";
+  }
+
 
   const classes = `transition-all ${
     variant === "primary"

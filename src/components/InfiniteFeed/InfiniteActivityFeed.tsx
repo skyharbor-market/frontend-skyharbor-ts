@@ -37,7 +37,7 @@ const InfiniteActivityFeed = () => {
           <LoadingCircle />
         </div>
   );
-  if (error) return <p>Error: {error.message}</p>;
+  if (error) return <p className="text-red-500 dark:text-red-400">Error: {error.message}</p>;
 
   return (
     <InfiniteScroll
@@ -57,130 +57,67 @@ const InfiniteActivityFeed = () => {
         });
       }}
       hasMore={hasMore}
-      loader={<h4>Loading...</h4>}
+      loader={<h4 className="text-gray-600 dark:text-gray-400">Loading...</h4>}
     >
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="sm:flex sm:items-center">
           <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-            {/* <button
-            type="button"
-            className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          >
-            Export
-          </button> */}
+            {/* Add any additional buttons or controls here */}
           </div>
         </div>
         <div className="mt-8 flow-root">
-          {/* <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-            <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8"> */}
-          <table className="min-w-full divide-y divide-gray-300 table-fixed">
-            <thead>
-              <tr>
-                <th
-                  scope="col"
-                  className="whitespace-nowrap py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
-                >
-                  Item
-                </th>
-                <th
-                  scope="col"
-                  className="whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900"
-                >
-                  Price
-                </th>
-                <th
-                  scope="col"
-                  className="whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900"
-                >
-                  From
-                </th>
-                <th
-                  scope="col"
-                  className="whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900"
-                >
-                  To
-                </th>
-                <th
-                  scope="col"
-                  className="whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900"
-                >
-                  Date
-                </th>
-                <th
-                  scope="col"
-                  className="whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900"
-                >
-                  <span>Transaction</span>
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200 bg-white">
-              {/* <div className="grid grid-cols-4 gap-4"> */}
-              {data.sales.map((transaction: any) => {
-                // get how long ago it happened
-                const daysAgoText = msToTime(transaction.completion_time);
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
+              <thead className="bg-gray-50 dark:bg-gray-800">
+                <tr>
+                  <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 dark:text-gray-200 sm:pl-3">Item</th>
+                  <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-gray-200">Price</th>
+                  <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-gray-200">From</th>
+                  <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-gray-200">To</th>
+                  <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-gray-200">Date</th>
+                  <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-gray-200">Transaction</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-900">
+                {data.sales.map((transaction: any) => {
+                  const daysAgoText = msToTime(transaction.completion_time);
 
-                return (
-                  <tr key={transaction.id} className="">
-                    <td className="whitespace-nowrap px-2 py-2 text-sm font-medium text-gray-900 flex flex-row items-center">
-                      <div className="w-12 aspect-square rounded overflow-hidden">
-                        {/* <img
-                          className="h-full w-full"
-                          src={transaction.token.ipfs_art_url}
-                          alt={transaction.token.nft_name}
-                        /> */}
-                        <ArtworkMedia box={convertGQLObject(transaction)}/>
-                      </div>
-                      <p className="w-5/6 ml-2 mb-0 font-semibold line-clamp-1">
-                        {transaction.token.nft_name}
-                      </p>
-                    </td>
-
-                    <td className="whitespace-nowrap py-2 pl-4 pr-3 text-sm text-gray-500 sm:pl-0 uppercase">
-                      {longToCurrency(
-                        transaction.nerg_sale_value,
-                        0,
-                        transaction.currency
-                      )}{" "}
-                      {transaction.currency}
-                    </td>
-                    <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">
-                      {friendlyAddress(transaction.seller_address, 4)}
-                    </td>
-                    <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">
-                      {friendlyAddress(transaction.buyer_address, 4)}
-                    </td>
-                    <td className=" whitespace-nowrap px-2 py-2 text-sm text-gray-900">
-                      {daysAgoText === ""
-                        ? moment(transaction.completion_time).format(
-                            "MMM Do, YYYY"
-                          )
-                        : `${daysAgoText} ago`}
-                    </td>
-                    <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500 cursor-pointer hover:opacity-60 transition-colors" onClick={()=>gotoTransaction(transaction.spent_tx)}>
-                      <div className="flex flex-row items-center"> 
-                        
-                      {friendlyToken(transaction.box_id, 4)}
-                      <FaExternalLinkAlt className="ml-2"/>
-                      </div>
-                    </td>
-                    {/* <td className="relative whitespace-nowrap py-2 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                          <a
-                            href="#"
-                            className="text-indigo-600 hover:text-indigo-900"
-                          >
-                            Edit
-                            <span className="sr-only">, {transaction.id}</span>
-                          </a>
-                        </td> */}
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                  return (
+                    <tr key={transaction.id} className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                      <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-3">
+                        <div className="flex items-center">
+                          <div className="h-10 w-10 flex-shrink-0">
+                            <ArtworkMedia box={convertGQLObject(transaction)} />
+                          </div>
+                          <div className="ml-4">
+                            <p className="font-medium text-gray-900 dark:text-gray-100">{transaction.token.nft_name}</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-400">
+                        {longToCurrency(transaction.nerg_sale_value, 0, transaction.currency)} {transaction.currency}
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-400">{friendlyAddress(transaction.seller_address, 4)}</td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-400">{friendlyAddress(transaction.buyer_address, 4)}</td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-400">
+                        {daysAgoText === "" ? moment(transaction.completion_time).format("MMM Do, YYYY") : `${daysAgoText} ago`}
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-400">
+                        <button
+                          onClick={() => gotoTransaction(transaction.spent_tx)}
+                          className="flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
+                        >
+                          {friendlyToken(transaction.box_id, 4)}
+                          <FaExternalLinkAlt className="ml-2" />
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
-        {/* </div>
-        </div> */}
       </div>
     </InfiniteScroll>
   );

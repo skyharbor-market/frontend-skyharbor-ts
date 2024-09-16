@@ -52,38 +52,31 @@ function WalletButton({ changeTheme, darkMode }) {
             <div
             // size='lg'
             >
-              <Button
-                colorScheme="orange"
-                // minW={100}
-                // isLoading={!userAddress}
-                className="flex flex-row items-center relative overflow-hidden"
-              >
-                <div
-                  className="flex flex-row items-center relative overflow-hidden"
+              <div className="inline-flex rounded-md shadow-sm" role="group">
+                <button
                   onClick={gotoWallet}
+                  className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-orange-500 to-orange-600 rounded-l-lg hover:bg-gradient-to-r hover:from-orange-600 hover:to-orange-700 focus:z-10 focus:ring-2 focus:ring-orange-500 focus:outline-none transition duration-300 ease-in-out"
                 >
-                  <FaWallet className="mr-2 h-4 w-4 text-white" />
-                  {/* {walletBalance === -1 ? "..." : walletBalance} ERG */}
-                  <p className="text-ellipsis mb-0 pr-9 text-white font-semibold">
-                    {friendlyAddress(reduxState?.wallet?.defaultAddress, 4)}
-                  </p>
-                </div>
-
-                <div
-                  className="absolute right-0 top-0 bg-gray-500 h-full flex justify-center w-10 items-center hover:bg-gray-300 transition-all"
-                  onClick={() => {
-                    dispatch(setWalletSelectOpen(true));
-                  }}
+                  <FaWallet className="inline-block mr-2 h-4 w-4" />
+                  <span className="truncate">View Wallet</span>
+                </button>
+                <button
+                  onClick={() => dispatch(setWalletSelectOpen(true))}
+                  className="px-3 py-2 border-l border-orange-500 text-sm font-medium text-white bg-gradient-to-r from-orange-600 to-orange-700 rounded-r-lg hover:bg-gradient-to-r hover:from-orange-700 hover:to-orange-800 focus:z-10 focus:ring-2 focus:ring-orange-500 focus:outline-none transition duration-300 ease-in-out"
                 >
-                  <MdSettings className="h-full w-4 mr-1 text-white" />
-                </div>
-              </Button>
+                  <MdSettings className="h-4 w-4" />
+                </button>
+              </div>
             </div>
           </div>
         ) : (
-          <Button onClick={handleConnectButton} colorScheme="orange" w={16}>
-            <FaWallet className="h-4 w-4 text-white dark:text-black" />
-          </Button>
+          <button
+            onClick={handleConnectButton}
+            className="flex items-center justify-center px-4 py-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg shadow-md transition duration-150 ease-in-out transform hover:scale-[1.01]"
+          >
+            <FaWallet className="h-5 w-5 mr-2" />
+            <span>Connect Wallet</span>
+          </button>
         )}
       </div>
     </Fragment>

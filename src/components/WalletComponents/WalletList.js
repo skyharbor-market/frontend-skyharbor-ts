@@ -218,7 +218,7 @@ function WalletList({ artworks, tokensLoading }) {
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-5">
           {tokensLoading
-            ? [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((item) => {
+            ? [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((item) => {
                 return <LoadingCard key={item} />;
               })
             : filteredArtworks.map((box) => {
