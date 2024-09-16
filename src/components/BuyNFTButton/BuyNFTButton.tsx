@@ -99,6 +99,8 @@ export default function BuyNFTButton({
     // onOpen();
     setSubmitting(true);
 
+    try {
+
     const cancelTxId = await delistNft({
       buyBox: box,
       userAddresses: await getWalletAddresses(),
@@ -108,7 +110,14 @@ export default function BuyNFTButton({
       setModalType("submitted");
       setOpen(true);
       setTransactionId(cancelTxId);
+    setSubmitting(false);
     }
+  }catch (err: any) {
+    console.log(err?.message);
+    toast.error(`Error: ${err?.message}`);
+    setSubmitting(false);
+
+  }
     setSubmitting(false);
 
     // setSaleId(saleTxId);

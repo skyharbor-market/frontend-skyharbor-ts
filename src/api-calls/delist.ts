@@ -18,15 +18,18 @@ export const delistNft = async ({ buyBox, userAddresses }: CancelInterface) => {
 };
 
 export const delistNftApi = async ({ buyBox, userAddresses }: CancelInterface): Promise<TransactionPromiseInterface> => {
-  const res = await axios.post(
-    `${skyHarborTestApi}/api/transactions/delist`,
-    {
-      userAddresses: userAddresses,
-      cancelBox: buyBox,
-    }
-  );
+  try {
+    const res = await axios.post(
+      `${skyHarborTestApi}/api/transactions/delist`,
+      {
+        userAddresses: userAddresses,
+        cancelBox: buyBox,
+      }
+    );
+    const transaction_to_sign: TransactionPromiseInterface = res.data;
 
-  const transaction_to_sign: TransactionPromiseInterface = res.data
-
-  return transaction_to_sign;
+    return transaction_to_sign;
+  } catch (err: any) {
+    throw err?.response?.data;
+  }
 };
