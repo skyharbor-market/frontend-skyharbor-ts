@@ -20,7 +20,7 @@ export default function CustomButtonGroup({ buttons }: CustomButtonGroupProps) {
               index === 0 ? "rounded-l-md" : "-ml-px"
             } ${
               index === buttons.length - 1 && "rounded-r-md"
-            } bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10`}
+            } bg-white dark:bg-gray-800 px-3 py-2 text-sm font-semibold text-gray-900 dark:text-gray-100 ring-1 ring-inset ring-gray-300 dark:ring-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 focus:z-10`}
             onClick={b.onClick}
           >
             {b.icon}

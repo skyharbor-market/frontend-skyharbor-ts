@@ -92,12 +92,14 @@ const Collection = () => {
         });
       }
       return (
-        <div className="flex flex-row space-x-4 items-center">
-          <div className="items-center flex w-1/6 rounded-full overflow-hidden">
-            <img
-              src={colData.card_image}
-              className="h-full w-full object-cover"
-            />
+        <div className="flex flex-row space-x-4">
+          <div className="flex w-44 h-44 rounded-full overflow-hidden">
+            <div className="aspect-square w-full">
+              <img
+                src={colData.card_image}
+                className="h-full w-full object-cover"
+              />
+            </div>
           </div>
           <div className="w-5/6 flex flex-col space-y-3">
             <div className="flex flex-row items-center">
