@@ -42,7 +42,7 @@ type WalletTypes = "nautilus" | "safew";
 function InitializeWallet({}) {
   const router = useRouter();
   const client = useApolloClient();
-  const reduxState = useSelector((state) => state);
+  const reduxState = useSelector((state: any) => state);
   const dispatch = useDispatch();
 
   const [processing, setProcessing] = useState(false);
@@ -231,7 +231,7 @@ function InitializeWallet({}) {
                     : "cursor-pointer"
                 }`}
                 onClick={() => handleWalletConnect("nautilus")}
-                disabled={walletState !== "Configure" && userAddress}
+                disabled={(walletState !== "Configure" && userAddress) ? true : false}
               >
                 <div className="flex items-center dark:text-white">
                   <div className="relative w-8 h-8 mr-3">
@@ -256,7 +256,7 @@ function InitializeWallet({}) {
                     : "cursor-pointer"
                 }`}
                 onClick={() => handleWalletConnect("safew")}
-                disabled={walletState !== "Configure" && userAddress}
+                disabled={(walletState !== "Configure" && userAddress) ? true : false}
               >
                 <div className="flex items-center dark:text-white">
                   <div className="mr-3">
@@ -276,7 +276,7 @@ function InitializeWallet({}) {
                     : "cursor-pointer"
                 }`}
                 onClick={connectErgopay}
-                disabled={walletState !== "Configure" && userAddress}
+                disabled={(walletState !== "Configure" && userAddress) ? true : false}
               >
                 <div className="flex items-center dark:text-white">
                   <div className="mr-3">
@@ -333,7 +333,7 @@ function InitializeWallet({}) {
       return (
         <div>
           <p className="text-xl dark:text-white mb-4">
-          {modalPage === "main" ? "Select your wallet" : "Disconnect"}
+          Disconnect
           </p>
           <div className="mb-4">
             <p className="mb-4">
