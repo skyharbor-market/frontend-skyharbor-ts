@@ -69,24 +69,21 @@ const TopCollections = (props: Props) => {
                         {collection.description}
                       </p>
 
-                      <div className="max-w-xl lg:row-start-3 mt-4 lg:mt-10 lg:max-w-md lg:border-t lg:border-white/10 lg:pt-10">
-                        <dl className="max-w-xl space-y-8 text-base leading-7 text-gray-300 lg:max-w-none">
-                          <div className="relative">
-                            <dt className="inline-block font-semibold text-white">
-                              Volume
-                            </dt>{" "}
-                            <dd className="inline">
-                              {formatValueWithDP(
-                                longToCurrency(
-                                  collection.sum,
-                                  supportedCurrencies[0].decimal
-                                ),
-                                0
-                              )}{" "}
-                              ERG
-                            </dd>
-                          </div>
-                        </dl>
+                      <div className="mt-6 lg:mt-10">
+                        <div className="inline-flex items-baseline px-4 pb-2 pt-1.5 rounded-full bg-white/10 backdrop-blur-sm">
+                          <span className="text-2xl font-bold text-white">
+                            {formatValueWithDP(
+                              longToCurrency(
+                                collection.sum,
+                                supportedCurrencies[0].decimal
+                              ),
+                              0
+                            )}
+                            <span className="ml-1 text-lg font-semibold">ERG</span>
+                          <span className="text-xs font-semibold text-white ml-1">Monthly Volume</span>
+
+                          </span>
+                        </div>
                       </div>
                     </div>
                     <div className="w-full md:w-1/2">
