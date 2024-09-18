@@ -1,13 +1,12 @@
+import { useQuery } from "@apollo/client";
+import React, { useState } from "react";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import { GET_TOP_MONTHLY_COLLECTIONS } from "@/lib/gqlQueries";
+import { formatValueWithDP } from "@/ergofunctions/frontend_helpers";
+import { longToCurrency } from "@/ergofunctions/serializer";
+import { supportedCurrencies } from "@/ergofunctions/consts";
 
-import { useQuery } from '@apollo/client';
-import React, { useState } from 'react';
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
-import { GET_TOP_MONTHLY_COLLECTIONS } from '@/lib/gqlQueries';
-import { formatValueWithDP } from '@/ergofunctions/frontend_helpers';
-import { longToCurrency } from '@/ergofunctions/serializer';
-import { supportedCurrencies } from '@/ergofunctions/consts';
-
-type Props = {}
+type Props = {};
 
 const TopCollections = (props: Props) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -28,18 +27,20 @@ const TopCollections = (props: Props) => {
   };
 
   const prevSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + collections.length) % collections.length);
+    setCurrentIndex(
+      (prevIndex) => (prevIndex - 1 + collections.length) % collections.length
+    );
   };
 
   return (
     <div>
       <div className="mx-auto mt-32 max-w-7xl sm:mt-56 sm:px-6 lg:px-8">
-        <div className="relative isolate overflow-hidden bg-gray-900 px-6 py-20 sm:rounded-3xl sm:px-16 sm:py-24 lg:py-24 xl:px-24">
+        <div className="relative isolate overflow-hidden bg-gray-900 px-6 py-12 rounded-xl sm:rounded-3xl sm:px-16 sm:py-24 lg:py-24 xl:px-24">
           {collections.map((collection: any, index: number) => (
             <div
               key={collection.id}
-              className={`mx-auto flex flex-row max-w-2xl gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none ${
-                index === currentIndex ? 'block' : 'hidden'
+              className={`mx-auto flex flex-col md:flex-row max-w-2xl gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none ${
+                index === currentIndex ? "block" : "hidden"
               }`}
             >
               <div className="lg:max-w-md">
@@ -50,29 +51,37 @@ const TopCollections = (props: Props) => {
                   {collection.description}
                 </p>
 
-                <div className="max-w-xl lg:row-start-3 lg:mt-10 lg:max-w-md lg:border-t lg:border-white/10 lg:pt-10">
-                    <dl className="max-w-xl space-y-8 text-base leading-7 text-gray-300 lg:max-w-none">
+                <div className="max-w-xl lg:row-start-3 mt-4 lg:mt-10 lg:max-w-md lg:border-t lg:border-white/10 lg:pt-10">
+                  <dl className="max-w-xl space-y-8 text-base leading-7 text-gray-300 lg:max-w-none">
                     <div className="relative">
-                        <dt className="inline-block font-semibold text-white">
+                      <dt className="inline-block font-semibold text-white">
                         Volume
-                        </dt>{" "}
-                        <dd className="inline">{formatValueWithDP(longToCurrency(collection.sum, supportedCurrencies[0].decimal), 0)} ERG</dd>
+                      </dt>{" "}
+                      <dd className="inline">
+                        {formatValueWithDP(
+                          longToCurrency(
+                            collection.sum,
+                            supportedCurrencies[0].decimal
+                          ),
+                          0
+                        )}{" "}
+                        ERG
+                      </dd>
                     </div>
-                    </dl>
+                  </dl>
                 </div>
               </div>
-              <div className='w-1/2'>
-
-              <div
-                className="relative -z-20 min-w-full max-w-xl rounded-xl shadow-xl ring-1 ring-white/10 lg:row-span-4 "
-                style={{
-                  backgroundImage: `url(${collection.card_image})`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                //   filter: 'blur(8px)',
-                  height: '400px',
-                }}
-              />
+              <div className="w-full md:w-1/2">
+                <div
+                  className="relative -z-20 min-w-full max-w-xl rounded-xl shadow-xl ring-1 ring-white/10 lg:row-span-4 "
+                  style={{
+                    backgroundImage: `url(${collection.card_image})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    //   filter: 'blur(8px)',
+                    height: "400px",
+                  }}
+                />
               </div>
             </div>
           ))}
@@ -103,7 +112,7 @@ const TopCollections = (props: Props) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default TopCollections
+export default TopCollections;
