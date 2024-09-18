@@ -300,3 +300,17 @@ export const GET_COLLECTION_NFTS = gql`
     }
   }
 `;
+
+
+export const GET_TOP_MONTHLY_COLLECTIONS = gql`
+query GetMonthlyTopCollections {
+  monthly_top_collection_volumes(limit: 10, order_by: {sum: desc}) {
+    id
+    card_image
+    description
+    name
+    sys_name
+    sum
+  }
+}
+`

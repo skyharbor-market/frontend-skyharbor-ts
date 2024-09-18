@@ -27,7 +27,7 @@ const Marketplace = (props: Props) => {
   return (
     <div className="">
       <div>
-        <p className="text-center text-4xl font-semibold">Collections</p>
+        <p className="text-center text-4xl font-semibold mb-8">Collections</p>
       </div>
       <div className="">
         <div className="mx-auto my-6">
