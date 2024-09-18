@@ -233,7 +233,7 @@ function InitializeWallet({}) {
                 onClick={() => handleWalletConnect("nautilus")}
                 disabled={walletState !== "Configure" && userAddress}
               >
-                <div className="flex items-center">
+                <div className="flex items-center dark:text-white">
                   <div className="relative w-8 h-8 mr-3">
                     <Image
                       layout="fill"
@@ -258,7 +258,7 @@ function InitializeWallet({}) {
                 onClick={() => handleWalletConnect("safew")}
                 disabled={walletState !== "Configure" && userAddress}
               >
-                <div className="flex items-center">
+                <div className="flex items-center dark:text-white">
                   <div className="mr-3">
                     <FaWallet size={24} className="text-orange-500" />
                   </div>
@@ -278,7 +278,7 @@ function InitializeWallet({}) {
                 onClick={connectErgopay}
                 disabled={walletState !== "Configure" && userAddress}
               >
-                <div className="flex items-center">
+                <div className="flex items-center dark:text-white">
                   <div className="mr-3">
                     <MdPhoneAndroid size={24} className="text-purple-500" />
                   </div>

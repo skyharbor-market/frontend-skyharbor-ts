@@ -129,15 +129,15 @@ const SellModal = ({ open, onClose, token }: SellModalProps) => {
 
   const renderForm = () => {
     return (
-      <div>
+      <div className="dark:text-gray-100">
         <div>
-          <div className="text-xl">List NFT: {token.nft_name}</div>
+          <div className="text-xl dark:text-gray-50">List NFT: {token.nft_name}</div>
         </div>
-        <hr className="my-2" />
+        <hr className="my-2 dark:border-gray-700" />
         <div className="flex flex-col space-y-2">
           <div className="flex flex-row space-x-2">
             <div className="w-3/4">
-              <p className="mb-1">List Price</p>
+              <p className="mb-1 dark:text-gray-300">List Price</p>
               <CustomInput
                 value={price}
                 type={"number"}
@@ -149,7 +149,7 @@ const SellModal = ({ open, onClose, token }: SellModalProps) => {
               />
             </div>
             <div className="w-1/4">
-              <p className="mb-1">Currency</p>
+              <p className="mb-1 dark:text-gray-300">Currency</p>
               <CustomDropdown
                 value={currency}
                 items={[
@@ -166,7 +166,7 @@ const SellModal = ({ open, onClose, token }: SellModalProps) => {
               />
             </div>
           </div>
-          <div className="flex flex-row justify-between text-sm">
+          <div className="flex flex-row justify-between text-sm dark:text-gray-300">
             <p>
               Artist Royalties{" "}
               {royalties?.percentage
@@ -178,21 +178,23 @@ const SellModal = ({ open, onClose, token }: SellModalProps) => {
               {currency}
             </p>
           </div>
-          <div className="flex flex-row justify-between text-sm">
+          <div className="flex flex-row justify-between text-sm dark:text-gray-300">
             <p>Service Fee ({serviceFee * 100}%)</p>
             <p>
               {finalEarnings.servicePayment} {currency}
             </p>
           </div>
-          <div className="flex flex-row justify-between">
+          <div className="flex flex-row justify-between dark:text-gray-200">
             <p>Your earnings</p>
             <p>2 {currency}</p>
           </div>
         </div>
 
-        <div className=" mt-4">
+        <div className="mt-4">
           <Button
-            className="w-full bg-red-400 text-white"
+            className="w-full bg-red-400 dark:bg-red-500 text-white"
+            colorScheme="red"
+            variant="outline"
             onClick={() => createSaleTx()}
             disabled={disableButton}
           >

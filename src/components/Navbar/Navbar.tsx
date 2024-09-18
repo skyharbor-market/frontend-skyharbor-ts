@@ -61,13 +61,13 @@ export default function Navbar({ setTheme, theme }: NavProps) {
             <Bars3Icon className="h-6 w-6" aria-hidden="true" />
           </button>
         </div>
-        <div className="hidden lg:flex">
+        <div className="hidden lg:flex items-center">
           <div className="text-sm font-semibold leading-6 ">
-            <WalletButton />
+            <WalletButton theme={theme} />
           </div>
 
           <button
-            className="text-sm font-semibold leading-6 ml-2 w-10 h-10 flex items-center justify-center border dark:border-gray-600 rounded-lg"
+            className="text-sm font-semibold leading-6 ml-2 w-10 h-[38px] flex items-center  hover:text-white dark:hover:text-black justify-center border dark:border-gray-600 rounded-lg hover:bg-black dark:hover:bg-white transition-colors"
             onClick={() => {
               setTheme(theme === "light" ? "dark" : "light");
             }}
@@ -128,7 +128,7 @@ export default function Navbar({ setTheme, theme }: NavProps) {
                 ))}
               </div>
               <div className="py-6">
-                <WalletButton />
+                <WalletButton theme={theme}/>
               </div>
             </div>
           </div>

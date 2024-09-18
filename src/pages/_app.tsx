@@ -58,8 +58,13 @@ const TailwindToaster = () => {
 
 function MyApp({ Component, pageProps }: AppProps) {
   const dispatch = useDispatch();
-
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const savedTheme = localStorage.getItem('theme');
+      return savedTheme || 'light';
+    }
+    return 'light';
+  });
 
   // Get ERG price
   async function getErgPrice() {
@@ -77,15 +82,6 @@ function MyApp({ Component, pageProps }: AppProps) {
   // Light/dark mode
   useEffect(() => {
     getErgPrice();
-  }, []);
-
-  useEffect(() => {
-    const currentTheme = localStorage.getItem("theme");
-    console.log("THEME111", currentTheme);
-
-    if (currentTheme) {
-      setTheme(currentTheme);
-    }
   }, []);
 
   useEffect(() => {
