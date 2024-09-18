@@ -35,6 +35,7 @@ import { supportedCurrencies } from "@/ergofunctions/consts";
 import Link from "next/link";
 import { maxDP } from "@/ergofunctions/frontend_helpers";
 import TopCollections from "@/components/LandingPage/TopCollections";
+import { BsBarChart } from "react-icons/bs";
 
 const GET_WEEKLY_VOLUME = gql`
   query getWeeklyHourVolume {
@@ -324,13 +325,13 @@ export default function Landing() {
           </svg>
           <div className="mx-auto max-w-7xl px-6 py-12 sm:py-32 lg:flex lg:items-center lg:gap-x-10 lg:px-8 lg:py-24">
             <div className="mx-auto max-w-2xl lg:mx-0 lg:flex-auto">
-              <h1 className="max-w-lg text-4xl font-bold tracking-tight mb-3 text-gray-900 sm:text-8xl">
+              <h1 className="max-w-lg text-4xl font-bold tracking-tight mb-3 text-gray-900 dark:text-gray-100 sm:text-8xl">
                 SkyHarbor
               </h1>
-              <p className=" mt-2 max-w-lg text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
+              <p className=" mt-2 max-w-lg text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100 sm:text-3xl">
                 Buy and sell NFTs.
               </p>
-              <p className="mt-4 text-lg leading-8 text-gray-600">
+              <p className="mt-4 leading-7 text-gray-600 dark:text-gray-300">
                 Buy and sell NFTs with ease. Experience seamless transactions,
                 top-tier security, and a platform dedicated to innovation.
                 Whether you&apos;re buying, selling, or showcasing, SkyHarbor is
@@ -338,33 +339,30 @@ export default function Landing() {
               </p>
               <div>
                 <Fade fadeKey={"volume"}>
-                  <p className="text-lg leading-8 text-gray-600">
-                    {data?.weekly_volume[0].sum
-                      ? addNumberCommas(
-                          maxDP(
-                            longToCurrency(
-                              data.weekly_volume[0].sum,
-                              supportedCurrencies[0].decimal
-                            ),
-                            0
+                  <div className="inline-flex mt-3 items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200">
+                    <BsBarChart className="mr-2"/>
+                    <span>
+                      {data?.weekly_volume[0].sum
+                        ? addNumberCommas(
+                            maxDP(
+                              longToCurrency(
+                                data.weekly_volume[0].sum,
+                                supportedCurrencies[0].decimal
+                              ),
+                              0
+                            )
                           )
-                        )
-                      : 0}{" "}
-                    ERG weekly volume.
-                  </p>
+                        : 0}{" "}
+                      ERG weekly volume
+                    </span>
+                  </div>
                 </Fade>
               </div>
               <div className="mt-10 flex items-center gap-x-6">
                 <Link href="/marketplace">
                   <div className="rounded-md cursor-pointer bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                    Get started
+                    View Marketplace
                   </div>
-                </Link>
-                <Link
-                  href="#"
-                  className="text-sm font-semibold leading-6 text-gray-900"
-                >
-                  Learn more →
                 </Link>
               </div>
             </div>
