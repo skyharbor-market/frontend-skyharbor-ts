@@ -192,9 +192,9 @@ const SellModal = ({ open, onClose, token }: SellModalProps) => {
 
         <div className="mt-4">
           <Button
-            className="w-full bg-red-400 dark:bg-red-500 text-white"
+            className="w-full bg-red-400 dark:bg-red-500 dark:hover:bg-red-600 dark:text-white"
             colorScheme="red"
-            variant="outline"
+            // variant="outline"
             onClick={() => createSaleTx()}
             disabled={disableButton}
           >
@@ -203,7 +203,7 @@ const SellModal = ({ open, onClose, token }: SellModalProps) => {
                 <LoaderIcon /> <p className="ml-2">Loading royalties</p>
               </div>
             ) : (
-              "List"
+              "List for sale"
             )}
           </Button>
         </div>

@@ -92,7 +92,7 @@ const TopCollections = (props: Props) => {
 
   return (
     <div>
-      <div className="mx-auto mt-32 max-w-7xl sm:mt-56 sm:px-6 lg:px-8">
+      <div className="mx-auto mt-8 max-w-7xl sm:px-6 lg:px-8">
         <div className="relative isolate overflow-hidden bg-gray-900 z-[2] px-6 py-12 rounded-xl sm:rounded-3xl sm:px-16 sm:py-20 lg:py-20 xl:px-24">
           <AnimatePresence mode="wait" initial={false}>
             {collections.map(
