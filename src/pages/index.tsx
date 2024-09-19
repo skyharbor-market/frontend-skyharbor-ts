@@ -36,6 +36,7 @@ import Link from "next/link";
 import { maxDP } from "@/ergofunctions/frontend_helpers";
 import TopCollections from "@/components/LandingPage/TopCollections";
 import { BsBarChart } from "react-icons/bs";
+import LatestSales from "@/components/LandingPage/LatestSales";
 
 const GET_WEEKLY_VOLUME = gql`
   query getWeeklyHourVolume {
@@ -323,7 +324,7 @@ export default function Landing() {
               fill="url(#83fd4e5a-9d52-42fc-97b6-718e5d7ee527)"
             />
           </svg>
-          <div className="mx-auto max-w-7xl px-6 py-12 sm:py-32 lg:flex lg:items-center lg:gap-x-10 lg:px-8 lg:py-24">
+          <div className="mx-auto max-w-7xl px-6 py-8 sm:py-12 lg:flex lg:items-center lg:gap-x-10 lg:px-8 lg:py-12">
             <div className="mx-auto max-w-2xl lg:mx-0 lg:flex-auto">
               <h1 className="max-w-lg text-4xl font-bold tracking-tight mb-3 text-gray-900 dark:text-gray-100 sm:text-8xl">
                 SkyHarbor
@@ -479,9 +480,18 @@ export default function Landing() {
           </div>
         </div> */}
 
-        {/* Feature section */}
-        <TopCollections />
-        {/* Feature section */}
+
+        {/* LATEST SALES */}
+        <div className="mt-0">
+          <LatestSales />
+        </div>
+
+        {/* TOP COLLECTIONS */}
+        <div>
+          <TopCollections />
+        </div>
+
+
         <div className="mx-auto mt-32 max-w-7xl px-6 sm:mt-56 lg:px-8">
           <div className="mx-auto max-w-2xl lg:text-center">
             <h2 className="text-base font-semibold leading-7 text-indigo-600">

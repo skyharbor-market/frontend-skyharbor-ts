@@ -211,6 +211,53 @@ export const GET_TOP_SALES = gql`
     }
   }
 `;
+export const GET_TOP_SALES_MONTH = gql`
+  query getHighestPriceSales($limit: Int, $offset: Int, $thirtyDaysAgo: timestamptz!) {
+  sales(
+    where: {
+      _and: [
+        { status: { _eq: "complete" } },
+        { currency: { _eq: "erg" } },
+        { completion_time: { _gte: $thirtyDaysAgo } },
+        { token: { token_collection: { verified: { _eq: true } } } }
+      ]
+    }
+    order_by: { nerg_sale_value: desc }
+    limit: $limit
+    offset: $offset
+  ) {
+    token_id
+    box_id
+    box_json
+    completion_time
+    sales_address {
+      address
+    }
+    nerg_sale_value
+    seller_address
+    buyer_address
+    spent_tx
+    currency
+    list_time
+    token {
+      
+      nft_name
+      nft_desc
+      royalty_int
+      royalty_address
+      ipfs_art_hash
+      ipfs_art_url
+      nft_type
+      token_collection {
+        name
+        sys_name
+        verified
+      }
+    }
+  }
+}
+
+`;
 export const GET_COLLECTIONS = gql`
   query getCollections($limit: Int, $offset: Int, $search: String) {
     collections(
