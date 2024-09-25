@@ -53,8 +53,18 @@ const Collection = () => {
   const renderCollectionInfo = () => {
     if (loading) {
       return (
-        <div className="m-auto w-12">
-          <LoadingCircle />
+        <div className="flex flex-row space-x-4">
+          <div className="w-44 h-44 rounded-full bg-gray-200 animate-pulse"></div>
+          <div className="w-5/6 flex flex-col space-y-3">
+            <div className="h-8 w-64 bg-gray-200 rounded animate-pulse"></div>
+            <div className="h-4 w-48 bg-gray-200 rounded animate-pulse"></div>
+            <div className="h-20 w-full bg-gray-200 rounded animate-pulse"></div>
+            <div className="flex space-x-2">
+              <div className="h-8 w-8 bg-gray-200 rounded-full animate-pulse"></div>
+              <div className="h-8 w-8 bg-gray-200 rounded-full animate-pulse"></div>
+              <div className="h-8 w-8 bg-gray-200 rounded-full animate-pulse"></div>
+            </div>
+          </div>
         </div>
       );
     } else if (error || !data?.collections) {

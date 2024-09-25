@@ -48,6 +48,8 @@ import { CheckCircleIcon } from "@heroicons/react/24/outline";
 import { BsCheckCircleFill } from "react-icons/bs";
 import TokenPrevSales from "./TokenPrevSales";
 import RecentlyListed from "./RecentlyListed";
+import { FaRegCopy } from "react-icons/fa";
+import toast from "react-hot-toast";
 
 const GET_TOKEN_PAGE = gql`
   query getTokenSales($tokenId: String) {
@@ -134,7 +136,7 @@ function TokenPage({ token }: TokenPageProps) {
 
   // Copy text
   const handleCopy = (text: string) => {
-    navigator.clipboard.writeText(text).then(() => alert("Copied"));
+    navigator.clipboard.writeText(text).then(() => toast.success("Copied!"))
   };
 
   const gotoCollection = (sys: string) => {
@@ -326,16 +328,16 @@ function TokenPage({ token }: TokenPageProps) {
           </div>
         )}
 
-        <p className="font-semibold">
-          Token ID:
-          <span
-            className="cursor-pointer text-blue-500"
+        <div className="flex items-center justify-center text-sm">
+          <span className="text-gray-500">Token ID:</span>
+          <button
+            className="ml-2 px-2 py-1 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors flex items-center"
             onClick={() => handleCopy(tokenInfo.tokenId)}
           >
-            {" "}
-            {friendlyToken(tokenInfo.tokenId, 8)}
-          </span>
-        </p>
+            <span className="text-gray-700">{friendlyToken(tokenInfo.tokenId, 8)}</span>
+            <FaRegCopy className="ml-2 text-gray-400 hover:text-gray-600" />
+          </button>
+        </div>
       </div>
 
       <div className="flex flex-col lg:flex-row justify-between space-y-4 lg:space-y-0 lg:space-x-8">
