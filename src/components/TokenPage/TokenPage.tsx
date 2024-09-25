@@ -328,14 +328,14 @@ function TokenPage({ token }: TokenPageProps) {
           </div>
         )}
 
-        <div className="flex items-center justify-center text-sm">
-          <span className="text-gray-500">Token ID:</span>
+        <div className="flex items-center justify-center text-sm mt-2">
+          <span className="text-gray-500 dark:text-gray-400">Token ID:</span>
           <button
-            className="ml-2 px-2 py-1 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors flex items-center"
+            className="ml-2 px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors flex items-center"
             onClick={() => handleCopy(tokenInfo.tokenId)}
           >
-            <span className="text-gray-700">{friendlyToken(tokenInfo.tokenId, 8)}</span>
-            <FaRegCopy className="ml-2 text-gray-400 hover:text-gray-600" />
+            <span className="text-gray-700 dark:text-gray-300">{friendlyToken(tokenInfo.tokenId, 8)}</span>
+            <FaRegCopy className="ml-2 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300" />
           </button>
         </div>
       </div>

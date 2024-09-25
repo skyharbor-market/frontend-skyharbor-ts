@@ -84,7 +84,7 @@ function UserActivity({ addresses }) {
           return (
             <div
               key={item}
-              className="w-full h-4 bg-gray-200 animate-pulse"
+              className="w-full h-4 bg-gray-200 dark:bg-gray-700 animate-pulse"
             ></div>
           );
         })}
@@ -93,7 +93,7 @@ function UserActivity({ addresses }) {
   } else if (error) {
     return (
       <div className="text-center">
-        <span className="font-semibold text-center">
+        <span className="font-semibold text-center text-gray-800 dark:text-gray-200">
           An error occurred retrieving your listed NFTs. Please refresh, If
           problem persists, notify us on{" "}
           <span
@@ -111,7 +111,7 @@ function UserActivity({ addresses }) {
   } else if (data.sales.length === 0) {
     return (
       <div className="text-center">
-        <strong className="flex justify-center items-center">
+        <strong className="flex justify-center items-center text-gray-800 dark:text-gray-200">
           You haven{"'"}t sold any NFTs yet.
         </strong>
       </div>
@@ -120,28 +120,28 @@ function UserActivity({ addresses }) {
 
   return (
     <div className="mt-4">
-      <div className="bg-white border rounded">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+      <div className="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded">
+        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+          <thead className="bg-gray-50 dark:bg-gray-700">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                 Item
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                 Price
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                 From
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                 To
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                 Date
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
             {data.sales.map((item, index) => {
               const soldItem = {
                 token_id: item.token_id,
