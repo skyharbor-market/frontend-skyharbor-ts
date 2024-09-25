@@ -19,30 +19,37 @@ type CollectionItemProps = {
   isHighlighted: boolean;
 };
 
-const CollectionItem: React.FC<CollectionItemProps> = ({ collection, index, startIndex, isHighlighted }) => {
+const CollectionItem: React.FC<CollectionItemProps> = ({
+  collection,
+  index,
+  startIndex,
+  isHighlighted,
+}) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
     // <Link href={`/collection/${collection.sys_name}`}>
-      <motion.a
-        key={collection.id}
-        className={`relative flex cursor-pointer items-center justify-between px-4 py-2 bg-white rounded-lg backdrop-blur-md transition-all duration-300 hover:bg-opacity-30 overflow-hidden ${
-          isHighlighted ? 'ring-2 ring-purple-300 shadow-lg bg-opacity-10' : 'bg-opacity-20'
-        }`}
-        onHoverStart={() => setIsHovered(true)}
-        onHoverEnd={() => setIsHovered(false)}
-      >
-        <div className="flex items-center z-10">
-          <img
-            src={collection.card_image}
-            alt={collection.name}
-            className="w-12 h-12 object-cover rounded-full mr-4 border-2 border-white"
-          />
-          <span className="font-semibold text-white">
-            {startIndex + index + 1}. {collection.name}
-          </span>
-        </div>
-        {/* <motion.div
+    <motion.a
+      key={collection.id}
+      className={`relative flex cursor-pointer items-center justify-between px-4 py-2 bg-white rounded-lg backdrop-blur-md transition-all duration-300 hover:bg-opacity-30 overflow-hidden ${
+        isHighlighted
+          ? "ring-2 ring-purple-300 shadow-lg bg-opacity-10"
+          : "bg-opacity-20"
+      }`}
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
+    >
+      <div className="flex items-center z-10">
+        <img
+          src={collection.card_image}
+          alt={collection.name}
+          className="w-12 h-12 object-cover rounded-full mr-4 border-2 border-white"
+        />
+        <span className="font-semibold text-white">
+          {startIndex + index + 1}. {collection.name}
+        </span>
+      </div>
+      {/* <motion.div
           initial={{ x: "100%", opacity: 0 }}
           animate={{ x: isHovered ? "0%" : "100%", opacity: isHovered ? 1 : 0 }}
           transition={{ duration: 0.2, ease: "easeInOut" }}
@@ -50,17 +57,14 @@ const CollectionItem: React.FC<CollectionItemProps> = ({ collection, index, star
         >
           <span className="text-white font-bold text-xs md:text-xs transform flex flex-row items-center">View Collection <ArrowRightCircleIcon className="h-4 w-4 md:w-5 md:h-5 ml-1" /></span>
         </motion.div> */}
-        <span className="text-white font-medium z-10">
-          {formatValueWithDP(
-            longToCurrency(
-              collection.sum,
-              supportedCurrencies[0].decimal
-            ),
-            0
-          )}{" "}
-          ERG
-        </span>
-      </motion.a>
+      <span className="text-white font-medium z-10">
+        {formatValueWithDP(
+          longToCurrency(collection.sum, supportedCurrencies[0].decimal),
+          0
+        )}{" "}
+        ERG
+      </span>
+    </motion.a>
     // </Link>
   );
 };
@@ -165,9 +169,9 @@ const TopCollections = (props: Props) => {
                           </div>
                         </div>
                         <Link href={`/collection/${collection.sys_name}`}>
-                        <button className="bg-blue-500 hover:bg-blue-600 transition-colors text-white px-3 py-2 rounded-lg text-sm mt-3">
-                          View Collection
-                        </button>
+                          <button className="bg-blue-500 hover:bg-blue-600 transition-colors text-white px-3 py-2 rounded-lg text-sm mt-3">
+                            View Collection
+                          </button>
                         </Link>
                       </div>
                       <div className="w-full md:w-1/3">
@@ -216,32 +220,35 @@ const TopCollections = (props: Props) => {
           <div className="relative pt-20 pb-4 px-6 backdrop-blur-sm">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
               <div className="space-y-4">
-                {collections.slice(0, middleIndex).map((collection: any, index: number) => (
-                  <div onClick={()=>goToSlide(index)}>
-
-                  <CollectionItem 
-                    key={collection.id} 
-                    collection={collection} 
-                    index={index} 
-                    startIndex={0} 
-                    isHighlighted={index === currentIndex}
-                  />
-                  </div>
-                ))}
+                {collections
+                  .slice(0, middleIndex)
+                  .map((collection: any, index: number) => (
+                    <div onClick={() => goToSlide(index)} key={collection.id}>
+                      <CollectionItem
+                        collection={collection}
+                        index={index}
+                        startIndex={0}
+                        isHighlighted={index === currentIndex}
+                      />
+                    </div>
+                  ))}
               </div>
               <div className="space-y-4">
-                {collections.slice(middleIndex).map((collection: any, index: number) => (
-                  <div onClick={()=>goToSlide(index + middleIndex)}>
-
-                  <CollectionItem 
-                    key={collection.id} 
-                    collection={collection} 
-                    index={index} 
-                    startIndex={middleIndex} 
-                    isHighlighted={index + middleIndex === currentIndex}
-                  />
-                  </div>
-                ))}
+                {collections
+                  .slice(middleIndex)
+                  .map((collection: any, index: number) => (
+                    <div
+                      onClick={() => goToSlide(index + middleIndex)}
+                      key={collection.id}
+                    >
+                      <CollectionItem
+                        collection={collection}
+                        index={index}
+                        startIndex={middleIndex}
+                        isHighlighted={index + middleIndex === currentIndex}
+                      />
+                    </div>
+                  ))}
               </div>
             </div>
           </div>
