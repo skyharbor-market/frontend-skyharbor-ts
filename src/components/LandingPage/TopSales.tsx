@@ -1,6 +1,7 @@
 import { useQuery } from "@apollo/client";
 import React, { useMemo } from "react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { GET_TOP_SALES_MONTH } from "@/lib/gqlQueries";
 import { formatValueWithDP } from "@/ergofunctions/frontend_helpers";
 import { longToCurrency } from "@/ergofunctions/serializer";
@@ -34,10 +35,7 @@ const TopSales = (props: Props) => {
 
   const sales = data?.sales || [];
 
-  
-
   return (
-    // <div className="bg-gradient-to-br from-purple-600 to-indigo-700 p-4 md:p-8 rounded-3xl shadow-2xl">
     <div className="">
       <h2 className="text-2xl md:text-3xl font-bold  mb-4 md:mb-6 flex items-center justify-center">
         <ArrowTrendingUpIcon className="w-6 h-6 md:w-8 md:h-8 mr-2" />
@@ -79,18 +77,21 @@ const TopSales = (props: Props) => {
 
               <ArtworkMedia
                 box={soldItem}
-                // alt={sale.token.nft_name}
               />
               </div>
 
             </div>
             <div className="text-center">
-              <h3 className="text-sm md:text-base font-semibold  truncate text-ellipsis  md:max-w-[120px] max-w-[1800px]">
-                {sale.token.nft_name}
-              </h3>
-              <p className="text-xs text-gray-300 truncate md:max-w-[120px]">
-                {sale.token.token_collection.name}
-              </p>
+              <Link href={`/token/${sale.token_id}`}>
+                <h3 className="text-sm md:text-base font-semibold truncate text-ellipsis md:max-w-[120px] max-w-[1800px] cursor-pointer hover:underline">
+                  {sale.token.nft_name}
+                </h3>
+              </Link>
+              <Link href={`/collection/${sale.token.token_collection.sys_name}`}>
+                <p className="text-xs text-gray-300 truncate md:max-w-[120px] cursor-pointer hover:underline">
+                  {sale.token.token_collection.name}
+                </p>
+              </Link>
             </div>
             <div className="text-center mt-2">
               <p className={`text-sm md:text-lg font-bold ${index === 0 ? "text-yellow-600 dark:text-yellow-400" : ""}`}>

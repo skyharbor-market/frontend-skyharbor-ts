@@ -38,8 +38,8 @@ const TailwindToaster = () => {
           appear
           show={t.visible}
           className={`transform p-4 flex rounded shadow-lg ${
-            t.type === "error" ? "bg-red-400 text-white" : ""
-          } ${t.type === "success" ? "bg-white" : ""}`}
+            t.type === "error" ? "bg-red-400 text-white dark:bg-red-600" : ""
+          } ${t.type === "success" ? "bg-white dark:bg-gray-800 dark:text-white" : ""}`}
           enter="transition-all duration-150"
           enterFrom="opacity-0 scale-50"
           enterTo="opacity-100 scale-100"

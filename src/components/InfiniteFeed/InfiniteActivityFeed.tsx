@@ -68,7 +68,7 @@ const InfiniteActivityFeed = () => {
         </div>
         <div className="mt-8 flow-root">
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
+            <table className="min-w-full divide-y divide-gray-300 dark:divide-gray-700 rounded-lg overflow-hidden">
               <thead className="bg-gray-50 dark:bg-gray-800">
                 <tr>
                   <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 dark:text-gray-200 sm:pl-3">Item</th>

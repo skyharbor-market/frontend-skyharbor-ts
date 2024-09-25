@@ -120,8 +120,8 @@ function UserActivity({ addresses }) {
 
   return (
     <div className="mt-4">
-      <div className="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded">
-        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+      <div className="  ">
+        <table className="min-w-full dark:bg-gray-800 border dark:border-gray-700 divide-y divide-gray-200 dark:divide-gray-700 rounded-lg overflow-hidden">
           <thead className="bg-gray-50 dark:bg-gray-700">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">

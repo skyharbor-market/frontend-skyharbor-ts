@@ -58,10 +58,10 @@ function WalletButton({ changeTheme, theme }) {
               >
                 <motion.button
                   onClick={gotoWallet}
-                  className="px-4 py-2 text-sm font-medium text-white rounded-l-lg focus:z-10 focus:outline-none flex flex-row items-center"
+                  className={`px-4 py-2 text-sm font-medium text-white rounded-l-lg focus:z-10 focus:outline-none flex flex-row items-center ${router.pathname === '/wallet' ? 'opacity-75' : ''}`}
                   variants={buttonVariants}
                   animate={isDarkMode ? "dark" : "light"}
-                  whileHover={isDarkMode ? hoverVariants.dark : hoverVariants.light}
+                  whileHover={router.pathname !== '/wallet' ? (isDarkMode ? hoverVariants.dark : hoverVariants.light) : {}}
                   transition={{ duration: 0.15 }}
                 >
                   <FaWallet className="inline-block mr-2 h-4 w-4" />
