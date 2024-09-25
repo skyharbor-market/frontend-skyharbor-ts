@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import "react-h5-audio-player/lib/styles.css";
 // import TokenPage from "../../components/TokenPage/TokenPage";
 import LoadingCircle from "../../components/LoadingCircle/LoadingCircle";
+import TokenPage from "@/components/TokenPage/TokenPage";
 
 function Token() {
   let mounted = true;
@@ -25,8 +26,8 @@ function Token() {
   return (
     <div>
       {router.isReady ? (
-        <div></div>
-        // <TokenPage key={token} token={token} />
+        // <div></div>
+        <TokenPage key={token} token={token} />
       ) : (
         <LoadingCircle />
       )}

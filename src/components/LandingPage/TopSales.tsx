@@ -18,7 +18,7 @@ const LoadingState = () => (
   </div>
 );
 
-const LatestSales = (props: Props) => {
+const TopSales = (props: Props) => {
   const getThirty = useMemo(() => {
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
@@ -67,7 +67,7 @@ const LatestSales = (props: Props) => {
             transition={{ delay: index * 0.1 }}
             className={`bg-white bg-opacity-10 w-full rounded-xl p-3 md:p-4 flex flex-col items-center justify-between
               ${index === 0 ? "md:w-1/4 md:h-48" : "md:w-1/5 md:h-44"}
-              ${index === 0 ? "border-2 border-yellow-400 shadow-lg" : " border-gray-300 shadow-md border-2"}`}
+              ${index === 0 ? "border border-yellow-400 shadow-lg" : " border-gray-300 dark:border-gray-600 shadow-md border"}`}
           >
             <div className="flex items-center mb-2">
               <div className={`text-lg md:text-2xl font-bold mr-2 ${index === 0 ? "text-yellow-600 dark:text-yellow-400" : ""}`}>
@@ -114,4 +114,4 @@ const LatestSales = (props: Props) => {
   );
 };
 
-export default LatestSales;
+export default TopSales;

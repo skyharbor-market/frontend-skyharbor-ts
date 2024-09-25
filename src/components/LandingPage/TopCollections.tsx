@@ -23,7 +23,7 @@ const CollectionItem: React.FC<CollectionItemProps> = ({ collection, index, star
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <Link href={`/collection/${collection.sys_name}`}>
+    // <Link href={`/collection/${collection.sys_name}`}>
       <motion.a
         key={collection.id}
         className={`relative flex cursor-pointer items-center justify-between px-4 py-2 bg-white rounded-lg backdrop-blur-md transition-all duration-300 hover:bg-opacity-30 overflow-hidden ${
@@ -42,14 +42,14 @@ const CollectionItem: React.FC<CollectionItemProps> = ({ collection, index, star
             {startIndex + index + 1}. {collection.name}
           </span>
         </div>
-        <motion.div
+        {/* <motion.div
           initial={{ x: "100%", opacity: 0 }}
           animate={{ x: isHovered ? "0%" : "100%", opacity: isHovered ? 1 : 0 }}
           transition={{ duration: 0.2, ease: "easeInOut" }}
           className="absolute inset-y-0 right-0 w-1/3 flex items-center justify-center bg-purple-600 bg-opacity-80 z-20  px-2 text-center whitespace-nowrap"
         >
           <span className="text-white font-bold text-xs md:text-xs transform flex flex-row items-center">View Collection <ArrowRightCircleIcon className="h-4 w-4 md:w-5 md:h-5 ml-1" /></span>
-        </motion.div>
+        </motion.div> */}
         <span className="text-white font-medium z-10">
           {formatValueWithDP(
             longToCurrency(
@@ -61,7 +61,7 @@ const CollectionItem: React.FC<CollectionItemProps> = ({ collection, index, star
           ERG
         </span>
       </motion.a>
-    </Link>
+    // </Link>
   );
 };
 
@@ -212,11 +212,13 @@ const TopCollections = (props: Props) => {
           </div>
         </div>
         <div className="-mt-14 relative overflow-hidden rounded-b-xl z-[1]">
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-400 to-indigo-600 opacity-75 blur-xl"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-indigo-700 opacity-75 blur-xl"></div>
           <div className="relative pt-20 pb-4 px-6 backdrop-blur-sm">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
               <div className="space-y-4">
                 {collections.slice(0, middleIndex).map((collection: any, index: number) => (
+                  <div onClick={()=>goToSlide(index)}>
+
                   <CollectionItem 
                     key={collection.id} 
                     collection={collection} 
@@ -224,10 +226,13 @@ const TopCollections = (props: Props) => {
                     startIndex={0} 
                     isHighlighted={index === currentIndex}
                   />
+                  </div>
                 ))}
               </div>
               <div className="space-y-4">
                 {collections.slice(middleIndex).map((collection: any, index: number) => (
+                  <div onClick={()=>goToSlide(index + middleIndex)}>
+
                   <CollectionItem 
                     key={collection.id} 
                     collection={collection} 
@@ -235,6 +240,7 @@ const TopCollections = (props: Props) => {
                     startIndex={middleIndex} 
                     isHighlighted={index + middleIndex === currentIndex}
                   />
+                  </div>
                 ))}
               </div>
             </div>

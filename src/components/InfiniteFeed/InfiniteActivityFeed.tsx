@@ -14,6 +14,7 @@ import ArtworkMedia from "../artworkMedia";
 import { BsLink } from "react-icons/bs";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import LoadingCircle from "../LoadingCircle/LoadingCircle";
+import Link from "next/link";
 
 const InfiniteActivityFeed = () => {
   const [hasMore, setHasMore] = useState(true);
@@ -84,6 +85,9 @@ const InfiniteActivityFeed = () => {
 
                   return (
                     <tr key={transaction.id} className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                      <Link href={`/token/${transaction.token_id}`}>
+                      <a>
+
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-3">
                         <div className="flex items-center">
                           <div className="h-10 w-10 flex-shrink-0">
@@ -94,6 +98,10 @@ const InfiniteActivityFeed = () => {
                           </div>
                         </div>
                       </td>
+                      </a>
+
+                      </Link>
+
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-400">
                         {longToCurrency(transaction.nerg_sale_value, 0, transaction.currency)} {transaction.currency}
                       </td>

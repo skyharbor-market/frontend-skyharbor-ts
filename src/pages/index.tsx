@@ -36,7 +36,7 @@ import Link from "next/link";
 import { maxDP } from "@/ergofunctions/frontend_helpers";
 import TopCollections from "@/components/LandingPage/TopCollections";
 import { BsBarChart } from "react-icons/bs";
-import LatestSales from "@/components/LandingPage/LatestSales";
+import TopSales from "@/components/LandingPage/TopSales";
 
 const GET_WEEKLY_VOLUME = gql`
   query getWeeklyHourVolume {
@@ -311,7 +311,7 @@ export default function Landing() {
                 <path d="M100 200V.5M.5 .5H200" fill="none" />
               </pattern>
             </defs>
-            <svg x="50%" y={-1} className="overflow-visible fill-gray-50">
+            <svg x="50%" y={-1} className="overflow-visible fill-gray-50 dark:fill-gray-100/20">
               <path
                 d="M-100.5 0h201v201h-201Z M699.5 0h201v201h-201Z M499.5 400h201v201h-201Z M-300.5 600h201v201h-201Z"
                 strokeWidth={0}
@@ -482,8 +482,8 @@ export default function Landing() {
 
 
         {/* LATEST SALES */}
-        <div className="mt-0">
-          <LatestSales />
+        <div className="mb-24 mt-12">
+          <TopSales />
         </div>
 
         {/* TOP COLLECTIONS */}
