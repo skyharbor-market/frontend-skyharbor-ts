@@ -1,7 +1,6 @@
 import React, { Fragment, useEffect } from "react";
 import { useRouter } from "next/router";
 import "react-h5-audio-player/lib/styles.css";
-// import TokenPage from "../../components/TokenPage/TokenPage";
 import LoadingCircle from "../../components/LoadingCircle/LoadingCircle";
 import TokenPage from "@/components/TokenPage/TokenPage";
 
@@ -29,7 +28,9 @@ function Token() {
         // <div></div>
         <TokenPage key={token} token={token} />
       ) : (
-        <LoadingCircle />
+        <div className="m-auto w-12">
+          <LoadingCircle />
+        </div>
       )}
     </div>
   );

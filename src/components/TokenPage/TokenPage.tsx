@@ -47,6 +47,7 @@ import SEOHead from "../SEOHead";
 import { CheckCircleIcon } from "@heroicons/react/24/outline";
 import { BsCheckCircleFill } from "react-icons/bs";
 import TokenPrevSales from "./TokenPrevSales";
+import RecentlyListed from "./RecentlyListed";
 
 const GET_TOKEN_PAGE = gql`
   query getTokenSales($tokenId: String) {
@@ -133,9 +134,7 @@ function TokenPage({ token }: TokenPageProps) {
 
   // Copy text
   const handleCopy = (text: string) => {
-    navigator.clipboard.writeText(text).then(() =>
-      alert("Copied")
-    );
+    navigator.clipboard.writeText(text).then(() => alert("Copied"));
   };
 
   const gotoCollection = (sys: string) => {
@@ -150,7 +149,7 @@ function TokenPage({ token }: TokenPageProps) {
   };
 
   async function loadArtworks() {
-    let decoded = [];
+    let decoded: any[] = [];
     const dec = await decodeArtwork(null, token);
     if (!dec) {
       return;
@@ -254,7 +253,7 @@ function TokenPage({ token }: TokenPageProps) {
     return <p className="text-red-500">Error getting token</p>;
   } else if (!tokenInfo) {
     return (
-      <div className="text-center">
+      <div className="m-auto w-12 mt-12">
         <LoadingCircle />
       </div>
     );
@@ -296,9 +295,11 @@ function TokenPage({ token }: TokenPageProps) {
             ? globalMeta.description
             : tokenInfo.nft_desc
         } | SkyHarbor`}
-        ogImgUrl={tokenImage}
+        // ogImgUrl={tokenImage}
         ogType="website"
-      />
+      >
+        <div className="invisible"></div>
+      </SEOHead>
 
       <div className="mb-8 text-center">
         <h1 className="text-3xl font-bold">{tokenInfo.nft_name}</h1>
@@ -306,13 +307,18 @@ function TokenPage({ token }: TokenPageProps) {
           <div className="flex items-center justify-center mt-2 mb-3">
             <p
               className={`text-xl font-semibold cursor-pointer ${
-                tokenInfo.verified_collection ? "text-blue-500" : "text-gray-500"
+                tokenInfo.verified_collection
+                  ? "text-blue-500"
+                  : "text-gray-500"
               }`}
               onClick={() => gotoCollection(tokenInfo.collection_sys_name)}
             >
               {tokenInfo.verified_collection
                 ? tokenInfo.collection_name
-                : `Unverified (${friendlyAddress(tokenInfo.collection_name, 4)})`}
+                : `Unverified (${friendlyAddress(
+                    tokenInfo.collection_name,
+                    4
+                  )})`}
             </p>
             {tokenInfo.verified_collection && (
               <BsCheckCircleFill className="h-5 w-5 ml-2 text-blue-500" />
@@ -345,7 +351,7 @@ function TokenPage({ token }: TokenPageProps) {
                 borderRad={8}
                 box={tokenInfo}
                 thumbnail={false}
-                maxHeight={"70vh"}
+                // maxHeight={"70vh"}
                 ratio="regular"
               />
             </a>
@@ -359,24 +365,25 @@ function TokenPage({ token }: TokenPageProps) {
                 On sale for {nftPrice} {currencyObject?.displayName}
               </p>
               <BuyNFTButton
-            box={token}
-            userAddresses={userAddresses}
-            buyButton={
-              <button className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-colors">
-                Buy Now
-              </button>
-            }
-            editButton={
-              <button className="w-full py-2 px-4 bg-red-600 text-white font-semibold rounded-md hover:bg-red-700 transition-colors">
-                Delist
-              </button>
-            }
-            loadingButton={
-              <button className="w-full py-2 px-4 bg-gray-400 text-white font-semibold rounded-md cursor-not-allowed">
-                Loading...
-              </button>
-            }
-          />            </div>
+                box={token}
+                userAddresses={userAddresses}
+                buyButton={
+                  <button className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-colors">
+                    Buy Now
+                  </button>
+                }
+                editButton={
+                  <button className="w-full py-2 px-4 bg-red-600 text-white font-semibold rounded-md hover:bg-red-700 transition-colors">
+                    Delist
+                  </button>
+                }
+                loadingButton={
+                  <button className="w-full py-2 px-4 bg-gray-400 text-white font-semibold rounded-md cursor-not-allowed">
+                    Loading...
+                  </button>
+                }
+              />{" "}
+            </div>
           )}
 
           <h2 className="mb-2 font-semibold text-2xl">Properties</h2>
@@ -386,18 +393,18 @@ function TokenPage({ token }: TokenPageProps) {
 
           <div>
             <h2 className="mt-8 mb-2 font-semibold text-2xl">Previous Sales</h2>
-            <TokenPrevSales tokenId={token} expanded />
+            <TokenPrevSales tokenId={token} expanded={false} />
           </div>
         </div>
       </div>
 
       {tokenInfo.collection_name && (
         <div className="mt-12">
-          {/* <RecentlyListed
+          <RecentlyListed
             collection={tokenInfo.collection_sys_name}
             collection_name={tokenInfo.collection_name}
             verified={tokenInfo.verified_collection}
-          /> */}
+          />
         </div>
       )}
     </div>
