@@ -214,7 +214,7 @@ const SellModal = ({ open, onClose, token }: SellModalProps) => {
   return (
     <div>
       <Modal open={open} setOpen={onClose}>
-        {txId ? <TxSubmitted txId={txId} /> : renderForm()}
+        {txId ? <TxSubmitted txId={txId} type="list" onClose={onClose} /> : renderForm()}
       </Modal>
     </div>
   );

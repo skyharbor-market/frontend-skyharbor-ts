@@ -1,22 +1,4 @@
-import {
-  BuildingOfficeIcon,
-  CreditCardIcon,
-  UserIcon,
-  UsersIcon,
-} from "@heroicons/react/20/solid";
-import { ComponentType, ReactNode } from "react";
-import { JsxElement } from "typescript";
-
-const tabs = [
-  { name: "My Account", href: "#", icon: UserIcon, current: false },
-  { name: "Company", href: "#", icon: BuildingOfficeIcon, current: false },
-  { name: "Team Members", href: "#", icon: UsersIcon, current: true },
-  { name: "Billing", href: "#", icon: CreditCardIcon, current: false },
-];
-
-function classNames(...classes: any) {
-  return classes.filter(Boolean).join(" ");
-}
+import { ComponentType } from "react";
 
 interface TabProps {
   name: string;
@@ -32,58 +14,40 @@ interface TabsProps {
 
 export default function Tabs({ tabs, setTab, currentTab }: TabsProps) {
   return (
-    <div>
+    <div className="w-full">
       <div className="sm:hidden">
-        <label htmlFor="tabs" className="sr-only">
-          Select a tab
-        </label>
-        {/* Use an "onChange" listener to redirect the user to the selected tab URL. */}
         <select
-          id="tabs"
-          name="tabs"
-          className="block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
-          defaultValue={tabs.find((tab) => tab.value === currentTab)?.value}
+          className="w-full p-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          value={currentTab}
           onChange={(e) => setTab(e.target.value)}
         >
           {tabs.map((tab) => (
-            <option key={tab.name}>{tab.name}</option>
+            <option key={tab.name} value={tab.value}>
+              {tab.name}
+            </option>
           ))}
         </select>
       </div>
       <div className="hidden sm:block">
-        <div className="border-b border-gray-200">
-          <nav className="-mb-px flex space-x-8" aria-label="Tabs">
-            {tabs.map((tab) => {
-              // const curTab = tabs.find((tab) => tab.value === currentTab)
-              return (
-                <div
-                  key={tab.name}
-                  className={classNames(
-                    tab.value == currentTab
-                      ? "border-indigo-500 text-indigo-600"
-                      : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
-                    "group inline-flex items-center border-b-2 py-4 px-1 text-sm font-medium cursor-pointer"
-                  )}
-                  // onChange={() => setTab(tab.value)}
-                  onClick={() => setTab(tab.value)}
-                  aria-current={tab.value ? "page" : undefined}
-                >
-                  <tab.icon
-                    // @ts-ignore
-                    className={classNames(
-                      tab.value == currentTab
-                        ? "text-indigo-500"
-                        : "text-gray-400 group-hover:text-gray-500",
-                      "-ml-0.5 mr-2 h-5 w-5"
-                    )}
-                    aria-hidden="true"
-                  />
-                  <span>{tab.name}</span>
-                </div>
-              );
-            })}
-          </nav>
-        </div>
+        <nav className="flex space-x-4 bg-white dark:bg-gray-800 p-2 rounded-lg shadow-md" aria-label="Tabs">
+          {tabs.map((tab) => {
+            const Icon = tab.icon;
+            return (
+              <button
+                key={tab.name}
+                onClick={() => setTab(tab.value)}
+                className={`flex items-center px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 ease-in-out ${
+                  tab.value === currentTab
+                    ? "bg-blue-500 text-white"
+                    : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                }`}
+              >
+                <Icon className="mr-2 h-5 w-5" aria-hidden="true" />
+                <span>{tab.name}</span>
+              </button>
+            );
+          })}
+        </nav>
       </div>
     </div>
   );

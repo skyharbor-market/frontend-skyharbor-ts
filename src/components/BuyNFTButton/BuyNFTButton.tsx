@@ -9,7 +9,7 @@ import { refund } from "../../ergofunctions/marketfunctions/refund";
 import { relist_NFT } from "../../ergofunctions/marketfunctions/relistNFT";
 import { useDispatch, useSelector } from "react-redux";
 import { showMsg } from "../../ergofunctions/helpers";
-import TxSubmitted from "../TxSubmitted/TxSubmitted";
+import TxSubmitted, {UserActionType} from "../TxSubmitted/TxSubmitted";
 import ArtworkMedia from "../artworkMedia";
 import Modal from "../Modal/Modal";
 import SellModal from "../WalletComponents/SellModal/SellModal";
@@ -49,6 +49,7 @@ export default function BuyNFTButton({
   // const userAddresses = getStoredWalletAddresses();
 
   const [submitting, setSubmitting] = useState(false);
+  const [selectedFunction, setSelectedFunction] = useState<UserActionType | null>(null);
   const [modalType, setModalType] = React.useState("edit");
   const [transactionId, setTransactionId] = React.useState(null);
 
@@ -57,6 +58,7 @@ export default function BuyNFTButton({
   // Functions
 
   const handleBuy = async () => {
+    setSelectedFunction("buy")
     // setModalType("sell");
     // onOpen();
     setSubmitting(true);
@@ -95,6 +97,7 @@ export default function BuyNFTButton({
 
   // Cancel listing
   const handleCancel = async () => {
+    setSelectedFunction("delist")
     // setModalType("sell");
     // onOpen();
     setSubmitting(true);
@@ -127,6 +130,7 @@ export default function BuyNFTButton({
 
   // Edit price
   const handleEditPrice = () => {
+    setSelectedFunction("edit")
     setModalType("edit");
 
     // Set edit modal open
@@ -212,7 +216,7 @@ export default function BuyNFTButton({
       //if modalType === "submitted"
       return (
         <Modal open={!!transactionId} setOpen={() => setTransactionId(null)}>
-          <TxSubmitted txId={transactionId} box={box} />
+          <TxSubmitted txId={transactionId} box={box} type={selectedFunction || "buy"} onClose={() => setTransactionId(null)}/>
         </Modal>
 
         // <Box mb="4">

@@ -58,7 +58,7 @@ export default function ShowMetadata({description}) {
                                 return (
                                     <Fragment key={index}>
                                         <tr className="bg-gray-50 dark:bg-gray-700">
-                                            <td className="p-3 w-1/2 max-w-[200px] min-w-[150px] whitespace-pre-wrap border-b border-gray-200 dark:border-gray-600 text-gray-800 dark:text-gray-200">
+                                            <td className="p-3 w-1/2 max-w-[200px] min-w-[150px] break-words whitespace-pre-wrap border-b border-gray-200 dark:border-gray-600 text-gray-800 dark:text-gray-200">
                                                 {metadataList[index * 2]}
                                             </td>
                                             {

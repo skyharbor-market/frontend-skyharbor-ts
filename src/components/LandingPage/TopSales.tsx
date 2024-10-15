@@ -64,15 +64,15 @@ const TopSales = (props: Props) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
             className={`bg-white bg-opacity-10 w-full rounded-xl p-3 md:p-4 flex flex-col items-center justify-between
-              ${index === 0 ? "md:w-1/4 md:h-48" : "md:w-1/5 md:h-44"}
+              ${index === 0 ? "md:w-1/4 " : "md:w-1/5 "}
               ${index === 0 ? "border border-yellow-400 shadow-lg" : " border-gray-300 dark:border-gray-600 shadow-md border"}`}
           >
             <div className="flex items-center mb-2">
-              <div className={`text-lg md:text-2xl font-bold mr-2 ${index === 0 ? "text-yellow-600 dark:text-yellow-400" : ""}`}>
+              {/* <div className={`text-lg md:text-2xl font-bold mr-2 ${index === 0 ? "text-yellow-600 dark:text-yellow-400" : ""}`}>
                 #{index + 1}
-              </div>
+              </div> */}
               <div
-                className="rounded-full overflow-hidden h-10 w-10"
+                className=" overflow-hidden aspect-square w-full"
                 >
 
               <ArtworkMedia
@@ -88,7 +88,7 @@ const TopSales = (props: Props) => {
                 </h3>
               </Link>
               <Link href={`/collection/${sale.token.token_collection.sys_name}`}>
-                <p className="text-xs text-gray-300 truncate md:max-w-[120px] cursor-pointer hover:underline">
+                <p className="text-xs dark:text-gray-300 text-gray-500 truncate md:max-w-[120px] cursor-pointer hover:underline">
                   {sale.token.token_collection.name}
                 </p>
               </Link>
@@ -104,7 +104,7 @@ const TopSales = (props: Props) => {
                 )}{" "}
                 ERG
               </p>
-              <p className="text-xs text-gray-300">
+              <p className="text-xs dark:text-gray-300 text-gray-500">
                 {new Date(sale.completion_time).toLocaleDateString()}
               </p>
             </div>

@@ -33,6 +33,7 @@ export default function ArtworkMedia({
     setImgHeight(img.naturalHeight);
     setImgWidth(img.naturalWidth);
     setIsLoaded(true);
+    setIsError(false)
   };
 
   // const tokenType = box.nft_type;

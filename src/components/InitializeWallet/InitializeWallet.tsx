@@ -372,14 +372,14 @@ function InitializeWallet({}) {
           {modalPage !== "clear" && (
             <div className="mt-6 flex justify-between">
               <button
-                className="py-2 px-4 bg-red-600 cursor-pointer hover:bg-red-700 rounded text-white transition duration-300"
+                className="py-2 px-4 bg-red-600 cursor-pointer hover:bg-red-700 rounded-lg text-white transition duration-300"
                 disabled={walletState === "Configure"}
                 onClick={handleClearButton}
               >
                 Disconnect Wallet
               </button>
               <button
-                className="py-2 px-4 bg-gray-700 cursor-pointer hover:bg-gray-600 rounded text-white transition duration-300"
+                className="py-2 px-4 bg-gray-700 cursor-pointer hover:bg-gray-600 rounded-lg text-white transition duration-300"
                 onClick={toggle}
               >
                 Close

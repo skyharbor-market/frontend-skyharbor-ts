@@ -25,6 +25,7 @@
     "@vercel/analytics": "^1.0.2",
     "autoprefixer": "10.4.15",
     "axios": "^1.5.0",
+    "canvas-confetti": "^1.9.3",
     "ergo-lib-wasm-browser": "^0.18.0",
     "eslint": "8.49.0",
     "framer-motion": "^10.16.4",

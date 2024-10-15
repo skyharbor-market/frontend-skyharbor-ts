@@ -303,7 +303,6 @@ export default function WalletPage() {
       </Head>
 
       {/* <div className="mb-6">{renderWalletAddresses()}</div> */}
-      <hr />
 
       <Tabs
         tabs={[

@@ -6,16 +6,35 @@ import { skyHarborApiRoot } from "../../ergofunctions/consts";
 import { getWalletAddress, getWalletType } from "../../ergofunctions/helpers";
 import ArtworkMedia from "../artworkMedia";
 import Button from "../Button/Button";
-// import ErgoPayCheckSigned from '../ErgoPay/ErgoPayCheckSigned';
 import toast, { Toaster } from "react-hot-toast";
 import ErgoPayCheckSigned from "../InitializeWallet/ErgoPay/ErgoPayCheckSigned";
+import confetti from 'canvas-confetti';
 
-export default function TxSubmitted({ txId, box }: { txId: any; box?: any }) {
+export type UserActionType = "list" | "buy" | "delist" |"edit"
+
+export default function TxSubmitted({ txId, box, onClose, type }: { txId: any; box?: any, onClose: ()=>void, type: UserActionType }) {
   const [userAddress, setUserAddress] = useState(null);
   const [usingErgoPay, setUsingErgoPay] = useState(null);
 
   // required to check if ergopay user signed tx
   const [signedTransaction, setSignedTransaction] = useState(false);
+
+  useEffect(() => {
+    if (type === "buy") {
+      // Trigger confetti effect on initial render for buy action
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+    }
+
+    const isEPay = getWalletType();
+    if (isEPay === "ergopay") {
+      setUsingErgoPay(true);
+      getErgoPayWalletAddress();
+    }
+  }, [type]);
 
   function gotoTransaction() {
     window.open(
@@ -43,20 +62,11 @@ export default function TxSubmitted({ txId, box }: { txId: any; box?: any }) {
     setUserAddress(await getWalletAddress());
   }
 
-  useEffect(() => {
-    const isEPay = getWalletType();
-    if (isEPay === "ergopay") {
-      setUsingErgoPay(true);
-      getErgoPayWalletAddress();
-    }
-  }, []);
-
   const SubmitDisplay = () => {
     if (usingErgoPay && !signedTransaction) {
       return (
         <div key={"ergopay"}>
           <div>
-            {/* <Heading fontSize="lg" mb="3" color={colorMode === "light" ? "black" : "white"}>Sign the transaction to continue</Heading> */}
             <p>
               Scan the QR code below with an ErgoPay compatible wallet to sign
               the transaction.
@@ -85,53 +95,68 @@ export default function TxSubmitted({ txId, box }: { txId: any; box?: any }) {
           <div>
             <p>Waiting for the transaction to be signed</p>
             <div>
-              {/* <CircularProgress isIndeterminate color='#3182ce'/> */}
-              {/* <Progress borderRadius={"xl"} size="xs" isIndeterminate color='#3182ce'/> */}
             </div>
           </div>
         </div>
       );
     } else {
       return (
-        <div key={"submitted"} className="flex flex-row space-x-2">
-          <div className="w-1/3">
-            <div className="relative">
-              <div className="absolute text-center w-full">
-                <MdCheckCircleOutline
-                  className="h-32 w-32 text-green-500 m-auto"
-                  color="green.400"
-                />
-              </div>
-              {box && (
-                <div className="aspect-square rounded overflow-hidden">
-                  <ArtworkMedia box={box} />
+        <div key="submitted" className="bg-white dark:bg-gray-800 p-6 max-w-2xl mx-auto relative">
+          <button
+            className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            onClick={onClose}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+          <div className="flex flex-col items-center md:items-start space-y-6 md:space-y-0">
+            <div className="w-full md:w-2/3 mx-auto">
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <MdCheckCircleOutline
+                    className="h-20 w-20 text-green-500"
+                    aria-hidden="true"
+                  />
                 </div>
+                {box && (
+                  <div className="aspect-square rounded-lg overflow-hidden shadow-md">
+                    <ArtworkMedia box={box} />
+                  </div>
+                )}
+              </div>
+              {box?.nft_name && (
+                <p className="text-center text-lg mb-4 text-gray-600 dark:text-gray-300  mt-2 font-medium">
+                  {box.nft_name}
+                </p>
               )}
             </div>
-            {box?.nft_name && (
-              <p className="text-center text-gray-500 text-sm mt-1">
-                {box.nft_name}
-              </p>
-            )}
-          </div>
-          <div className="w-2/3">
-            <div>
-              <div className="w-full break-words p-2 border rounded">
-                <p className="text-sm">Transaction ID</p>
-                <p className="text-gray-700 font-semibold">{txId}</p>
+            <div className="w-full space-y-4">
+              <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4">
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Transaction ID</p>
+                <p className="text-gray-800 dark:text-gray-200 font-mono text-sm break-all">{txId}</p>
               </div>
+              <div className="flex space-x-4">
+                <Button
+                  colorScheme="green"
+                  className="w-2/3 py-3 text-white text-xs md:text-sm font-semibold transition duration-300 ease-in-out transform hover:bg-green-700"
+                  onClick={() => gotoTransaction(txId)}
+                >
+                  View Transaction on Explorer
+                </Button>
+                <Button
+                  // colorScheme="red"
+                  variant="outline"
+                  className="w-1/3 py-3 text-gray-800 border text-sm dark:text-white font-semibold transition duration-300 ease-in-out transform hover:bg-gray-300 dark:hover:bg-gray-600"
+                  onClick={onClose}
+                >
+                  Close
+                </Button>
+              </div>
+              <p className="text-xs text-gray-600 dark:text-gray-400">
+                Please wait for confirmation on the blockchain. This process typically takes 2-10 minutes.
+              </p>
             </div>
-            <Button
-              colorScheme="green"
-              className="w-full bg-green-500 mt-3"
-              onClick={() => gotoTransaction(txId)}
-            >
-              View Tx on Explorer
-            </Button>
-            <p className="text-sm text-gray-600 mt-2">
-              Now we wait until it is confirmed on the blockchain. It should
-              take about 2-10 minutes.
-            </p>
           </div>
         </div>
       );

@@ -36,7 +36,7 @@ const NFTCard = ({ token, isOwner = false, noBuy = false, userAddresses = [] }: 
             </h3>
             <Link href={`/collection/${token?.collection_sys_name}`}>
               <div className="flex items-center mt-1 hover:opacity-80 transition-opacity cursor-pointer">
-                <FaCheckCircle className="text-blue-500 mr-2" />
+                {token?.verified_collection && <FaCheckCircle className="text-blue-500 mr-2" />}
                 <p className="text-sm text-gray-700 dark:text-gray-300 truncate">
                   {token?.collection_name}
                 </p>
