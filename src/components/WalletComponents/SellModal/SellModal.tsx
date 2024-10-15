@@ -56,7 +56,7 @@ const SellModal = ({ open, onClose, token }: SellModalProps) => {
     const tokenId = token.tokenId;
     const currencyIndex = 0; //currency
 
-    const thePrice = typeof price === "string" ? parseInt(price) : price;
+    const thePrice = typeof price === "string" ? parseFloat(price) : price;
     try {
       // const saleTxId = await bulk_list([
       //   {
@@ -119,7 +119,7 @@ const SellModal = ({ open, onClose, token }: SellModalProps) => {
     }
   }, [open]);
 
-  const disableButton = !price || Number(price) === 0 || royalties === null;
+  const disableButton = !price || Number(price) <= 0 || royalties === null;
 
   const finalEarnings = calculateEarnings(
     royalties?.percentage,
@@ -142,9 +142,7 @@ const SellModal = ({ open, onClose, token }: SellModalProps) => {
                 value={price}
                 type={"number"}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                  if (e.target.value) {
-                    setPrice(e.target.value);
-                  }
+                  setPrice(e.target.value);
                 }}
               />
             </div>
