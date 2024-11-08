@@ -1,4 +1,4 @@
-import React, { Fragment, ReactNode } from "react";
+import React, { useState, ReactNode } from "react";
 
 interface TooltipProps {
   children: ReactNode;
@@ -6,18 +6,43 @@ interface TooltipProps {
 }
 
 const Tooltip = ({ children, label }: TooltipProps) => {
+  const [isVisible, setIsVisible] = useState(false);
+
   return (
-    <Fragment>
-      {children}
+    <div className="">
       <div
-        id="tooltip-default"
-        role="tooltip"
-        className="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
+        onMouseEnter={() => setIsVisible(true)}
+        onMouseLeave={() => setIsVisible(false)}
       >
-        {label}
-        <div className="tooltip-arrow" data-popper-arrow></div>
+        {children}
       </div>
-    </Fragment>
+      {isVisible && (
+        <div
+          role="tooltip"
+          className="absolute z-10 px-3 min-w-[120px] text-center py-2 text-xs font-normal text-white bg-gray-900 rounded-lg shadow-sm dark:bg-gray-700"
+          style={{
+            top: "100%",
+            left: "50%",
+            transform: "translateX(-50%)",
+            marginTop: "0.5rem",
+          }}
+        >
+          {label}
+          <div
+            className="tooltip-arrow"
+            style={{
+              position: "absolute",
+              top: "-0.25rem",
+              left: "50%",
+              transform: "translateX(-50%) rotate(45deg)",
+              width: "0.5rem",
+              height: "0.5rem",
+              backgroundColor: "inherit",
+            }}
+          ></div>
+        </div>
+      )}
+    </div>
   );
 };
 

@@ -3,6 +3,7 @@ import CustomDropdown from "@/components/CustomDropdown/CustomDropdown";
 import CustomInput from "@/components/CustomInput/CustomInput";
 import LoadingCircle from "@/components/LoadingCircle/LoadingCircle";
 import Modal from "@/components/Modal/Modal";
+import Tooltip from "@/components/Tooltip/Tooltip";
 import TxSubmitted from "@/components/TxSubmitted/TxSubmitted";
 import { serviceFee } from "@/ergofunctions/consts";
 import { SupportedCurrenciesV2 } from "@/ergofunctions/Currencies";
@@ -14,6 +15,8 @@ import {
   getRoyaltyInfo,
 } from "@/ergofunctions/serializer";
 import { getWalletAddresses } from "@/ergofunctions/walletUtils";
+import { delistNft } from "api-calls/delist";
+import { editNft } from "api-calls/edit";
 import { listNft } from "api-calls/list";
 import { Currency } from "interfaces/ListInterface";
 import React, { ChangeEvent, useEffect, useState } from "react";
@@ -22,6 +25,7 @@ import toast, { LoaderIcon } from "react-hot-toast";
 export interface SellTokenInterface {
   tokenId: string;
   nft_name: string;
+  box_json?: any
 }
 
 interface RoyaltiesInterface {
@@ -34,9 +38,16 @@ export interface SellModalProps {
   onClose: () => void;
 
   token: SellTokenInterface;
+
+  isEdit?: boolean; // Not allowed to change currency if editing
 }
 
-const SellModal = ({ open, onClose, token }: SellModalProps) => {
+const SellModal = ({
+  open,
+  onClose,
+  token,
+  isEdit = false,
+}: SellModalProps) => {
   const [royalties, setRoyalties] = useState<RoyaltiesInterface | null>(null);
 
   const [txId, setTxId] = useState<string | null>(null);
@@ -51,6 +62,14 @@ const SellModal = ({ open, onClose, token }: SellModalProps) => {
   //     percentage: 5,
   //   });
   // }, []);
+
+  const handleSubmit = () => {
+    if (isEdit) {
+      submitEdit();
+    } else {
+      createSaleTx();
+    }
+  };
   // Create Sale
   const createSaleTx = async () => {
     const tokenId = token.tokenId;
@@ -97,6 +116,32 @@ const SellModal = ({ open, onClose, token }: SellModalProps) => {
     return;
   };
 
+  // edit price
+  const submitEdit = async () => {
+    const tokenId = token.tokenId;
+    const currencyIndex = 0; //currency
+    console.log("tokenId", tokenId);
+    const thePrice = typeof price === "string" ? parseFloat(price) : price;
+    try {
+      const saleTxId = await editNft({
+        editBox: {box_id: tokenId},
+        // editBox: token.box_json,
+        currency: currency as Currency,
+        newPrice: thePrice,
+        userAddresses: await getWalletAddresses(),
+      });
+      if (saleTxId) {
+        setTxId(saleTxId);
+        return;
+      }
+    } catch (error) {
+      console.error("ERROR", error);
+      toast.error("There was an error submitting the transaction");
+    }
+
+    return;
+  };
+
   const getTokenRoyalties = async () => {
     setRoyalties(null);
 
@@ -131,7 +176,9 @@ const SellModal = ({ open, onClose, token }: SellModalProps) => {
     return (
       <div className="dark:text-gray-100">
         <div>
-          <div className="text-xl dark:text-gray-50">List NFT: {token.nft_name}</div>
+          <div className="text-xl dark:text-gray-50">
+            {isEdit ? "Edit Listing:" : "List NFT:"} {token.nft_name}
+          </div>
         </div>
         <hr className="my-2 dark:border-gray-700" />
         <div className="flex flex-col space-y-2">
@@ -148,20 +195,28 @@ const SellModal = ({ open, onClose, token }: SellModalProps) => {
             </div>
             <div className="w-1/4">
               <p className="mb-1 dark:text-gray-300">Currency</p>
-              <CustomDropdown
-                value={currency}
-                items={[
-                  {
-                    label: "ERG",
-                    value: "erg",
-                  },
-                  {
-                    label: "SigUSD",
-                    value: "sigusd",
-                  },
-                ]}
-                onChange={handleCurrency}
-              />
+              <div className={isEdit ? "relative" : ""}>
+                <CustomDropdown
+                  value={currency}
+                  items={[
+                    {
+                      label: "ERG",
+                      value: "erg",
+                    },
+                    {
+                      label: "SigUSD",
+                      value: "sigusd",
+                    },
+                  ]}
+                  onChange={handleCurrency}
+                  disabled={isEdit}
+                />
+                {isEdit && (
+                  <Tooltip label="To change currency, you must delist first">
+                    <div className="absolute z-50 h-full w-full top-0 left-0 inset-0 bg-gray-200 opacity-50 cursor-not-allowed"></div>
+                  </Tooltip>
+                )}
+              </div>
             </div>
           </div>
           <div className="flex flex-row justify-between text-sm dark:text-gray-300">
@@ -193,7 +248,7 @@ const SellModal = ({ open, onClose, token }: SellModalProps) => {
             className="w-full bg-red-400 dark:bg-red-500 dark:hover:bg-red-600 dark:text-white"
             colorScheme="red"
             // variant="outline"
-            onClick={() => createSaleTx()}
+            onClick={handleSubmit}
             disabled={disableButton}
           >
             {royalties === null ? (
@@ -201,7 +256,7 @@ const SellModal = ({ open, onClose, token }: SellModalProps) => {
                 <LoaderIcon /> <p className="ml-2">Loading royalties</p>
               </div>
             ) : (
-              "List for sale"
+              `${isEdit ? "Submit change" : "List for sale"}`
             )}
           </Button>
         </div>
@@ -212,7 +267,11 @@ const SellModal = ({ open, onClose, token }: SellModalProps) => {
   return (
     <div>
       <Modal open={open} setOpen={onClose}>
-        {txId ? <TxSubmitted txId={txId} type="list" onClose={onClose} /> : renderForm()}
+        {txId ? (
+          <TxSubmitted txId={txId} type="list" onClose={onClose} />
+        ) : (
+          renderForm()
+        )}
       </Modal>
     </div>
   );

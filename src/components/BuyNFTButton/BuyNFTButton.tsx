@@ -32,6 +32,7 @@ export default function BuyNFTButton({
   const [openEdit, setOpenEdit] = useState<boolean>(false);
 
   
+  console.log("box", box);
   const handleBuy = async () => {
     setSelectedFunction("buy");
     setSubmitting(true);
@@ -129,20 +130,22 @@ export default function BuyNFTButton({
     <div>
       {renderBuyButton()}
       <Modal open={!!transactionId} setOpen={() => setTransactionId(null)}>
-        <TxSubmitted 
-          txId={transactionId!} 
-          box={box} 
-          type={selectedFunction || "buy"} 
+        <TxSubmitted
+          txId={transactionId!}
+          box={box}
+          type={selectedFunction || "buy"}
           onClose={() => setTransactionId(null)}
         />
       </Modal>
-      <SellModal 
+      <SellModal
         token={{
           nft_name: box.nft_name,
-          tokenId: box.tokenId,
-        }} 
-        open={openEdit} 
-        onClose={() => setOpenEdit(false)} 
+          tokenId: box.token_id,
+          box_json: box.box_json
+        }}
+        open={openEdit}
+        onClose={() => setOpenEdit(false)}
+        isEdit={true}
       />
     </div>
   );
