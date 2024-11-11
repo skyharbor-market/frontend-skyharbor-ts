@@ -45,7 +45,7 @@ export default function ArtworkMedia({
     else {
       if (isVideo)
         return url.replace(ipfsPrefix, "https://ipfs.blockfrost.dev/ipfs/");
-      return url.replace(ipfsPrefix, "https://cloudflare-ipfs.com/ipfs/");
+      return url.replace(ipfsPrefix, "https://cf-ipfs.com/ipfs/");
     }
   }
   useEffect(() => {
