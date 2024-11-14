@@ -135,6 +135,7 @@ const InfiniteActivityFeed = ({ collection }: InfiniteActivityFeedProps) => {
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-3">
                         <div className="flex items-center">
                           <div className="h-10 w-10 flex-shrink-0">
+                            {/* @ts-ignore */}
                             <ArtworkMedia box={convertGQLObject(transaction)} />
                           </div>
                           <div className="ml-4">
