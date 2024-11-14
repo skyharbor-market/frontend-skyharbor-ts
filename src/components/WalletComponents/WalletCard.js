@@ -23,6 +23,7 @@ export default function WalletCard({
       nft_name: nft_name,
       royalty: royalty || 0,
       artist: artist || null,
+      box_json: box,
     });
     setSellModalOpen(true);
   };
@@ -105,15 +106,20 @@ export default function WalletCard({
           Sell
         </button>
       </div>
-      <SellModal
+      {selectedToken && (
+        <SellModal
         open={sellModalOpen}
-        onClose={() => setSellModalOpen(false)}
+        onClose={() => {
+          setSellModalOpen(false);
+          setSelectedToken(null);
+        }}
         tokenId={selectedToken.tokenId}
         token={selectedToken}
         createSaleTx={createSaleTx}
         royalty={selectedToken.royalty}
         royalty_address={selectedToken.artist}
-      />
+        />
+      )}
     </div>
   );
 }

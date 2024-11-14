@@ -21,6 +21,7 @@ import { listNft } from "api-calls/list";
 import { Currency } from "interfaces/ListInterface";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import toast, { LoaderIcon } from "react-hot-toast";
+import { IoClose } from "react-icons/io5";
 
 export interface SellTokenInterface {
   tokenId: string;
@@ -49,19 +50,11 @@ const SellModal = ({
   isEdit = false,
 }: SellModalProps) => {
   const [royalties, setRoyalties] = useState<RoyaltiesInterface | null>(null);
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [txId, setTxId] = useState<string | null>(null);
 
   const [price, setPrice] = useState<string>("");
   const [currency, setCurrency] = useState<Currency>("erg");
-  // useEffect(() => {
-  //   decodeArtwork(null, token.tokenId, false);
-
-  //   setRoyalties({
-  //     address: "",
-  //     percentage: 5,
-  //   });
-  // }, []);
 
   const handleSubmit = () => {
     if (isEdit) {
@@ -76,17 +69,8 @@ const SellModal = ({
     const currencyIndex = 0; //currency
 
     const thePrice = typeof price === "string" ? parseFloat(price) : price;
+    setIsSubmitting(true);
     try {
-      // const saleTxId = await bulk_list([
-      //   {
-      //     id: tokenId,
-      //     currencyIndex: currencyIndex,
-      //     price: currencyToLong(
-      //       thePrice,
-      //       SupportedCurrenciesV2[currency].decimal
-      //     ),
-      //   },
-      // ]);
       const saleTxId = await listNft({
         nfts: {
           currency: currency as Currency,
@@ -101,16 +85,9 @@ const SellModal = ({
       }
     } catch (error) {
       console.error("ERROR", error);
-      // toast({
-      //   title: "There was an error submitting the transaction.",
-      //   description:
-      //     error?.info || "There was an error submitting the transaction",
-      //   position: "top-right",
-      //   status: "error",
-      //   duration: 5000,
-      //   isClosable: true,
-      // });
       toast.error("There was an error submitting the transaction");
+    } finally {
+      setIsSubmitting(false);
     }
 
     return;
@@ -122,10 +99,10 @@ const SellModal = ({
     const currencyIndex = 0; //currency
     console.log("tokenId", tokenId);
     const thePrice = typeof price === "string" ? parseFloat(price) : price;
+    setIsSubmitting(true);
     try {
       const saleTxId = await editNft({
         editBox: {box_id: tokenId},
-        // editBox: token.box_json,
         currency: currency as Currency,
         newPrice: thePrice,
         userAddresses: await getWalletAddresses(),
@@ -137,6 +114,8 @@ const SellModal = ({
     } catch (error) {
       console.error("ERROR", error);
       toast.error("There was an error submitting the transaction");
+    } finally {
+      setIsSubmitting(false);
     }
 
     return;
@@ -147,10 +126,12 @@ const SellModal = ({
 
     const royaltyRes = await getRoyaltyInfo(token.tokenId);
     console.log("royaltyRes", royaltyRes);
-    setRoyalties({
-      address: royaltyRes?.artist,
-      percentage: royaltyRes?.royalty,
-    });
+    if(royaltyRes) {
+      setRoyalties({
+        address: royaltyRes?.artist,
+        percentage: royaltyRes?.royalty,
+      });
+    }
   };
 
   const handleCurrency = (e: any) => {
@@ -164,21 +145,38 @@ const SellModal = ({
     }
   }, [open]);
 
-  const disableButton = !price || Number(price) <= 0 || royalties === null;
+  const disableButton = !price || Number(price) <= 0 || royalties === null || isSubmitting;
 
-  const finalEarnings = calculateEarnings(
-    royalties?.percentage,
-    price,
-    currency
-  );
+  const calculateFees = () => {
+    const priceNum = Number(price || 0);
+    const royaltyPercentage = Number(royalties?.percentage || 0) / 1000; // Convert from basis points (0.1%) to decimal
+    
+    const royaltyAmount = priceNum * royaltyPercentage;
+    const serviceAmount = priceNum * serviceFee;
+    const earnings = priceNum - royaltyAmount - serviceAmount;
+
+    return {
+      royaltyAmount: royaltyAmount.toFixed(4),
+      serviceAmount: serviceAmount.toFixed(4),
+      earnings: earnings.toFixed(4)
+    };
+  };
+
+  const fees = calculateFees();
 
   const renderForm = () => {
     return (
       <div className="dark:text-gray-100">
-        <div>
+        <div className="flex justify-between items-center">
           <div className="text-xl dark:text-gray-50">
             {isEdit ? "Edit Listing:" : "List NFT:"} {token.nft_name}
           </div>
+          <button 
+            onClick={onClose}
+            className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+          >
+            <IoClose className="w-6 h-6" />
+          </button>
         </div>
         <hr className="my-2 dark:border-gray-700" />
         <div className="flex flex-col space-y-2">
@@ -213,7 +211,7 @@ const SellModal = ({
                 />
                 {isEdit && (
                   <Tooltip label="To change currency, you must delist first">
-                    <div className="absolute z-50 h-full w-full top-0 left-0 inset-0 bg-gray-200 opacity-50 cursor-not-allowed"></div>
+                    <div className="absolute z-50 h-full w-full top-0 left-0 inset-0 bg-gray-200 rounded-lg opacity-50 cursor-not-allowed"></div>
                   </Tooltip>
                 )}
               </div>
@@ -227,19 +225,18 @@ const SellModal = ({
                 : "(0%)"}
             </p>
             <p>
-              {Number(price || 0) * (Number(royalties?.percentage || 0) / 100)}{" "}
-              {currency}
+              {fees.royaltyAmount} {currency}
             </p>
           </div>
           <div className="flex flex-row justify-between text-sm dark:text-gray-300">
             <p>Service Fee ({serviceFee * 100}%)</p>
             <p>
-              {finalEarnings.servicePayment} {currency}
+              {fees.serviceAmount} {currency}
             </p>
           </div>
           <div className="flex flex-row justify-between dark:text-gray-200">
             <p>Your earnings</p>
-            <p>2 {currency}</p>
+            <p>{fees.earnings} {currency}</p>
           </div>
         </div>
 
@@ -247,9 +244,9 @@ const SellModal = ({
           <Button
             className="w-full bg-red-400 dark:bg-red-500 dark:hover:bg-red-600 dark:text-white"
             colorScheme="red"
-            // variant="outline"
             onClick={handleSubmit}
             disabled={disableButton}
+            loading={isSubmitting}
           >
             {royalties === null ? (
               <div className="text-center flex flex-row items-center justify-center">
@@ -263,12 +260,13 @@ const SellModal = ({
       </div>
     );
   };
+  console.log("token", token);
 
   return (
     <div>
       <Modal open={open} setOpen={onClose}>
         {txId ? (
-          <TxSubmitted txId={txId} type="list" onClose={onClose} />
+          <TxSubmitted box={token?.box_json} txId={txId} type="list" onClose={onClose} />
         ) : (
           renderForm()
         )}

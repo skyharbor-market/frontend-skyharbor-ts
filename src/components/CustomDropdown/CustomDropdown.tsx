@@ -84,59 +84,59 @@ const CustomDropdown = ({
       // @ts-ignore
       components={{ ValueContainer }}
       isSearchable={false}
-      // defaultValue={currentVal}
       unstyled={variant === "unstyled"}
       styles={{
         control: (baseStyles, state) => ({
           ...baseStyles,
-          //   borderColor: state.isFocused ? "grey" : "black",
           borderRadius: 8,
           fontSize: size === "md" && !isMobile ? 18 : 14,
           cursor: "pointer",
-
           paddingTop: size === "md" ? 3 : 0,
           paddingBottom: size === "md" ? 3 : 0,
           paddingLeft: isMobile ? 4 : 10,
           paddingRight: isMobile ? 4 : 10,
           borderWidth: variant === "outlined" ? 1 : 0,
-          borderColor: variant === "outlined" ? "inherit" : "transparent",
-          background: "transparent",
+          borderColor: siteTheme === "dark" ? "#374151" : "inherit",
+          background: siteTheme === "dark" ? "#1F2937" : "transparent",
         }),
-        singleValue: (baseStyles, state) => ({
+        singleValue: (baseStyles) => ({
           ...baseStyles,
-          color: siteTheme === "light" ? "black" : "white",
+          color: siteTheme === "dark" ? "#F3F4F6" : "#111827",
         }),
-
-        menuList: (baseStyles, state) => ({
+        menuList: (baseStyles) => ({
           ...baseStyles,
-          paddingTop: 0,
-          paddingBottom: 0,
+          padding: 0,
         }),
-        menu: (baseStyles, state) => ({
+        menu: (baseStyles) => ({
           ...baseStyles,
           marginTop: 0,
-          background: siteTheme === "light" ? "white" : "#11151d",
+          background: siteTheme === "dark" ? "#1F2937" : "white",
           boxShadow: `0px 0px 10px rgba(0,0,0,${
-            siteTheme === "light" ? "0.1" : "0.3"
+            siteTheme === "dark" ? "0.5" : "0.1"
           })`,
-          color: siteTheme === "light" ? "black" : "white",
-          borderTopLeftRadius: 4,
-          borderTopRightRadius: 4,
-          borderBottomRightRadius: 8,
-          borderBottomLeftRadius: 8,
+          color: siteTheme === "dark" ? "#F3F4F6" : "#111827",
+          borderRadius: 8,
           overflow: "hidden",
         }),
         option: (baseStyles, state) => ({
           ...baseStyles,
           fontSize: size === "md" ? 14 : 12,
-          background: state.isFocused ? `rgba(0,0,0,0.1)` : `none`,
+          background: state.isFocused 
+            ? siteTheme === "dark" ? "#374151" : "rgba(0,0,0,0.1)"
+            : "transparent",
           ":active": {
-            backgroundColor:
-              siteTheme === "light" ? "rgba(0,0,0,0.2)" : "rgba(0,0,0,0.7)",
+            backgroundColor: siteTheme === "dark" ? "#4B5563" : "rgba(0,0,0,0.2)",
           },
           padding: 10,
-          color: siteTheme === "light" ? "black" : "white",
+          color: siteTheme === "dark" ? "#F3F4F6" : "#111827",
           cursor: "pointer",
+        }),
+        dropdownIndicator: (baseStyles) => ({
+          ...baseStyles,
+          color: siteTheme === "dark" ? "#9CA3AF" : "#6B7280",
+          ":hover": {
+            color: siteTheme === "dark" ? "#F3F4F6" : "#111827",
+          }
         }),
       }}
     />
