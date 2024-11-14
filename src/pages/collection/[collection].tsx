@@ -10,14 +10,16 @@ import {
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
-import { FaCheckCircle, FaDiscord, FaSearch, FaTwitter } from "react-icons/fa";
-import { MdSearch } from "react-icons/md";
+import { FaCheckCircle, FaDiscord, FaImage, FaSearch, FaTwitter } from "react-icons/fa";
+import { MdOutlineSell, MdSearch } from "react-icons/md";
 import { BsCheckCircle, BsGlobe } from "react-icons/bs";
 import { CheckCircleIcon } from "@heroicons/react/24/outline";
 import Button from "@/components/Button/Button";
 import { copyToClipboard, friendlyAddress } from "@/ergofunctions/helpers";
 import Fade from "@/components/Fade/Fade";
 import toast from "react-hot-toast";
+import Tabs from "@/components/Tabs/Tabs";
+import InfiniteActivityFeed from "@/components/InfiniteFeed/InfiniteActivityFeed";
 
 interface CollectionInfoInterface {
   id: number;
@@ -37,6 +39,7 @@ const Collection = () => {
   console.log("router collection", collection);
 
   const [viewMintAddresses, setViewMintAddresses] = useState<boolean>(false);
+  const [activeTab, setActiveTab] = useState<string>("For Sale");
 
   const { data, loading, error, fetchMore } = useQuery(GET_COLLECTION_INFO, {
     variables: { collection },
@@ -173,16 +176,36 @@ const Collection = () => {
         <div>{renderCollectionInfo()}</div>
       </div>
       <div className="mt-8">
-        <div className="mx-auto mb-6">
-          <CustomInput leftIcon={<MdSearch />} placeholder="Search..." />
+        <div className="mb-4">
+
+        <Tabs
+          tabs={[
+            { name: "For Sale", value: "For Sale", icon: MdOutlineSell },
+            { name: "Activity", value: "Activity", icon: FaImage }
+          ]}
+          currentTab={activeTab}
+          setTab={setActiveTab}
+        />
         </div>
-        <div>
-          <InfiniteNFTFeed
-            gqlQuery={GET_COLLECTION_NFTS}
-            // @ts-ignore
-            collection={collection}
-          />
-        </div>
+
+        {activeTab === "For Sale" ? (
+          <>
+            <div className="mx-auto mb-6">
+              <CustomInput leftIcon={<MdSearch />} placeholder="Search..." />
+            </div>
+            <div>
+              <InfiniteNFTFeed
+                gqlQuery={GET_COLLECTION_NFTS}
+                // @ts-ignore
+                collection={collection}
+              />
+            </div>
+          </>
+        ) : (
+          <div>
+            <InfiniteActivityFeed collection={collection as string} />
+          </div>
+        )}
       </div>
     </div>
   );

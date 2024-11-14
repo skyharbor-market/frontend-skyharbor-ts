@@ -10,6 +10,9 @@ import {
 import { cloudinaryOptimizerUrl, ipfsGateway } from "../ergofunctions/consts";
 import LoadingCircle from "./LoadingCircle/LoadingCircle";
 
+// Cache for loaded image states
+const loadedImages = new Map();
+
 export default function ArtworkMedia({
   box,
   cloudinary = true,
@@ -26,17 +29,27 @@ export default function ArtworkMedia({
   const [imgHeight, setImgHeight] = useState(0);
   const [imgWidth, setImgWidth] = useState(0);
   const [isError, setIsError] = useState(false);
-  const [isLoaded, setIsLoaded] = React.useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isLoaded, setIsLoaded] = React.useState(() => {
+    // Check cache on initial render
+    return loadedImages.get(box?.ipfs_art_hash || box?.ipfs_art_url) || false;
+  });
   const [fileSrc, setFileSrc] = React.useState("");
+  const [retryCount, setRetryCount] = React.useState(0);
+  const MAX_RETRIES = 3;
 
   const onImgLoad = ({ target: img }) => {
-    setImgHeight(img.naturalHeight);
-    setImgWidth(img.naturalWidth);
-    setIsLoaded(true);
-    setIsError(false)
+    if (mounted) {
+      setImgHeight(img.naturalHeight);
+      setImgWidth(img.naturalWidth);
+      setIsLoaded(true);
+      setIsLoading(false);
+      setIsError(false);
+      // Cache the loaded state
+      loadedImages.set(box?.ipfs_art_hash || box?.ipfs_art_url, true);
+    }
   };
 
-  // const tokenType = box.nft_type;
   const tokenType = box?.nft_type ? box?.nft_type : box?.token?.nft_type;
 
   function resolveIpfs(url, isVideo = false) {
@@ -45,13 +58,17 @@ export default function ArtworkMedia({
     else {
       if (isVideo)
         return url.replace(ipfsPrefix, "https://ipfs.blockfrost.dev/ipfs/");
-      return url.replace(ipfsPrefix, "https://cf-ipfs.com/ipfs/");
+      return url.replace(ipfsPrefix, "https://ipfs.io/ipfs/");
     }
   }
+
   useEffect(() => {
     mounted = true;
-
-    let backupFileLink;
+    // Only set loading if image hasn't been loaded before
+    if (!loadedImages.get(box?.ipfs_art_hash || box?.ipfs_art_url)) {
+      setIsLoading(true);
+    }
+    setIsError(false);
 
     let fileLink;
     if (tokenType === "video") {
@@ -67,33 +84,38 @@ export default function ArtworkMedia({
         ? `${ipfsGateway}/${box.ipfs_art_hash}`
         : `${box.ipfs_art_url}`;
 
-      let transformType = ratio === "square" ? "card" : "original";
-      if (small) {
-        transformType = "small";
-      }
-      let resourceType = "?resource_type=image";
-      if (cloudinary) {
-        const imageSize = small ? 200 : 400;
-        const imageFit = ratio === "square" ? "crop" : "clip";
-
-        const sizeExpanded = 500;
-
-        fileLink = tempLink;
-      } else {
-        fileLink = tempLink;
-      }
+      fileLink = tempLink;
     }
 
-    setFileSrc(fileLink);
+    if (fileLink) {
+      setFileSrc(fileLink);
+    } else {
+      setIsError(true);
+      setIsLoading(false);
+    }
 
     return () => {
       mounted = false;
     };
-  }, []);
-
-  useEffect(() => {
-    setIsError(false);
   }, [box]);
+
+  const handleImageError = () => {
+    if (retryCount < MAX_RETRIES) {
+      setRetryCount(prev => prev + 1);
+      setIsLoading(true);
+      // Add a small delay before retrying
+      setTimeout(() => {
+        if (mounted) {
+          setFileSrc(fileSrc + '?' + new Date().getTime());
+        }
+      }, 1000);
+    } else {
+      setIsError(true);
+      setIsLoading(false);
+      // Remove from cache if error
+      loadedImages.delete(box?.ipfs_art_hash || box?.ipfs_art_url);
+    }
+  };
 
   if (tokenType === "audio") {
     return (
@@ -109,7 +131,7 @@ export default function ArtworkMedia({
             objectFit: ratio === "square" ? "cover" : "contain",
           }}
           alt={box.token_id}
-          onError={() => setIsError(true)}
+          onError={handleImageError}
           className={`${
             imgWidth > 200 ? "display-image" : "display-image-pixelated"
           }`}
@@ -132,8 +154,8 @@ export default function ArtworkMedia({
       </div>
     );
   } else if (tokenType === "video") {
-    if (fileSrc === "") {
-      return <div></div>;
+    if (!fileSrc) {
+      return <LoadingCircle />;
     }
     return (
       <ReactPlayer
@@ -158,7 +180,7 @@ export default function ArtworkMedia({
   } else {
     return (
       <div className="w-full h-full">
-        {!isLoaded && !isError && (
+        {isLoading && !isError && !isLoaded && (
           <div className="animate-pulse">
             <div className="aspect-square">
               <div className="flex h-full w-full items-center justify-center p-8">
@@ -172,7 +194,7 @@ export default function ArtworkMedia({
           style={{ borderRadius: borderRad }}
         >
           <img
-            key={fileSrc}
+            key={`${fileSrc}-${retryCount}`}
             className={`w-full h-full m-auto ${
               ratio === "square" && `object-cover`
             } ${
@@ -181,14 +203,12 @@ export default function ArtworkMedia({
             onLoad={onImgLoad}
             loading={lazyLoad ? "lazy" : "eager"}
             alt={box.token_id}
-            onError={(e) => {
-              setIsError(true);
-            }}
+            onError={handleImageError}
             overflow="hidden"
             src={fileSrc ? fileSrc : ""}
           />
         </div>
-        {isError && (
+        {isError && !isLoading && (
           <div className="flex h-full items-center justify-center text-center">
             <MdOutlineImageNotSupported className="w-[70%] h-[70%]" />
           </div>

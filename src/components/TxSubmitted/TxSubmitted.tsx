@@ -113,12 +113,15 @@ export default function TxSubmitted({ txId, box, onClose, type }: { txId: any; b
           <div className="flex flex-col items-center md:items-start space-y-6 md:space-y-0">
             <div className="w-full md:w-2/3 mx-auto">
               <div className="relative">
+              {box && (
+
                 <div className="absolute inset-0 flex items-center justify-center">
                   <MdCheckCircleOutline
                     className="h-20 w-20 text-green-500"
                     aria-hidden="true"
-                  />
-                </div>
+                    />
+                  </div>
+                )}
                 {box && (
                   <div className="aspect-square rounded-lg overflow-hidden shadow-md">
                     <ArtworkMedia box={box} />

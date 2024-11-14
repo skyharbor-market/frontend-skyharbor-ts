@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useQuery } from "@apollo/client";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { GET_ACTIVITY } from "@/lib/gqlQueries";
+import { GET_ACTIVITY, GET_ACTIVITY_COLLECTION } from "@/lib/gqlQueries";
 import {
   convertGQLObject,
   friendlyAddress,
@@ -16,14 +16,25 @@ import { FaExternalLinkAlt } from "react-icons/fa";
 import LoadingCircle from "../LoadingCircle/LoadingCircle";
 import Link from "next/link";
 
-const InfiniteActivityFeed = () => {
+interface InfiniteActivityFeedProps {
+  collection?: string;
+}
+
+const InfiniteActivityFeed = ({ collection }: InfiniteActivityFeedProps) => {
   const [hasMore, setHasMore] = useState(true);
   const limit = 30; // Number of NFTs to load each time
 
-  const { data, loading, error, fetchMore } = useQuery(GET_ACTIVITY, {
-    variables: { limit, offset: 0 },
-    notifyOnNetworkStatusChange: true,
-  });
+  const { data, loading, error, fetchMore } = useQuery(
+    collection ? GET_ACTIVITY_COLLECTION : GET_ACTIVITY, 
+    {
+      variables: { 
+        limit, 
+        offset: 0,
+        ...(collection && { collectionName: collection })
+      },
+      notifyOnNetworkStatusChange: true,
+    }
+  );
 
 
   function gotoTransaction(txId: string) {
@@ -58,14 +69,47 @@ const InfiniteActivityFeed = () => {
         });
       }}
       hasMore={hasMore}
-      loader={<h4 className="text-gray-600 dark:text-gray-400">Loading...</h4>}
-    >
-      <div className="px-4 sm:px-6 lg:px-8">
-        <div className="sm:flex sm:items-center">
-          <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-            {/* Add any additional buttons or controls here */}
+      loader={
+        <div className="animate-pulse">
+          <div className="">
+            <div className="mt-2 flow-root">
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
+                  <tbody>
+                    {[...Array(3)].map((_, i) => (
+                      <tr key={i} className="bg-white dark:bg-gray-900">
+                        <td className="whitespace-nowrap py-4 pl-4 pr-3 sm:pl-3">
+                          <div className="flex items-center">
+                            <div className="h-10 w-10 rounded bg-gray-200 dark:bg-gray-700"></div>
+                            <div className="ml-4 h-4 w-32 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                          </div>
+                        </td>
+                        <td className="px-3 py-4">
+                          <div className="h-4 w-20 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                        </td>
+                        <td className="px-3 py-4">
+                          <div className="h-4 w-24 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                        </td>
+                        <td className="px-3 py-4">
+                          <div className="h-4 w-24 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                        </td>
+                        <td className="px-3 py-4">
+                          <div className="h-4 w-28 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                        </td>
+                        <td className="px-3 py-4">
+                          <div className="h-4 w-20 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
+      }
+    >
+      <div className="">
         <div className="mt-8 flow-root">
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-300 dark:divide-gray-700 rounded-lg overflow-hidden">
