@@ -5,10 +5,11 @@ import LoadingCircle from "@/components/LoadingCircle/LoadingCircle";
 import Modal from "@/components/Modal/Modal";
 import Tooltip from "@/components/Tooltip/Tooltip";
 import TxSubmitted from "@/components/TxSubmitted/TxSubmitted";
-import { serviceFee } from "@/ergofunctions/consts";
+import { serviceFee, supportedCurrencies } from "@/ergofunctions/consts";
 import { SupportedCurrenciesV2 } from "@/ergofunctions/Currencies";
 import { calculateEarnings } from "@/ergofunctions/helpers";
 import { bulk_list } from "@/ergofunctions/marketfunctions/bulkList";
+import { relist_NFT } from "@/ergofunctions/marketfunctions/relistNFT";
 import {
   currencyToLong,
   decodeArtwork,
@@ -101,12 +102,14 @@ const SellModal = ({
     const thePrice = typeof price === "string" ? parseFloat(price) : price;
     setIsSubmitting(true);
     try {
-      const saleTxId = await editNft({
-        editBox: {box_id: tokenId},
-        currency: currency as Currency,
-        newPrice: thePrice,
-        userAddresses: await getWalletAddresses(),
-      });
+      // const saleTxId = await relist_NFT({
+      //   editBox: {box_id: tokenId},
+      //   currency: currency as Currency,
+      //   newPrice: thePrice,
+      //   userAddresses: await getWalletAddresses(),
+      // });
+      const saleTxId = await relist_NFT(token, currencyToLong(thePrice, supportedCurrencies[currency === "erg"? 0 : 1].decimal),currency as Currency === "erg" ? 0 : 1 )
+
       if (saleTxId) {
         setTxId(saleTxId);
         return;
@@ -266,7 +269,7 @@ const SellModal = ({
     <div>
       <Modal open={open} setOpen={onClose}>
         {txId ? (
-          <TxSubmitted box={token?.box_json} txId={txId} type="list" onClose={onClose} />
+          <TxSubmitted box={token} txId={txId} type="list" onClose={onClose} />
         ) : (
           renderForm()
         )}

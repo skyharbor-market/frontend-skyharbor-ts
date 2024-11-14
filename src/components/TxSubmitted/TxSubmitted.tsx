@@ -15,6 +15,7 @@ export type UserActionType = "list" | "buy" | "delist" |"edit"
 export default function TxSubmitted({ txId, box, onClose, type }: { txId: any; box?: any, onClose: ()=>void, type: UserActionType }) {
   const [userAddress, setUserAddress] = useState(null);
   const [usingErgoPay, setUsingErgoPay] = useState(null);
+  const [isModalLoaded, setIsModalLoaded] = useState(false);
 
   // required to check if ergopay user signed tx
   const [signedTransaction, setSignedTransaction] = useState(false);
@@ -34,6 +35,13 @@ export default function TxSubmitted({ txId, box, onClose, type }: { txId: any; b
       setUsingErgoPay(true);
       getErgoPayWalletAddress();
     }
+
+    // Set modal as loaded after a brief delay to ensure animation completes
+    const timer = setTimeout(() => {
+      setIsModalLoaded(true);
+    }, 300);
+
+    return () => clearTimeout(timer);
   }, [type]);
 
   function gotoTransaction() {
@@ -114,7 +122,6 @@ export default function TxSubmitted({ txId, box, onClose, type }: { txId: any; b
             <div className="w-full md:w-2/3 mx-auto">
               <div className="relative">
               {box && (
-
                 <div className="absolute inset-0 flex items-center justify-center">
                   <MdCheckCircleOutline
                     className="h-20 w-20 text-green-500"
@@ -122,7 +129,7 @@ export default function TxSubmitted({ txId, box, onClose, type }: { txId: any; b
                     />
                   </div>
                 )}
-                {box && (
+                {box && isModalLoaded && (
                   <div className="aspect-square rounded-lg overflow-hidden shadow-md">
                     <ArtworkMedia box={box} />
                   </div>

@@ -141,7 +141,9 @@ export default function BuyNFTButton({
         token={{
           nft_name: box.nft_name,
           tokenId: box.token_id,
-          box_json: box.box_json
+          ...box.box_json,
+          ipfs_art_hash: box?.ipfs_art_hash,
+          ipfs_art_url: box?.ipfs_art_url
         }}
         open={openEdit}
         onClose={() => setOpenEdit(false)}
