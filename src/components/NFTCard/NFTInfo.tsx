@@ -95,6 +95,7 @@ const NFTInfo = ({
           <div className=" bg-gray-200 overflow-hidden dark:bg-gray-700 rounded-lg mb-4 md:mb-0">
             {showImg && (
               <Fade fadeDuration={0.1} fadeKey={`tokenpopup-${token.token_id}`}>
+                {/* @ts-ignore */}
                 <ArtworkMedia box={token} thumbnail={false} ratio="regular" />
               </Fade>
             )}

@@ -350,6 +350,7 @@ function TokenPage({ token }: TokenPageProps) {
               className="hover:opacity-70"
             >
               <ArtworkMedia
+                // @ts-ignore
                 borderRad={8}
                 box={tokenInfo}
                 thumbnail={false}

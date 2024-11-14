@@ -27,6 +27,7 @@ const NFTCard = ({ token, isOwner = false, noBuy = false, userAddresses = [] }: 
           onClick={() => setOpenInfo(true)}
           className="aspect-square overflow-hidden cursor-pointer"
         >
+          {/* @ts-ignore */}
           <ArtworkMedia box={token} ratio="square" />
         </div>
         <div className="p-4 flex-grow flex flex-col justify-between">

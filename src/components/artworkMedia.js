@@ -9,23 +9,25 @@ import "react-h5-audio-player/lib/styles.css";
 // Move cache outside component to persist between renders
 const loadedImages = new Map();
 
-const ArtworkMedia = memo(function ArtworkMedia({
-  box,
-  cloudinary = true,
-  ratio = "square",
-  thumbnail = true,
-  lazyLoad = false,
-  small = false,
-  wallet = false,
-  autoPlay = false,
-  borderRad = 0,
-}) {
+const ArtworkMedia = memo(function ArtworkMedia(props) {
+  const {
+    box,
+    cloudinary = true,
+    ratio = "square", 
+    thumbnail = true,
+    lazyLoad = false,
+    small = false,
+    wallet = false,
+    autoPlay = false,
+    borderRad = 0
+  } = props;
+
   const [imageState, setImageState] = useState({
     height: 0,
     width: 0,
     isError: false,
-    isLoading: true, // Always start loading
-    isLoaded: false, // Don't rely on cache for initial state
+    isLoading: true,
+    isLoaded: false,
     retryCount: 0
   });
 
