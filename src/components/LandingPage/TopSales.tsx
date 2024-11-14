@@ -74,8 +74,9 @@ const TopSales = (props: Props) => {
               <div
                 className=" overflow-hidden aspect-square w-full"
                 >
-
+                
               <ArtworkMedia
+                // @ts-ignore
                 box={soldItem}
               />
               </div>
