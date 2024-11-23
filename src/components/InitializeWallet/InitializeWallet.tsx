@@ -336,7 +336,7 @@ function InitializeWallet({}) {
           Disconnect
           </p>
           <div className="mb-4">
-            <p className="mb-4">
+            <p className="mb-4 dark:text-white">
               Are you sure you want to disconnect?{" "}
               {walletState === "ergopay"
                 ? ""

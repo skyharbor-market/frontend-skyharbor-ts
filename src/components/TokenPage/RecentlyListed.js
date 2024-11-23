@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import { useQuery } from '@apollo/client';
 import { GET_COLLECTION_NFTS, GET_RECENTLY_LISTED } from '../../lib/gqlQueries';
-import { convertGQLObject } from '../../ergofunctions/helpers';
+import { convertGQLObject, friendlyAddress } from '../../ergofunctions/helpers';
 import NFTCard from '../NFTCard/NFTCard';
 import { CheckCircleIcon } from '@heroicons/react/24/outline';
 import LoadingCircle from '../LoadingCircle/LoadingCircle';
