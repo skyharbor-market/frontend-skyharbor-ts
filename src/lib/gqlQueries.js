@@ -29,7 +29,7 @@ export const CHECK_MINT_ADDRESS = gql`
 `;
 
 export const GET_NFTS = gql`
-  query getMarketplaceNFTs($limit: Int, $offset: Int) {
+  query getMarketplaceNFTs($limit: Int, $offset: Int, $orderBy: [sales_order_by!]) {
     sales(
       where: {
         _and: {
@@ -39,7 +39,7 @@ export const GET_NFTS = gql`
       }
       limit: $limit
       offset: $offset
-      order_by: { list_time: desc }
+      order_by: $orderBy
     ) {
       token_id
       box_id
@@ -73,7 +73,7 @@ export const GET_NFTS = gql`
 `;
 
 export const GET_NFTS_SEARCH = gql`
-  query getMarketplaceNFTsSearch($limit: Int, $offset: Int, $search: String) {
+  query getMarketplaceNFTsSearch($limit: Int, $offset: Int, $search: String, $orderBy: [sales_order_by!]) {
     sales(
       where: {
         _and: [
@@ -91,7 +91,7 @@ export const GET_NFTS_SEARCH = gql`
       }
       limit: $limit
       offset: $offset
-      order_by: { list_time: desc }
+      order_by: $orderBy
     ) {
       token_id
       box_id
@@ -349,7 +349,7 @@ export const GET_COLLECTION_INFO = gql`
 `;
 
 export const GET_COLLECTION_NFTS = gql`
-  query getMarketplaceNFTs($limit: Int, $offset: Int, $collection: String) {
+  query getMarketplaceNFTs($limit: Int, $offset: Int, $collection: String, $orderBy: [sales_order_by!]) {
     sales(
       where: {
         _and: {
@@ -359,7 +359,7 @@ export const GET_COLLECTION_NFTS = gql`
       }
       limit: $limit
       offset: $offset
-      order_by: { list_time: desc }
+      order_by: $orderBy
     ) {
       token_id
       box_id

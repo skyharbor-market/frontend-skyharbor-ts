@@ -6,10 +6,11 @@ import {
   GET_COLLECTION_INFO,
   GET_COLLECTION_NFTS,
   GET_NFTS,
+  GET_NFTS_SEARCH,
 } from "@/lib/gqlQueries";
 import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { FaCheckCircle, FaDiscord, FaImage, FaSearch, FaTwitter } from "react-icons/fa";
 import { MdOutlineSell, MdSearch } from "react-icons/md";
 import { BsCheckCircle, BsGlobe } from "react-icons/bs";
@@ -20,6 +21,8 @@ import Fade from "@/components/Fade/Fade";
 import toast from "react-hot-toast";
 import Tabs from "@/components/Tabs/Tabs";
 import InfiniteActivityFeed from "@/components/InfiniteFeed/InfiniteActivityFeed";
+import SortDropdown, { SORT_OPTIONS } from '@/components/SortDropdown/SortDropdown';
+import debounce from "lodash/debounce";
 
 interface CollectionInfoInterface {
   id: number;
@@ -36,10 +39,25 @@ interface CollectionInfoInterface {
 const Collection = () => {
   const router = useRouter();
   const { collection } = router.query;
-  console.log("router collection", collection);
-
+  
   const [viewMintAddresses, setViewMintAddresses] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<string>("For Sale");
+  const [sortOption, setSortOption] = useState(SORT_OPTIONS[2]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+
+  const debouncedSearch = useCallback(
+    debounce((value: string) => {
+      setDebouncedSearchTerm(value);
+    }, 300),
+    []
+  );
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setSearchTerm(value);
+    debouncedSearch(value);
+  };
 
   const { data, loading, error, fetchMore } = useQuery(GET_COLLECTION_INFO, {
     variables: { collection },
@@ -172,32 +190,44 @@ const Collection = () => {
   return (
     <div>
       <div>
-        {/* <p className="text-center text-4xl font-semibold">{collection}</p> */}
         <div>{renderCollectionInfo()}</div>
       </div>
       <div className="mt-8">
         <div className="mb-4">
-
-        <Tabs
-          tabs={[
-            { name: "For Sale", value: "For Sale", icon: MdOutlineSell },
-            { name: "Activity", value: "Activity", icon: FaImage }
-          ]}
-          currentTab={activeTab}
-          setTab={setActiveTab}
-        />
+          <Tabs
+            tabs={[
+              { name: "For Sale", value: "For Sale", icon: MdOutlineSell },
+              { name: "Activity", value: "Activity", icon: FaImage }
+            ]}
+            currentTab={activeTab}
+            setTab={setActiveTab}
+          />
         </div>
 
         {activeTab === "For Sale" ? (
           <>
-            <div className="mx-auto mb-6">
-              <CustomInput leftIcon={<MdSearch />} placeholder="Search..." />
+            <div className="mx-auto mb-6 flex gap-4">
+              <div className="flex-grow">
+                <CustomInput 
+                  leftIcon={<MdSearch />} 
+                  placeholder="Search..." 
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                />
+              </div>
+              <div className="w-48">
+                <SortDropdown
+                  value={sortOption.value}
+                  onChange={setSortOption}
+                />
+              </div>
             </div>
             <div>
               <InfiniteNFTFeed
-                gqlQuery={GET_COLLECTION_NFTS}
-                // @ts-ignore
-                collection={collection}
+                gqlQuery={debouncedSearchTerm.trim() === "" ? GET_COLLECTION_NFTS : GET_NFTS_SEARCH}
+                collection={collection as string}
+                searchTerm={debouncedSearchTerm}
+                orderBy={sortOption.orderBy}
               />
             </div>
           </>
