@@ -33,6 +33,7 @@ import Tabs from "@/components/Tabs/Tabs";
 import { FaChevronDown, FaChevronUp, FaImage, FaUserMd } from "react-icons/fa";
 import { ImPriceTag } from "react-icons/im";
 import { MdOutlineSell, MdSell } from "react-icons/md";
+import SEO from '@/components/SEO/SEO';
 
 export default function WalletPage() {
   let mounted = true;
@@ -265,58 +266,29 @@ export default function WalletPage() {
   };
 
   return (
-    <div>
-      <Head>
-        <title>Wallet | SkyHarbor</title>
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-
-        {/* Twitter */}
-        <meta
-          name="twitter:card"
-          content="Welcome to the premium NFT marketplace on the Ergo blockchain. Buy and sell NFTs with ease."
-          key="twcard"
-        />
-        <meta name="twitter:creator" content={"@skyharbor_io"} key="twhandle" />
-
-        {/* Open Graph */}
-        <meta
-          name="og:url"
-          content={`https://www.skyharbor.io/wallet`}
-          key="ogurl"
-        />
-        <meta
-          name="og:image"
-          content={"/assets/images/cloudgnome.webp"}
-          key="ogimage"
-        />
-        <meta name="og:site_name" content={"SkyHarbor"} key="ogsitename" />
-        <meta
-          name="og:title"
-          content="SkyHarbor | Ergo NFT Marketplace"
-          key="ogtitle"
-        />
-        <meta
-          name="og:description"
-          content="Welcome to the premium NFT marketplace on the Ergo blockchain. Buy and sell NFTs with ease."
-          key="ogdesc"
-        />
-      </Head>
-
-      {/* <div className="mb-6">{renderWalletAddresses()}</div> */}
-
-      <Tabs
-        tabs={[
-          { name: "Owned", value: "owned", icon: FaImage },
-          { name: "For Sale", value: "for_sale", icon: MdOutlineSell },
-          { name: "Sold", value: "sold", icon: MdSell },
-        ]}
-        currentTab={currentTab}
-        setTab={(val) => {
-          console.log("VAL", val);
-          setCurrentTab(val);
-        }}
+    <>
+      <SEO 
+        title="My Wallet"
+        description="View and manage your NFTs on SkyHarbor"
+        url="https://skyharbor.io/wallet"
       />
-      <div className="mt-6">{renderTabs()}</div>
-    </div>
+      <div>
+        {/* <div className="mb-6">{renderWalletAddresses()}</div> */}
+
+        <Tabs
+          tabs={[
+            { name: "Owned", value: "owned", icon: FaImage },
+            { name: "For Sale", value: "for_sale", icon: MdOutlineSell },
+            { name: "Sold", value: "sold", icon: MdSell },
+          ]}
+          currentTab={currentTab}
+          setTab={(val) => {
+            console.log("VAL", val);
+            setCurrentTab(val);
+          }}
+        />
+        <div className="mt-6">{renderTabs()}</div>
+      </div>
+    </>
   );
 }

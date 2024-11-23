@@ -38,6 +38,7 @@ import TopCollections from "@/components/LandingPage/TopCollections";
 import { BsBarChart } from "react-icons/bs";
 import TopSales from "@/components/LandingPage/TopSales";
 import LatestSales from "@/components/LandingPage/LatestSales";
+import SEO from '@/components/SEO/SEO';
 
 const GET_WEEKLY_VOLUME = gql`
   query getWeeklyHourVolume {
@@ -254,7 +255,7 @@ function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Landing() {
+const Home = () => {
   let mounted = true;
   const { loading, error, data } = useQuery(GET_WEEKLY_VOLUME);
 
@@ -290,354 +291,360 @@ export default function Landing() {
   }, [imgAnimation]);
 
   return (
-    <div className="">
-      {/* Header */}
+    <>
+      <SEO 
+        title="SkyHarbor | Ergo NFT Marketplace"
+        url="https://skyharbor.io"
+      />
+      <div>
+        {/* Header */}
 
-      <main>
-        {/* Hero section */}
-        <div className="relative isolate">
-          <svg
-            className="absolute inset-0 -z-10 h-full w-full stroke-gray-200 [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]"
-            aria-hidden="true"
-          >
-            <defs>
-              <pattern
-                id="83fd4e5a-9d52-42fc-97b6-718e5d7ee527"
-                width={200}
-                height={200}
-                x="50%"
-                y={-1}
-                patternUnits="userSpaceOnUse"
-              >
-                <path d="M100 200V.5M.5 .5H200" fill="none" />
-              </pattern>
-            </defs>
-            <svg x="50%" y={-1} className="overflow-visible fill-gray-50 dark:fill-gray-100/10">
-              <path
-                d="M-100.5 0h201v201h-201Z M699.5 0h201v201h-201Z M499.5 400h201v201h-201Z M-300.5 600h201v201h-201Z"
-                strokeWidth={0}
-              />
-            </svg>
-            <rect
-              width="100%"
-              height="100%"
-              strokeWidth={0}
-              fill="url(#83fd4e5a-9d52-42fc-97b6-718e5d7ee527)"
-            />
-          </svg>
-          <div className="mx-auto max-w-7xl px-6 py-8 sm:py-12 lg:flex lg:items-center lg:gap-x-10 lg:px-8 lg:py-12">
-            <div className="mx-auto max-w-2xl lg:mx-0 lg:flex-auto">
-              <h1 className="max-w-lg text-4xl font-bold tracking-tight mb-3 text-gray-900 dark:text-gray-100 sm:text-8xl">
-                SkyHarbor
-              </h1>
-              <p className=" mt-2 max-w-lg text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100 sm:text-3xl">
-                Buy and sell NFTs.
-              </p>
-              <p className="mt-4 leading-7 text-gray-600 dark:text-gray-300">
-                Buy and sell NFTs with ease. Experience seamless transactions,
-                top-tier security, and a platform dedicated to innovation.
-                Whether you&apos;re buying, selling, or showcasing, SkyHarbor is
-                your trusted gateway to the NFT world.
-              </p>
-              <div>
-                <Fade fadeKey={"volume"}>
-                  <div className="inline-flex mt-3 items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200">
-                    <BsBarChart className="mr-2"/>
-                    <span>
-                      {data?.weekly_volume[0].sum
-                        ? addNumberCommas(
-                            maxDP(
-                              longToCurrency(
-                                data.weekly_volume[0].sum,
-                                supportedCurrencies[0].decimal
-                              ),
-                              0
-                            )
-                          )
-                        : 0}{" "}
-                      ERG weekly volume
-                    </span>
-                  </div>
-                </Fade>
-              </div>
-              <div className="mt-10 flex items-center gap-x-6">
-                <Link href="/marketplace">
-                  <div className="rounded-md cursor-pointer bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                    View Marketplace
-                  </div>
-                </Link>
-              </div>
-            </div>
-            <div className="mt-16 sm:mt-24 lg:mt-0 lg:flex-shrink-0 lg:flex-grow">
-              <motion.div
-                animate={imgAnimation}
-                onMouseMove={(e) => handleMouseMove(e)}
-                onMouseOut={(e) => {
-                  if(mounted) {
-                    imgAnimation.start({
-                      x: 0,
-                      y: 0,
-                    });
-                  }
-                }}
-              >
-                <Image
-                  // width={"100%"}
-                  // layout="fill"
-                  key={"/assets/images/cloudgnome.webp"}
-                  // onLoad={onImgLoad}
-                  // borderRadius={6}
-                  className="home-top-image"
-                  width={400}
-                  height={400}
-                  style={{ margin: "auto" }}
-                  // priority={true}
-                  // height={{md: "500px", lg: "600px"}}
-                  // width={{md: "500px", lg: "600px"}}
-                  // blurDataURL={colorMode === "light" ? '/assets/images/cloudgnome.webp' : '/assets/images/quokka.webp'}
-                  // placeholder='blur'
-
-                  alt={"Welcome!"}
-                  objectFit={"contain"}
-                  src={"/assets/images/cloudgnome.webp"}
-                />
-              </motion.div>
-            </div>
-
-            {/* <div className="mt-16 sm:mt-24 lg:mt-0 lg:flex-shrink-0 lg:flex-grow">
-              <svg
-                viewBox="0 0 366 729"
-                role="img"
-                className="mx-auto w-[22.875rem] max-w-full drop-shadow-xl"
-              >
-                <title>App screenshot</title>
-                <defs>
-                  <clipPath id="2ade4387-9c63-4fc4-b754-10e687a0d332">
-                    <rect width={316} height={684} rx={36} />
-                  </clipPath>
-                </defs>
-                <path
-                  fill="#4B5563"
-                  d="M363.315 64.213C363.315 22.99 341.312 1 300.092 1H66.751C25.53 1 3.528 22.99 3.528 64.213v44.68l-.857.143A2 2 0 0 0 1 111.009v24.611a2 2 0 0 0 1.671 1.973l.95.158a2.26 2.26 0 0 1-.093.236v26.173c.212.1.398.296.541.643l-1.398.233A2 2 0 0 0 1 167.009v47.611a2 2 0 0 0 1.671 1.973l1.368.228c-.139.319-.314.533-.511.653v16.637c.221.104.414.313.56.689l-1.417.236A2 2 0 0 0 1 237.009v47.611a2 2 0 0 0 1.671 1.973l1.347.225c-.135.294-.302.493-.49.607v377.681c0 41.213 22 63.208 63.223 63.208h95.074c.947-.504 2.717-.843 4.745-.843l.141.001h.194l.086-.001 33.704.005c1.849.043 3.442.37 4.323.838h95.074c41.222 0 63.223-21.999 63.223-63.212v-394.63c-.259-.275-.48-.796-.63-1.47l-.011-.133 1.655-.276A2 2 0 0 0 366 266.62v-77.611a2 2 0 0 0-1.671-1.973l-1.712-.285c.148-.839.396-1.491.698-1.811V64.213Z"
-                />
-                <path
-                  fill="#343E4E"
-                  d="M16 59c0-23.748 19.252-43 43-43h246c23.748 0 43 19.252 43 43v615c0 23.196-18.804 42-42 42H58c-23.196 0-42-18.804-42-42V59Z"
-                />
-                <foreignObject
-                  width={316}
-                  height={684}
-                  transform="translate(24 24)"
-                  clipPath="url(#2ade4387-9c63-4fc4-b754-10e687a0d332)"
+        <main>
+          {/* Hero section */}
+          <div className="relative isolate">
+            <svg
+              className="absolute inset-0 -z-10 h-full w-full stroke-gray-200 [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]"
+              aria-hidden="true"
+            >
+              <defs>
+                <pattern
+                  id="83fd4e5a-9d52-42fc-97b6-718e5d7ee527"
+                  width={200}
+                  height={200}
+                  x="50%"
+                  y={-1}
+                  patternUnits="userSpaceOnUse"
                 >
-                  <img
-                    src="https://tailwindui.com/img/component-images/mobile-app-screenshot.png"
-                    alt=""
-                  />
-                </foreignObject>
+                  <path d="M100 200V.5M.5 .5H200" fill="none" />
+                </pattern>
+              </defs>
+              <svg x="50%" y={-1} className="overflow-visible fill-gray-50 dark:fill-gray-100/10">
+                <path
+                  d="M-100.5 0h201v201h-201Z M699.5 0h201v201h-201Z M499.5 400h201v201h-201Z M-300.5 600h201v201h-201Z"
+                  strokeWidth={0}
+                />
               </svg>
-            </div> */}
-          </div>
-        </div>
-
-        {/* Logo cloud */}
-        {/* <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto grid max-w-lg grid-cols-4 items-center gap-x-8 gap-y-12 sm:max-w-xl sm:grid-cols-6 sm:gap-x-10 sm:gap-y-14 lg:mx-0 lg:max-w-none lg:grid-cols-5">
-            <img
-              className="col-span-2 max-h-12 w-full object-contain lg:col-span-1"
-              src="https://tailwindui.com/img/logos/158x48/transistor-logo-gray-400.svg"
-              alt="Transistor"
-              width={158}
-              height={48}
-            />
-            <img
-              className="col-span-2 max-h-12 w-full object-contain lg:col-span-1"
-              src="https://tailwindui.com/img/logos/158x48/reform-logo-gray-400.svg"
-              alt="Reform"
-              width={158}
-              height={48}
-            />
-            <img
-              className="col-span-2 max-h-12 w-full object-contain lg:col-span-1"
-              src="https://tailwindui.com/img/logos/158x48/tuple-logo-gray-400.svg"
-              alt="Tuple"
-              width={158}
-              height={48}
-            />
-            <img
-              className="col-span-2 max-h-12 w-full object-contain sm:col-start-2 lg:col-span-1"
-              src="https://tailwindui.com/img/logos/158x48/savvycal-logo-gray-400.svg"
-              alt="SavvyCal"
-              width={158}
-              height={48}
-            />
-            <img
-              className="col-span-2 col-start-2 max-h-12 w-full object-contain sm:col-start-auto lg:col-span-1"
-              src="https://tailwindui.com/img/logos/158x48/statamic-logo-gray-400.svg"
-              alt="Statamic"
-              width={158}
-              height={48}
-            />
-          </div>
-        </div> */}
-
-
-        {/* TOP SALES */}
-        <div className="mb-24 mt-12">
-          <TopSales />
-        </div>
-
-        {/* TOP COLLECTIONS */}
-        <div>
-          <TopCollections />
-        </div>
-        
-        {/* LATEST SALES */}
-        <div>
-          <LatestSales />
-        </div>
-
-
-        {/* Testimonials section */}
-        {/* <div className="relative isolate mt-32 sm:mt-56 sm:pt-32">
-          <svg
-            className="absolute inset-0 -z-10 hidden h-full w-full stroke-gray-200 [mask-image:radial-gradient(64rem_64rem_at_top,white,transparent)] sm:block"
-            aria-hidden="true"
-          >
-            <defs>
-              <pattern
-                id="55d3d46d-692e-45f2-becd-d8bdc9344f45"
-                width={200}
-                height={200}
-                x="50%"
-                y={0}
-                patternUnits="userSpaceOnUse"
-              >
-                <path d="M.5 200V.5H200" fill="none" />
-              </pattern>
-            </defs>
-            <svg x="50%" y={0} className="overflow-visible fill-gray-50">
-              <path
-                d="M-200.5 0h201v201h-201Z M599.5 0h201v201h-201Z M399.5 400h201v201h-201Z M-400.5 600h201v201h-201Z"
+              <rect
+                width="100%"
+                height="100%"
                 strokeWidth={0}
+                fill="url(#83fd4e5a-9d52-42fc-97b6-718e5d7ee527)"
               />
             </svg>
-            <rect
-              width="100%"
-              height="100%"
-              strokeWidth={0}
-              fill="url(#55d3d46d-692e-45f2-becd-d8bdc9344f45)"
-            />
-          </svg>
-          <div className="relative">
-            <div
-              className="absolute inset-x-0 top-1/2 -z-10 -translate-y-1/2 transform-gpu overflow-hidden opacity-30 blur-3xl"
-              aria-hidden="true"
-            >
-              <div
-                className="ml-[max(50%,38rem)] aspect-[1313/771] w-[82.0625rem] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc]"
-                style={{
-                  clipPath:
-                    "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
-                }}
-              />
-            </div>
-            <div
-              className="absolute inset-x-0 top-0 -z-10 flex transform-gpu overflow-hidden pt-8 opacity-25 blur-3xl xl:justify-end"
-              aria-hidden="true"
-            >
-              <div
-                className="ml-[-22rem] aspect-[1313/771] w-[82.0625rem] flex-none origin-top-right rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] xl:ml-0 xl:mr-[calc(50%-12rem)]"
-                style={{
-                  clipPath:
-                    "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
-                }}
-              />
-            </div>
-            <div className="mx-auto max-w-7xl px-6 lg:px-8">
-              <div className="mx-auto max-w-xl sm:text-center">
-                <h2 className="text-lg font-semibold leading-8 tracking-tight text-indigo-600">
-                  Testimonials
-                </h2>
-                <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-                  We have worked with thousands of amazing people
+            <div className="mx-auto max-w-7xl px-6 py-8 sm:py-12 lg:flex lg:items-center lg:gap-x-10 lg:px-8 lg:py-12">
+              <div className="mx-auto max-w-2xl lg:mx-0 lg:flex-auto">
+                <h1 className="max-w-lg text-4xl font-bold tracking-tight mb-3 text-gray-900 dark:text-gray-100 sm:text-8xl">
+                  SkyHarbor
+                </h1>
+                <p className=" mt-2 max-w-lg text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100 sm:text-3xl">
+                  Buy and sell NFTs.
                 </p>
-              </div>
-              <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 grid-rows-1 gap-8 text-sm leading-6 text-gray-900 sm:mt-20 sm:grid-cols-2 xl:mx-0 xl:max-w-none xl:grid-flow-col xl:grid-cols-4">
-                <figure className="col-span-2 hidden sm:block sm:rounded-2xl sm:bg-white sm:shadow-lg sm:ring-1 sm:ring-gray-900/5 xl:col-start-2 xl:row-end-1">
-                  <blockquote className="p-12 text-xl font-semibold leading-8 tracking-tight text-gray-900">
-                    <p>{`“${featuredTestimonial.body}”`}</p>
-                  </blockquote>
-                  <figcaption className="flex items-center gap-x-4 border-t border-gray-900/10 px-6 py-4">
-                    <img
-                      className="h-10 w-10 flex-none rounded-full bg-gray-50"
-                      src={featuredTestimonial.author.imageUrl}
-                      alt=""
-                    />
-                    <div className="flex-auto">
-                      <div className="font-semibold">
-                        {featuredTestimonial.author.name}
-                      </div>
-                      <div className="text-gray-600">{`@${featuredTestimonial.author.handle}`}</div>
+                <p className="mt-4 leading-7 text-gray-600 dark:text-gray-300">
+                  Buy and sell NFTs with ease. Experience seamless transactions,
+                  top-tier security, and a platform dedicated to innovation.
+                  Whether you&apos;re buying, selling, or showcasing, SkyHarbor is
+                  your trusted gateway to the NFT world.
+                </p>
+                <div>
+                  <Fade fadeKey={"volume"}>
+                    <div className="inline-flex mt-3 items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200">
+                      <BsBarChart className="mr-2"/>
+                      <span>
+                        {data?.weekly_volume[0].sum
+                          ? addNumberCommas(
+                              maxDP(
+                                longToCurrency(
+                                  data.weekly_volume[0].sum,
+                                  supportedCurrencies[0].decimal
+                                ),
+                                0
+                              )
+                            )
+                          : 0}{" "}
+                        ERG weekly volume
+                      </span>
                     </div>
+                  </Fade>
+                </div>
+                <div className="mt-10 flex items-center gap-x-6">
+                  <Link href="/marketplace">
+                    <div className="rounded-md cursor-pointer bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                      View Marketplace
+                    </div>
+                  </Link>
+                </div>
+              </div>
+              <div className="mt-16 sm:mt-24 lg:mt-0 lg:flex-shrink-0 lg:flex-grow">
+                <motion.div
+                  animate={imgAnimation}
+                  onMouseMove={(e) => handleMouseMove(e)}
+                  onMouseOut={(e) => {
+                    if(mounted) {
+                      imgAnimation.start({
+                        x: 0,
+                        y: 0,
+                      });
+                    }
+                  }}
+                >
+                  <Image
+                    // width={"100%"}
+                    // layout="fill"
+                    key={"/assets/images/cloudgnome.webp"}
+                    // onLoad={onImgLoad}
+                    // borderRadius={6}
+                    className="home-top-image"
+                    width={400}
+                    height={400}
+                    style={{ margin: "auto" }}
+                    // priority={true}
+                    // height={{md: "500px", lg: "600px"}}
+                    // width={{md: "500px", lg: "600px"}}
+                    // blurDataURL={colorMode === "light" ? '/assets/images/cloudgnome.webp' : '/assets/images/quokka.webp'}
+                    // placeholder='blur'
+
+                    alt={"Welcome!"}
+                    objectFit={"contain"}
+                    src={"/assets/images/cloudgnome.webp"}
+                  />
+                </motion.div>
+              </div>
+
+              {/* <div className="mt-16 sm:mt-24 lg:mt-0 lg:flex-shrink-0 lg:flex-grow">
+                <svg
+                  viewBox="0 0 366 729"
+                  role="img"
+                  className="mx-auto w-[22.875rem] max-w-full drop-shadow-xl"
+                >
+                  <title>App screenshot</title>
+                  <defs>
+                    <clipPath id="2ade4387-9c63-4fc4-b754-10e687a0d332">
+                      <rect width={316} height={684} rx={36} />
+                    </clipPath>
+                  </defs>
+                  <path
+                    fill="#4B5563"
+                    d="M363.315 64.213C363.315 22.99 341.312 1 300.092 1H66.751C25.53 1 3.528 22.99 3.528 64.213v44.68l-.857.143A2 2 0 0 0 1 111.009v24.611a2 2 0 0 0 1.671 1.973l.95.158a2.26 2.26 0 0 1-.093.236v26.173c.212.1.398.296.541.643l-1.398.233A2 2 0 0 0 1 167.009v47.611a2 2 0 0 0 1.671 1.973l1.368.228c-.139.319-.314.533-.511.653v16.637c.221.104.414.313.56.689l-1.417.236A2 2 0 0 0 1 237.009v47.611a2 2 0 0 0 1.671 1.973l1.347.225c-.135.294-.302.493-.49.607v377.681c0 41.213 22 63.208 63.223 63.208h95.074c.947-.504 2.717-.843 4.745-.843l.141.001h.194l.086-.001 33.704.005c1.849.043 3.442.37 4.323.838h95.074c41.222 0 63.223-21.999 63.223-63.212v-394.63c-.259-.275-.48-.796-.63-1.47l-.011-.133 1.655-.276A2 2 0 0 0 366 266.62v-77.611a2 2 0 0 0-1.671-1.973l-1.712-.285c.148-.839.396-1.491.698-1.811V64.213Z"
+                  />
+                  <path
+                    fill="#343E4E"
+                    d="M16 59c0-23.748 19.252-43 43-43h246c23.748 0 43 19.252 43 43v615c0 23.196-18.804 42-42 42H58c-23.196 0-42-18.804-42-42V59Z"
+                  />
+                  <foreignObject
+                    width={316}
+                    height={684}
+                    transform="translate(24 24)"
+                    clipPath="url(#2ade4387-9c63-4fc4-b754-10e687a0d332)"
+                  >
                     <img
-                      className="h-10 w-auto flex-none"
-                      src={featuredTestimonial.author.logoUrl}
+                      src="https://tailwindui.com/img/component-images/mobile-app-screenshot.png"
                       alt=""
                     />
-                  </figcaption>
-                </figure>
-                {testimonials.map((columnGroup, columnGroupIdx) => (
-                  <div
-                    key={columnGroupIdx}
-                    className="space-y-8 xl:contents xl:space-y-0"
-                  >
-                    {columnGroup.map((column, columnIdx) => (
-                      <div
-                        key={columnIdx}
-                        className={classNames(
-                          (columnGroupIdx === 0 && columnIdx === 0) ||
-                            (columnGroupIdx === testimonials.length - 1 &&
-                              columnIdx === columnGroup.length - 1)
-                            ? "xl:row-span-2"
-                            : "xl:row-start-1",
-                          "space-y-8"
-                        )}
-                      >
-                        {column.map((testimonial) => (
-                          <figure
-                            key={testimonial.author.handle}
-                            className="rounded-2xl bg-white p-6 shadow-lg ring-1 ring-gray-900/5"
-                          >
-                            <blockquote className="text-gray-900">
-                              <p>{`“${testimonial.body}”`}</p>
-                            </blockquote>
-                            <figcaption className="mt-6 flex items-center gap-x-4">
-                              <img
-                                className="h-10 w-10 rounded-full bg-gray-50"
-                                src={testimonial.author.imageUrl}
-                                alt=""
-                              />
-                              <div>
-                                <div className="font-semibold">
-                                  {testimonial.author.name}
-                                </div>
-                                <div className="text-gray-600">{`@${testimonial.author.handle}`}</div>
-                              </div>
-                            </figcaption>
-                          </figure>
-                        ))}
-                      </div>
-                    ))}
-                  </div>
-                ))}
-              </div>
+                  </foreignObject>
+                </svg>
+              </div> */}
             </div>
           </div>
-        </div> */}
-      </main>
-    </div>
-  );
-}
 
-// export default withApollo()(Landing);
+          {/* Logo cloud */}
+          {/* <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <div className="mx-auto grid max-w-lg grid-cols-4 items-center gap-x-8 gap-y-12 sm:max-w-xl sm:grid-cols-6 sm:gap-x-10 sm:gap-y-14 lg:mx-0 lg:max-w-none lg:grid-cols-5">
+              <img
+                className="col-span-2 max-h-12 w-full object-contain lg:col-span-1"
+                src="https://tailwindui.com/img/logos/158x48/transistor-logo-gray-400.svg"
+                alt="Transistor"
+                width={158}
+                height={48}
+              />
+              <img
+                className="col-span-2 max-h-12 w-full object-contain lg:col-span-1"
+                src="https://tailwindui.com/img/logos/158x48/reform-logo-gray-400.svg"
+                alt="Reform"
+                width={158}
+                height={48}
+              />
+              <img
+                className="col-span-2 max-h-12 w-full object-contain lg:col-span-1"
+                src="https://tailwindui.com/img/logos/158x48/tuple-logo-gray-400.svg"
+                alt="Tuple"
+                width={158}
+                height={48}
+              />
+              <img
+                className="col-span-2 max-h-12 w-full object-contain sm:col-start-2 lg:col-span-1"
+                src="https://tailwindui.com/img/logos/158x48/savvycal-logo-gray-400.svg"
+                alt="SavvyCal"
+                width={158}
+                height={48}
+              />
+              <img
+                className="col-span-2 col-start-2 max-h-12 w-full object-contain sm:col-start-auto lg:col-span-1"
+                src="https://tailwindui.com/img/logos/158x48/statamic-logo-gray-400.svg"
+                alt="Statamic"
+                width={158}
+                height={48}
+              />
+            </div>
+          </div> */}
+
+
+          {/* TOP SALES */}
+          <div className="mb-24 mt-12">
+            <TopSales />
+          </div>
+
+          {/* TOP COLLECTIONS */}
+          <div>
+            <TopCollections />
+          </div>
+          
+          {/* LATEST SALES */}
+          <div>
+            <LatestSales />
+          </div>
+
+
+          {/* Testimonials section */}
+          {/* <div className="relative isolate mt-32 sm:mt-56 sm:pt-32">
+            <svg
+              className="absolute inset-0 -z-10 hidden h-full w-full stroke-gray-200 [mask-image:radial-gradient(64rem_64rem_at_top,white,transparent)] sm:block"
+              aria-hidden="true"
+            >
+              <defs>
+                <pattern
+                  id="55d3d46d-692e-45f2-becd-d8bdc9344f45"
+                  width={200}
+                  height={200}
+                  x="50%"
+                  y={0}
+                  patternUnits="userSpaceOnUse"
+                >
+                  <path d="M.5 200V.5H200" fill="none" />
+                </pattern>
+              </defs>
+              <svg x="50%" y={0} className="overflow-visible fill-gray-50">
+                <path
+                  d="M-200.5 0h201v201h-201Z M599.5 0h201v201h-201Z M399.5 400h201v201h-201Z M-400.5 600h201v201h-201Z"
+                  strokeWidth={0}
+                />
+              </svg>
+              <rect
+                width="100%"
+                height="100%"
+                strokeWidth={0}
+                fill="url(#55d3d46d-692e-45f2-becd-d8bdc9344f45)"
+              />
+            </svg>
+            <div className="relative">
+              <div
+                className="absolute inset-x-0 top-1/2 -z-10 -translate-y-1/2 transform-gpu overflow-hidden opacity-30 blur-3xl"
+                aria-hidden="true"
+              >
+                <div
+                  className="ml-[max(50%,38rem)] aspect-[1313/771] w-[82.0625rem] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc]"
+                  style={{
+                    clipPath:
+                      "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
+                  }}
+                />
+              </div>
+              <div
+                className="absolute inset-x-0 top-0 -z-10 flex transform-gpu overflow-hidden pt-8 opacity-25 blur-3xl xl:justify-end"
+                aria-hidden="true"
+              >
+                <div
+                  className="ml-[-22rem] aspect-[1313/771] w-[82.0625rem] flex-none origin-top-right rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] xl:ml-0 xl:mr-[calc(50%-12rem)]"
+                  style={{
+                    clipPath:
+                      "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
+                  }}
+                />
+              </div>
+              <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                <div className="mx-auto max-w-xl sm:text-center">
+                  <h2 className="text-lg font-semibold leading-8 tracking-tight text-indigo-600">
+                    Testimonials
+                  </h2>
+                  <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                    We have worked with thousands of amazing people
+                  </p>
+                </div>
+                <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 grid-rows-1 gap-8 text-sm leading-6 text-gray-900 sm:mt-20 sm:grid-cols-2 xl:mx-0 xl:max-w-none xl:grid-flow-col xl:grid-cols-4">
+                  <figure className="col-span-2 hidden sm:block sm:rounded-2xl sm:bg-white sm:shadow-lg sm:ring-1 sm:ring-gray-900/5 xl:col-start-2 xl:row-end-1">
+                    <blockquote className="p-12 text-xl font-semibold leading-8 tracking-tight text-gray-900">
+                      <p>{`“${featuredTestimonial.body}”`}</p>
+                    </blockquote>
+                    <figcaption className="flex items-center gap-x-4 border-t border-gray-900/10 px-6 py-4">
+                      <img
+                        className="h-10 w-10 flex-none rounded-full bg-gray-50"
+                        src={featuredTestimonial.author.imageUrl}
+                        alt=""
+                      />
+                      <div className="flex-auto">
+                        <div className="font-semibold">
+                          {featuredTestimonial.author.name}
+                        </div>
+                        <div className="text-gray-600">{`@${featuredTestimonial.author.handle}`}</div>
+                      </div>
+                      <img
+                        className="h-10 w-auto flex-none"
+                        src={featuredTestimonial.author.logoUrl}
+                        alt=""
+                      />
+                    </figcaption>
+                  </figure>
+                  {testimonials.map((columnGroup, columnGroupIdx) => (
+                    <div
+                      key={columnGroupIdx}
+                      className="space-y-8 xl:contents xl:space-y-0"
+                    >
+                      {columnGroup.map((column, columnIdx) => (
+                        <div
+                          key={columnIdx}
+                          className={classNames(
+                            (columnGroupIdx === 0 && columnIdx === 0) ||
+                              (columnGroupIdx === testimonials.length - 1 &&
+                                columnIdx === columnGroup.length - 1)
+                              ? "xl:row-span-2"
+                              : "xl:row-start-1",
+                            "space-y-8"
+                          )}
+                        >
+                          {column.map((testimonial) => (
+                            <figure
+                              key={testimonial.author.handle}
+                              className="rounded-2xl bg-white p-6 shadow-lg ring-1 ring-gray-900/5"
+                            >
+                              <blockquote className="text-gray-900">
+                                <p>{`“${testimonial.body}”`}</p>
+                              </blockquote>
+                              <figcaption className="mt-6 flex items-center gap-x-4">
+                                <img
+                                  className="h-10 w-10 rounded-full bg-gray-50"
+                                  src={testimonial.author.imageUrl}
+                                  alt=""
+                                />
+                                <div>
+                                  <div className="font-semibold">
+                                    {testimonial.author.name}
+                                  </div>
+                                  <div className="text-gray-600">{`@${testimonial.author.handle}`}</div>
+                                </div>
+                              </figcaption>
+                            </figure>
+                          ))}
+                        </div>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div> */}
+        </main>
+      </div>
+    </>
+  );
+};
+
+export default Home;

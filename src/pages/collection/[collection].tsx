@@ -23,6 +23,7 @@ import Tabs from "@/components/Tabs/Tabs";
 import InfiniteActivityFeed from "@/components/InfiniteFeed/InfiniteActivityFeed";
 import SortDropdown, { SORT_OPTIONS } from '@/components/SortDropdown/SortDropdown';
 import debounce from "lodash/debounce";
+import SEO from '@/components/SEO/SEO';
 
 interface CollectionInfoInterface {
   id: number;
@@ -63,6 +64,8 @@ const Collection = () => {
     variables: { collection },
     notifyOnNetworkStatusChange: true,
   });
+
+  const collectionInfo = data?.collections?.[0];
 
   function gotoSocial(social?: string) {
     if (!social) {
@@ -188,7 +191,13 @@ const Collection = () => {
   };
 
   return (
-    <div>
+    <>
+      <SEO 
+        title={collectionInfo?.name || 'Collection'}
+        description={collectionInfo?.description || undefined}
+        image={collectionInfo?.card_image || undefined}
+        url={`https://skyharbor.io/collection/${collection}`}
+      />
       <div>
         <div>{renderCollectionInfo()}</div>
       </div>
@@ -237,7 +246,7 @@ const Collection = () => {
           </div>
         )}
       </div>
-    </div>
+    </>
   );
 };
 

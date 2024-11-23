@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import "react-h5-audio-player/lib/styles.css";
 import LoadingCircle from "../../components/LoadingCircle/LoadingCircle";
 import TokenPage from "@/components/TokenPage/TokenPage";
+import SEO from '@/components/SEO/SEO';
 
 function Token() {
   let mounted = true;

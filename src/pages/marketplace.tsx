@@ -6,6 +6,7 @@ import { MdSearch } from "react-icons/md";
 import debounce from "lodash/debounce";
 import { useSelector } from "react-redux";
 import SortDropdown, { SORT_OPTIONS } from '@/components/SortDropdown/SortDropdown';
+import SEO from '@/components/SEO/SEO';
 
 type Props = {};
 
@@ -29,36 +30,42 @@ const Marketplace = (props: Props) => {
   };
 
   return (
-    <div>
+    <>
+      <SEO 
+        title="Marketplace"
+        url="https://skyharbor.io/marketplace"
+      />
       <div>
-        <p className="text-center text-4xl font-semibold">Marketplace</p>
-      </div>
-      <div className="mt-8">
-        <div className="mx-auto mb-6 flex gap-4">
-          <div className="flex-grow">
-            <CustomInput
-              leftIcon={<MdSearch />}
-              placeholder="Search..."
-              value={searchTerm}
-              onChange={handleSearchChange}
-            />
+        <div>
+          <p className="text-center text-4xl font-semibold">Marketplace</p>
+        </div>
+        <div className="mt-8">
+          <div className="mx-auto mb-6 flex gap-4">
+            <div className="flex-grow">
+              <CustomInput
+                leftIcon={<MdSearch />}
+                placeholder="Search..."
+                value={searchTerm}
+                onChange={handleSearchChange}
+              />
+            </div>
+            <div className="w-48">
+              <SortDropdown
+                value={sortOption.value}
+                onChange={setSortOption}
+              />
+            </div>
           </div>
-          <div className="w-48">
-            <SortDropdown
-              value={sortOption.value}
-              onChange={setSortOption}
+          <div className="">
+            <InfiniteNFTFeed 
+              gqlQuery={debouncedSearchTerm.trim() === "" ? GET_NFTS : GET_NFTS_SEARCH} 
+              searchTerm={debouncedSearchTerm}
+              orderBy={sortOption.orderBy}
             />
           </div>
         </div>
-        <div className="">
-          <InfiniteNFTFeed 
-            gqlQuery={debouncedSearchTerm.trim() === "" ? GET_NFTS : GET_NFTS_SEARCH} 
-            searchTerm={debouncedSearchTerm}
-            orderBy={sortOption.orderBy}
-          />
-        </div>
       </div>
-    </div>
+    </>
   );
 };
 
