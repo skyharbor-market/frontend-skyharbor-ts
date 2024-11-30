@@ -13,9 +13,16 @@ interface InfiniteNFTFeedProps {
   collection?: string;
   searchTerm?: string;
   orderBy?: any;
+  verifiedOnly: boolean;
 }
 
-const InfiniteNFTFeed = ({ gqlQuery, collection, searchTerm, orderBy }: InfiniteNFTFeedProps) => {
+const InfiniteNFTFeed = ({ 
+  gqlQuery, 
+  collection, 
+  searchTerm, 
+  orderBy,
+  verifiedOnly 
+}: InfiniteNFTFeedProps) => {
   const [hasMore, setHasMore] = useState(true);
   const limit = 12; // Number of NFTs to load each time
   // @ts-ignore
@@ -30,6 +37,7 @@ const InfiniteNFTFeed = ({ gqlQuery, collection, searchTerm, orderBy }: Infinite
       offset: 0, 
       collection, 
       orderBy,
+      verifiedOnly,
       ...(isSearchActive && { search: `%${searchTerm}%` })
     },
     notifyOnNetworkStatusChange: true,
@@ -37,12 +45,21 @@ const InfiniteNFTFeed = ({ gqlQuery, collection, searchTerm, orderBy }: Infinite
 
   useEffect(() => {
     if (isSearchActive) {
-      refetch({ search: `%${searchTerm}%`, orderBy });
+      refetch({ 
+        search: `%${searchTerm}%`, 
+        orderBy, 
+        verifiedOnly,
+        offset: 0 
+      });
     } else {
-      refetch({ orderBy });
+      refetch({ 
+        orderBy, 
+        verifiedOnly,
+        offset: 0 
+      });
     }
     setHasMore(true);
-  }, [searchTerm, orderBy, refetch, isSearchActive]);
+  }, [searchTerm, orderBy, verifiedOnly, refetch, isSearchActive]);
 
   if (loading && !data?.sales) return <div className="w-24 h-24 mx-auto"><LoadingCircle /></div>;
   if (!loading && data?.sales?.length <= 0) return <div className="text-center"><p>No NFTs found {isSearchActive ? `under "${searchTerm}"` : ""}</p></div>;
