@@ -13,7 +13,7 @@ interface InfiniteNFTFeedProps {
   collection?: string;
   searchTerm?: string;
   orderBy?: any;
-  verifiedOnly: boolean;
+  verifiedOnly?: boolean;
 }
 
 const InfiniteNFTFeed = ({ 
