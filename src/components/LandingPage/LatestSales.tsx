@@ -21,7 +21,6 @@ const LatestSales = ({
     variables: {
       limit,
       offset: 0,
-      verifiedOnly: true,
     },
     notifyOnNetworkStatusChange: true,
   });
