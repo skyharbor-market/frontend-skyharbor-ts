@@ -29,18 +29,13 @@ export const CHECK_MINT_ADDRESS = gql`
 `;
 
 export const GET_NFTS = gql`
-  query getMarketplaceNFTs($limit: Int, $offset: Int, $orderBy: [sales_order_by!], $verifiedOnly: Boolean!) {
+  query getMarketplaceNFTs($limit: Int, $offset: Int, $orderBy: [sales_order_by!]) {
     sales(
       where: {
-        _and: [
-          { status: { _eq: "active" } },
-          {
-            _or: [
-              { token: { token_collection: { verified: { _eq: true } } } },
-              { token: { token_collection: { verified: { _eq: $verifiedOnly } } } },
-            ]
-          }
-        ]
+        _and: {
+          status: { _eq: "active" }
+          token: { token_collection: { verified: { _eq: true } } }
+        }
       }
       limit: $limit
       offset: $offset
@@ -78,22 +73,12 @@ export const GET_NFTS = gql`
 `;
 
 export const GET_NFTS_SEARCH = gql`
-  query getMarketplaceNFTsSearch($limit: Int, $offset: Int, $search: String, $orderBy: [sales_order_by!], $verifiedOnly: Boolean!) {
+  query getMarketplaceNFTsSearch($limit: Int, $offset: Int, $search: String, $orderBy: [sales_order_by!]) {
     sales(
       where: {
         _and: [
           { status: { _eq: "active" } },
-          {
-            _or: [
-              { token: { token_collection: { verified: { _eq: true } } } },
-              { 
-                _and: [
-                  { token: { token_collection: { verified: { _eq: false } } } },
-                  { _not: { token: { token_collection: { verified: { _eq: $verifiedOnly } } } } }
-                ]
-              }
-            ]
-          },
+          { token: { token_collection: { verified: { _eq: true } } } },
           {
             _or: [
               { token_id: { _ilike: $search } },
