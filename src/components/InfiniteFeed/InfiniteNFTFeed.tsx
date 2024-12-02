@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useQuery } from "@apollo/client";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { GET_NFTS, GET_UNVERIFIED_NFTS, GET_NFTS_SEARCH, GET_UNVERIFIED_NFTS_SEARCH } from "@/lib/gqlQueries";
+import { GET_NFTS } from "@/lib/gqlQueries";
 import { convertGQLObject } from "@/ergofunctions/helpers";
 import NFTCard from "../NFTCard/NFTCard";
 import { useSelector } from "react-redux";
@@ -13,7 +13,7 @@ interface InfiniteNFTFeedProps {
   collection?: string;
   searchTerm?: string;
   orderBy?: any;
-  verifiedOnly: boolean;
+  verifiedOnly?: boolean;
 }
 
 const InfiniteNFTFeed = ({ 
@@ -24,82 +24,42 @@ const InfiniteNFTFeed = ({
   verifiedOnly 
 }: InfiniteNFTFeedProps) => {
   const [hasMore, setHasMore] = useState(true);
-  const limit = 12;
+  const limit = 12; // Number of NFTs to load each time
+  // @ts-ignore
   const userAddresses = useSelector((state: any) => state.wallet.addresses);
+  console.log("searchTerm", searchTerm)
+
   const isSearchActive = searchTerm && searchTerm.trim() !== "";
 
-  // Query for verified NFTs
-  const { 
-    data: verifiedData, 
-    loading: verifiedLoading, 
-    error: verifiedError, 
-    fetchMore: fetchMoreVerified 
-  } = useQuery(isSearchActive ? GET_NFTS_SEARCH : GET_NFTS, {
+  const { data, loading, error, fetchMore, refetch } = useQuery(gqlQuery, {
     variables: { 
       limit, 
       offset: 0, 
       collection, 
       orderBy,
+      verifiedOnly,
       ...(isSearchActive && { search: `%${searchTerm}%` })
     },
-    skip: !verifiedOnly,
+    notifyOnNetworkStatusChange: true,
   });
-
-  // Query for unverified NFTs
-  const { 
-    data: unverifiedData, 
-    loading: unverifiedLoading, 
-    error: unverifiedError, 
-    fetchMore: fetchMoreUnverified 
-  } = useQuery(isSearchActive ? GET_UNVERIFIED_NFTS_SEARCH : GET_UNVERIFIED_NFTS, {
-    variables: { 
-      limit, 
-      offset: 0, 
-      collection, 
-      orderBy,
-      ...(isSearchActive && { search: `%${searchTerm}%` })
-    },
-    skip: verifiedOnly,
-  });
-
-  const data = verifiedOnly ? verifiedData : {
-    sales: [...(verifiedData?.sales || []), ...(unverifiedData?.sales || [])]
-  };
-  const loading = verifiedOnly ? verifiedLoading : (verifiedLoading || unverifiedLoading);
-  const error = verifiedOnly ? verifiedError : (verifiedError || unverifiedError);
 
   useEffect(() => {
     if (isSearchActive) {
-      fetchMoreVerified({ 
-        variables: {
-          search: `%${searchTerm}%`, 
-          orderBy, 
-          offset: 0 
-        }
-      });
-      fetchMoreUnverified({ 
-        variables: {
-          search: `%${searchTerm}%`, 
-          orderBy, 
-          offset: 0 
-        }
+      refetch({ 
+        search: `%${searchTerm}%`, 
+        orderBy, 
+        verifiedOnly,
+        offset: 0 
       });
     } else {
-      fetchMoreVerified({ 
-        variables: {
-          orderBy, 
-          offset: 0 
-        }
-      });
-      fetchMoreUnverified({ 
-        variables: {
-          orderBy, 
-          offset: 0 
-        }
+      refetch({ 
+        orderBy, 
+        verifiedOnly,
+        offset: 0 
       });
     }
     setHasMore(true);
-  }, [searchTerm, orderBy, verifiedOnly, fetchMoreVerified, fetchMoreUnverified, isSearchActive]);
+  }, [searchTerm, orderBy, verifiedOnly, refetch, isSearchActive]);
 
   if (loading && !data?.sales) return <div className="w-24 h-24 mx-auto"><LoadingCircle /></div>;
   if (!loading && data?.sales?.length <= 0) return <div className="text-center"><p>No NFTs found {isSearchActive ? `under "${searchTerm}"` : ""}</p></div>;
@@ -110,50 +70,19 @@ const InfiniteNFTFeed = ({
       dataLength={data.sales.length}
       style={{ overflow: "visible" }}
       next={() => {
-        if (verifiedOnly) {
-          fetchMoreVerified({
-            variables: {
-              offset: verifiedData?.sales.length || 0,
-              ...(isSearchActive && { search: `%${searchTerm}%` })
-            },
-            updateQuery: (prev, { fetchMoreResult }) => {
-              if (!fetchMoreResult) return prev;
-              if (fetchMoreResult.sales.length < limit) setHasMore(false);
-              return {
-                sales: [...prev.sales, ...fetchMoreResult.sales],
-              };
-            },
-          });
-        } else {
-          Promise.all([
-            fetchMoreVerified({
-              variables: {
-                offset: verifiedData?.sales.length || 0,
-                ...(isSearchActive && { search: `%${searchTerm}%` })
-              },
-              updateQuery: (prev, { fetchMoreResult }) => {
-                if (!fetchMoreResult) return prev;
-                if (fetchMoreResult.sales.length < limit) setHasMore(false);
-                return {
-                  sales: [...prev.sales, ...fetchMoreResult.sales],
-                };
-              },
-            }),
-            fetchMoreUnverified({
-              variables: {
-                offset: unverifiedData?.sales.length || 0,
-                ...(isSearchActive && { search: `%${searchTerm}%` })
-              },
-              updateQuery: (prev, { fetchMoreResult }) => {
-                if (!fetchMoreResult) return prev;
-                if (fetchMoreResult.sales.length < limit) setHasMore(false);
-                return {
-                  sales: [...prev.sales, ...fetchMoreResult.sales],
-                };
-              },
-            })
-          ]);
-        }
+        fetchMore({
+          variables: {
+            offset: data.sales.length,
+            ...(isSearchActive && { search: `%${searchTerm}%` })
+          },
+          updateQuery: (prev, { fetchMoreResult }) => {
+            if (!fetchMoreResult) return prev;
+            if (fetchMoreResult.sales.length < limit) setHasMore(false);
+            return {
+              sales: [...prev.sales, ...fetchMoreResult.sales],
+            };
+          },
+        });
       }}
       hasMore={hasMore}
       loader={<div className="w-12 h-12 mx-auto mt-6"><LoadingCircle /></div>}

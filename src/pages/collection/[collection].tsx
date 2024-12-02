@@ -237,7 +237,6 @@ const Collection = () => {
                 collection={collection as string}
                 searchTerm={debouncedSearchTerm}
                 orderBy={sortOption.orderBy}
-                verifiedOnly={false}
               />
             </div>
           </>
