@@ -208,6 +208,7 @@ function TokenPage({ token }: TokenPageProps) {
         tokenId: item.token_id,
         nft_name: item.nft_name,
         nft_desc: item.nft_desc,
+        royalties: item.royalty_int,
 
         collection_name: item.token_collection.name,
         collection_sys_name: item.token_collection.sys_name,
@@ -286,6 +287,9 @@ function TokenPage({ token }: TokenPageProps) {
   const ownedNFT = userAddresses
     ? userAddresses.includes(tokenInfo.seller_address)
     : false;
+
+
+  console.log("tokeninto", tokenInfo)
 
   return (
     <div>
@@ -393,6 +397,17 @@ function TokenPage({ token }: TokenPageProps) {
           <div className="mt-1 text-md text-gray-500">
             <ShowMetadata description={tokenInfo.nft_desc} />
           </div>
+
+
+          {tokenInfo.royalties && (
+            <div className="my-4 flex items-center space-x-2">
+              <span className="text-sm font-medium">Artist Royalty Fee:</span>
+              <div className="flex items-center">
+                <span className="text-sm font-bold text-blue-600 dark:text-blue-400">{(tokenInfo.royalties / 10)}%</span>
+              </div>
+            </div>
+          )}
+
 
           <div>
             <h2 className="mt-8 mb-2 font-semibold text-2xl">Previous Sales</h2>

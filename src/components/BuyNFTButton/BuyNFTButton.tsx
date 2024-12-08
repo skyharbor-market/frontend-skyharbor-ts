@@ -31,9 +31,7 @@ export default function BuyNFTButton({
   const [transactionId, setTransactionId] = useState<string | null>(null);
   const [openEdit, setOpenEdit] = useState<boolean>(false);
 
-  
-  console.log("box", box);
-  const handleBuy = async () => {
+    const handleBuy = async () => {
     setSelectedFunction("buy");
     setSubmitting(true);
 

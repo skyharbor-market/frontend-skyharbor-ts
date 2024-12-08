@@ -98,7 +98,6 @@ const SellModal = ({
   const submitEdit = async () => {
     const tokenId = token.tokenId;
     const currencyIndex = 0; //currency
-    console.log("tokenId", tokenId);
     const thePrice = typeof price === "string" ? parseFloat(price) : price;
     setIsSubmitting(true);
     try {
@@ -128,7 +127,6 @@ const SellModal = ({
     setRoyalties(null);
 
     const royaltyRes = await getRoyaltyInfo(token.tokenId);
-    console.log("royaltyRes", royaltyRes);
     if(royaltyRes) {
       setRoyalties({
         address: royaltyRes?.artist,
@@ -142,7 +140,6 @@ const SellModal = ({
   };
 
   useEffect(() => {
-    console.log("Is open?", open);
     if (open) {
       getTokenRoyalties();
     }
@@ -263,7 +260,6 @@ const SellModal = ({
       </div>
     );
   };
-  console.log("token", token);
 
   return (
     <div>
