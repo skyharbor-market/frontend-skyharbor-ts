@@ -63,7 +63,7 @@ const TopSales = (props: Props) => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
-            className={`bg-white bg-opacity-10 w-full rounded-xl p-3 md:p-4 flex flex-col items-center justify-between
+            className={`bg-white dark:bg-slate-900 w-full rounded-xl p-3 md:p-4 flex flex-col items-center justify-between
               ${index === 0 ? "md:w-1/4 " : "md:w-1/5 "}
               ${index === 0 ? "border border-yellow-400 shadow-lg" : " border-gray-300 dark:border-gray-600 shadow-md border"}`}
           >
