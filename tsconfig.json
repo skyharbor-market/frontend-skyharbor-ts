@@ -20,7 +20,8 @@
       "@/components/*": ["components/*"],
       "@/ergofunctions/*": ["ergofunctions/*"],
       "@/lib/*": ["lib/*"],
-      "@/styles/*": ["styles/*"]
+      "@/styles/*": ["styles/*"],
+      "@/hooks/*": ["hooks/*"]
     },
     "forceConsistentCasingInFileNames": true
   },

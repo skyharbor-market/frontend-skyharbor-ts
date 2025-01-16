@@ -18,7 +18,7 @@ interface LayoutProps {
 export default function Layout({ children, setTheme, theme }: LayoutProps) {
   return (
     <div
-      className={`bg-white dark:bg-black dark:text-white`}
+      className={`bg-white dark:bg-black dark:text-white transition-colors duration-300`}
       style={{ fontFamily: "Noto Sans" }}
     >
       <div className="z-20">
