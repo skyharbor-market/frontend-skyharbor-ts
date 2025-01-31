@@ -37,7 +37,7 @@ const TopSales = (props: Props) => {
 
   return (
     <div className="">
-      <h2 className="text-2xl md:text-3xl font-bold  mb-4 md:mb-6 flex items-center justify-center">
+      <h2 className="text-2xl md:text-3xl font-bold  mb-4 md:mb-2 flex items-center justify-center">
         <ArrowTrendingUpIcon className="w-6 h-6 md:w-8 md:h-8 mr-2" />
         Top Monthly Sales
       </h2>

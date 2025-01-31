@@ -1,4 +1,8 @@
 import { motion, AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
+import { BsLink } from 'react-icons/bs';
+import { FaExternalLinkAlt } from 'react-icons/fa';
+import { MdOutlet } from 'react-icons/md';
 
 interface AnimatedBackgroundProps {
   currentTheme: string;
@@ -16,7 +20,7 @@ const AnimatedBackground = ({ currentTheme }: AnimatedBackgroundProps) => {
             filter: 'brightness(1.5)'
           }}
           animate={{ 
-            opacity: 0.75,
+            opacity: 0.25,
             scale: 1,
             filter: 'brightness(1)'
           }}
@@ -45,6 +49,12 @@ const AnimatedBackground = ({ currentTheme }: AnimatedBackgroundProps) => {
           }}
         /> */}
       </AnimatePresence>
+      <Link href="/collection/cybercitizens" >
+      <div className="absolute top-4 right-4 backdrop-blur-sm bg-white/10 dark:bg-black/10 hover:bg-white/20 dark:hover:bg-black/20 text-black dark:text-white text-xs px-4 py-2 rounded-full shadow-lg border border-white/20 dark:border-gray-800/50 transition-all duration-300 flex items-center gap-2 group cursor-pointer">
+        <p className="font-medium">Background by CyberCitizens</p>
+        <FaExternalLinkAlt className="text-[10px] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
+      </div>
+      </Link>
     </div>
   );
 };

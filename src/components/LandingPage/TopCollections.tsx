@@ -17,6 +17,7 @@ type CollectionItemProps = {
   index: number;
   startIndex: number;
   isHighlighted: boolean;
+  onClick: () => void;
 };
 
 const CollectionItem: React.FC<CollectionItemProps> = ({
@@ -24,6 +25,7 @@ const CollectionItem: React.FC<CollectionItemProps> = ({
   index,
   startIndex,
   isHighlighted,
+  onClick
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -38,6 +40,7 @@ const CollectionItem: React.FC<CollectionItemProps> = ({
       }`}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
+      onClick={onClick}
     >
       <div className="flex items-center z-10">
         <img
@@ -79,6 +82,79 @@ const LoadingState = () => (
     </div>
   </div>
 );
+
+type FeaturedCollectionProps = {
+  collections: any[];
+  currentIndex: number;
+};
+
+const FeaturedCollection: React.FC<FeaturedCollectionProps> = ({ collections, currentIndex }) => {
+  return (
+    <AnimatePresence mode="wait" initial={false}>
+      {collections.map(
+        (collection: any, index: number) =>
+          index === currentIndex && (
+            <motion.div
+              key={`${collection.id}-${index}`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.1 }}
+            >
+              <div className="mx-auto flex flex-col md:flex-row justify-between max-w-2xl gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none">
+                <div className="lg:max-w-lg">
+                  <h2 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+                    #{index + 1} {collection.name}
+                  </h2>
+                  <p className="mt-6 leading-7 text-gray-300 h-32 overflow-hidden">
+                    <span className="line-clamp-4 sm:line-clamp-4 md:line-clamp-4">
+                      {collection.description}
+                    </span>
+                  </p>
+
+                  <div className="mt-3 lg:mt-3">
+                    <div className="inline-flex items-baseline px-4 pb-2 pt-1.5 rounded-lg bg-white/10 backdrop-blur-sm">
+                      <span className="text-2xl font-bold text-white">
+                        {formatValueWithDP(
+                          longToCurrency(
+                            collection.sum,
+                            supportedCurrencies[0].decimal
+                          ),
+                          0
+                        )}
+                        <span className="ml-1 text-lg font-semibold">
+                          ERG
+                        </span>
+                        <span className="text-xs font-semibold text-white ml-1">
+                          Monthly Volume
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                  <Link href={`/collection/${collection.sys_name}`}>
+                    <button className="bg-blue-500 hover:bg-blue-600 transition-colors text-white px-3 py-2 rounded-lg text-sm mt-3">
+                      View Collection
+                    </button>
+                  </Link>
+                </div>
+                <div className="w-full md:w-1/3">
+                  <div
+                    className="relative -z-20 min-w-full max-w-xl rounded-xl shadow-xl ring-1 ring-white/10 lg:row-span-4"
+                    style={{
+                      backgroundImage: `url(${collection.card_image})`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                      height: "250px",
+                    }}
+                  />
+                </div>
+              </div>
+            </motion.div>
+          )
+      )}
+    </AnimatePresence>
+  );
+};
 
 const TopCollections = (props: Props) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -127,70 +203,8 @@ const TopCollections = (props: Props) => {
     <div>
       <div className="mx-auto mt-8 max-w-7xl sm:px-6 lg:px-8">
         <div className="relative isolate overflow-hidden bg-gray-900 z-[2] px-6 py-12 rounded-xl sm:rounded-3xl sm:px-16 sm:py-20 lg:py-20 xl:px-24">
-          <AnimatePresence mode="wait" initial={false}>
-            {collections.map(
-              (collection: any, index: number) =>
-                index === currentIndex && (
-                  <motion.div
-                    key={collection.id}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.1 }}
-                  >
-                    <div className="mx-auto flex flex-col md:flex-row justify-between max-w-2xl gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none">
-                      <div className="lg:max-w-lg">
-                        <h2 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
-                          #{index + 1} {collection.name}
-                        </h2>
-                        <p className="mt-6 leading-7 text-gray-300 h-32 overflow-hidden">
-                          <span className="line-clamp-4 sm:line-clamp-4 md:line-clamp-4">
-                            {collection.description}
-                          </span>
-                        </p>
-
-                        <div className="mt-3 lg:mt-3">
-                          <div className="inline-flex items-baseline px-4 pb-2 pt-1.5 rounded-lg bg-white/10 backdrop-blur-sm">
-                            <span className="text-2xl font-bold text-white">
-                              {formatValueWithDP(
-                                longToCurrency(
-                                  collection.sum,
-                                  supportedCurrencies[0].decimal
-                                ),
-                                0
-                              )}
-                              <span className="ml-1 text-lg font-semibold">
-                                ERG
-                              </span>
-                              <span className="text-xs font-semibold text-white ml-1">
-                                Monthly Volume
-                              </span>
-                            </span>
-                          </div>
-                        </div>
-                        <Link href={`/collection/${collection.sys_name}`}>
-                          <button className="bg-blue-500 hover:bg-blue-600 transition-colors text-white px-3 py-2 rounded-lg text-sm mt-3">
-                            View Collection
-                          </button>
-                        </Link>
-                      </div>
-                      <div className="w-full md:w-1/3">
-                        <div
-                          className="relative -z-20 min-w-full max-w-xl rounded-xl shadow-xl ring-1 ring-white/10 lg:row-span-4"
-                          style={{
-                            backgroundImage: `url(${collection.card_image})`,
-                            backgroundSize: "cover",
-                            backgroundPosition: "center",
-                            height: "250px",
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </motion.div>
-                )
-            )}
-          </AnimatePresence>
-
+          <FeaturedCollection collections={collections} currentIndex={currentIndex} />
+          
           <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
             {collections.map((_: any, index: number) => (
               <button
@@ -223,31 +237,28 @@ const TopCollections = (props: Props) => {
                 {collections
                   .slice(0, middleIndex)
                   .map((collection: any, index: number) => (
-                    <div onClick={() => goToSlide(index)} key={collection.id}>
-                      <CollectionItem
-                        collection={collection}
-                        index={index}
-                        startIndex={0}
-                        isHighlighted={index === currentIndex}
-                      />
-                    </div>
+                    <CollectionItem
+                      key={collection.id}
+                      collection={collection}
+                      index={index}
+                      startIndex={0}
+                      isHighlighted={index === currentIndex}
+                      onClick={() => goToSlide(index)}
+                    />
                   ))}
               </div>
               <div className="space-y-4">
                 {collections
                   .slice(middleIndex)
                   .map((collection: any, index: number) => (
-                    <div
-                      onClick={() => goToSlide(index + middleIndex)}
+                    <CollectionItem
                       key={collection.id}
-                    >
-                      <CollectionItem
-                        collection={collection}
-                        index={index}
-                        startIndex={middleIndex}
-                        isHighlighted={index + middleIndex === currentIndex}
-                      />
-                    </div>
+                      collection={collection}
+                      index={index}
+                      startIndex={middleIndex}
+                      isHighlighted={index + middleIndex === currentIndex}
+                      onClick={() => goToSlide(index + middleIndex)}
+                    />
                   ))}
               </div>
             </div>

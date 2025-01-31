@@ -21,6 +21,9 @@ const LatestSales = ({
     variables: {
       limit,
       offset: 0,
+      orderBy: {
+        list_time: "desc"
+      }
     },
     notifyOnNetworkStatusChange: true,
   });
