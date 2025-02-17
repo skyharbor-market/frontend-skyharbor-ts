@@ -86,6 +86,7 @@ const SellModal = ({
       }
     } catch (error) {
       console.error("ERROR", error);
+      // @ts-ignore
       toast.error(`Error listing: ${error?.response?.data?.message}`);
     } finally {
       setIsSubmitting(false);
