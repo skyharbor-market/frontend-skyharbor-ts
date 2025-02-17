@@ -83,72 +83,80 @@ export default function WalletPage() {
     let ids = [];
     let amounts = {};
 
-    // Get wallet address/addresses
-    const dappConnector = getWalletConnector();
-    if (dappConnector === "nautilus" || dappConnector === "safew") {
-      const tokens = await getTokens();
-      ids = Object.keys(tokens);
-      ids.forEach((key) => (amounts[key] = tokens[key].amount));
-    } else {
-      ids = (await getBalance(getWalletAddress())).tokens.map((tok) => {
-        amounts[tok.tokenId] = tok.amount;
-        return tok.tokenId;
-      });
-    }
-
-    // CHECK FOR DUPLICATES
-    // IN THE CLEAR
-    // CHECK FOR DUPLICATES
-
-    let decoded = [];
-    let apiCalls = [];
-
-    for (let i = 0; i < ids.length; i++) {
-      apiCalls.push(decodeArtwork(null, ids[i], false));
-    }
-
     try {
-      const res = await Promise.allSettled(apiCalls);
+      // Get wallet address/addresses
+      const dappConnector = getWalletConnector();
+      if (dappConnector === "nautilus" || dappConnector === "safew") {
+        const tokens = await getTokens();
+        ids = Object.keys(tokens);
+        ids.forEach((key) => (amounts[key] = tokens[key].amount));
+      } else {
+        ids = (await getBalance(getWalletAddress())).tokens.map((tok) => {
+          amounts[tok.tokenId] = tok.amount;
+          return tok.tokenId;
+        });
+      }
 
-      const data = res
-        .filter((r) => r.status === "fulfilled") // Filter out rejected promises
-        .map((r) => r.value); // Map to the value of fulfilled promises
+      let decoded = [];
+      let apiCalls = [];
 
-      decoded = data.flat();
-    } catch (e) {
-      throw Error("Couldn't process wallet tokens: ", e);
-    }
+      // Create array of promises for each token decode attempt
+      for (let i = 0; i < ids.length; i++) {
+        apiCalls.push(
+          decodeArtwork(null, ids[i], false)
+            .then(result => ({
+              status: 'fulfilled',
+              value: result
+            }))
+            .catch(error => ({
+              status: 'rejected',
+              tokenId: ids[i],
+              error
+            }))
+        );
+      }
 
-    try {
+      // Wait for all promises to settle
+      const results = await Promise.all(apiCalls);
+
+      // Filter successful decodes and log errors
+      decoded = results
+        .filter(result => result.status === 'fulfilled')
+        .map(result => result.value)
+        .flat();
+
+      // Log failed decodes for debugging
+      const failedDecodes = results.filter(result => result.status === 'rejected');
+      if (failedDecodes.length > 0) {
+        console.warn('Failed to decode some tokens:', failedDecodes);
+      }
+
+      // Add amounts to successfully decoded tokens
       for (let d of decoded) {
-        // Exit if not mounted
-        console.log("mounted", mounted);
-
-        // if (!mounted) {
-        //   return;
-        // }
-        if (d.tokenId) {
+        if (d?.tokenId) {
           d.amount = amounts[d.tokenId];
         }
       }
+
+      // Filter NFTs and save to redux
+      const filteredNFTs = decoded.filter((bx) => bx?.isArtwork);
+      
+      console.log("Decoded NFTs:", filteredNFTs);
+      
+      dispatch(setTokens(filteredNFTs));
+      setArtworks(filteredNFTs);
+      setLoading(false);
+
     } catch (err) {
-      console.log("SUPER ERROR", err);
+      console.error("Error getting tokens:", err);
+      // Still update state with any tokens we managed to decode
+      if (decoded?.length > 0) {
+        const filteredNFTs = decoded.filter((bx) => bx?.isArtwork);
+        dispatch(setTokens(filteredNFTs));
+        setArtworks(filteredNFTs);
+      }
+      setLoading(false);
     }
-
-    // Save to redux even if wallet page isnt loaded anymore
-    const filteredNFTs = decoded.filter((bx) => bx.isArtwork);
-
-    console.log("filteredNFTs", filteredNFTs);
-
-    dispatch(setTokens(filteredNFTs));
-
-    // if (mounted) {
-    setArtworks(filteredNFTs);
-    setLoading(false);
-    console.log("done.", filteredNFTs);
-    // }
-
-    return;
   }
 
   // const searchFilter = () => {
