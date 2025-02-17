@@ -18,11 +18,6 @@ export default function WalletCard({
   const [selectedToken, setSelectedToken] = useState({});
 
   const handleSellButton = (tokenId, nft_name, royalty, artist) => {
-    if(!verified) {
-      showMsg("You cannot list unverified collections");
-      return;
-    }
-    
     setSelectedToken({
       tokenId: tokenId,
       nft_name: nft_name,
@@ -106,7 +101,7 @@ export default function WalletCard({
               box.artist
             )
           }
-          disabled={currentlySelecting || box.nft_type === "audio" || !verified}
+          disabled={currentlySelecting || box.nft_type === "audio"}
         >
           Sell
         </button>
