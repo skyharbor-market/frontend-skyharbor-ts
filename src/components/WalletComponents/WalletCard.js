@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { friendlyToken } from "../../ergofunctions/helpers";
+import { friendlyToken, showMsg } from "../../ergofunctions/helpers";
 import ArtworkMedia from "../artworkMedia";
 import { bulk_list } from "../../ergofunctions/marketfunctions/bulkList";
 import { FaCheckCircle } from "react-icons/fa";
@@ -18,6 +18,11 @@ export default function WalletCard({
   const [selectedToken, setSelectedToken] = useState({});
 
   const handleSellButton = (tokenId, nft_name, royalty, artist) => {
+    if(!verified) {
+      showMsg("You cannot list unverified collections");
+      return;
+    }
+    
     setSelectedToken({
       tokenId: tokenId,
       nft_name: nft_name,
@@ -101,7 +106,7 @@ export default function WalletCard({
               box.artist
             )
           }
-          disabled={currentlySelecting || box.nft_type === "audio"}
+          disabled={currentlySelecting || box.nft_type === "audio" || !verified}
         >
           Sell
         </button>

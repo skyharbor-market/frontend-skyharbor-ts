@@ -86,7 +86,7 @@ const SellModal = ({
       }
     } catch (error) {
       console.error("ERROR", error);
-      toast.error("There was an error submitting the transaction");
+      toast.error(`Error listing: ${error?.response?.data?.message}`);
     } finally {
       setIsSubmitting(false);
     }
