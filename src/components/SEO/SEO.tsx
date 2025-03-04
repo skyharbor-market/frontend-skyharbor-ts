@@ -9,7 +9,7 @@ interface SEOProps {
 }
 
 const defaultDescription = "Welcome to the premium NFT marketplace on the Ergo blockchain. Buy and sell NFTs with ease.";
-const defaultImage = "/assets/images/cloudgnome.webp";
+const defaultImage = "assets/images/skyharborlogo.png";
 
 export default function SEO({ 
   title, 
