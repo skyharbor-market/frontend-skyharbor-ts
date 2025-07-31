@@ -19,7 +19,7 @@ export const globalMeta = {
 
 // export const skyHarborApi =  "https://skyharbor-server.net"
 export const skyHarborApi = "https://api.skyharbor.io";
-export const skyHarborTestApi =  "https://testapi.skyharbor.io"
+export const skyHarborTestApi =  "https://api.skyharbor.io"
 
 // export const skyHarborApi =  "https://testapi.skyharbor.io"
 // export const skyHarborApiRoot = "testapi.skyharbor.io"
