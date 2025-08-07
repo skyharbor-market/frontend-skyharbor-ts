@@ -58,7 +58,7 @@ export default function WalletPage() {
 
   const [openAddresses, setOpenAddresses] = React.useState(false);
 
-  const [currentTab, setCurrentTab] = useState("owned");
+  const [currentTab, setCurrentTab] = useState("for_sale");
 
   // for loading counter
   const countRef = useRef(LoadingCount);
@@ -285,9 +285,9 @@ export default function WalletPage() {
 
         <Tabs
           tabs={[
-            { name: "Owned", value: "owned", icon: FaImage },
+            // { name: "Owned", value: "owned", icon: FaImage },
             { name: "For Sale", value: "for_sale", icon: MdOutlineSell },
-            { name: "Sold", value: "sold", icon: MdSell },
+            // { name: "Sold", value: "sold", icon: MdSell },
           ]}
           currentTab={currentTab}
           setTab={(val) => {
