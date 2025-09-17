@@ -1,8 +1,5 @@
-import { skyHarborApi, skyHarborTestApi } from "@/ergofunctions/consts";
-import { signWalletTx } from "@/ergofunctions/utxos";
-import axios from "axios";
+import { refund } from "@/ergofunctions/marketfunctions/refund";
 import { BuyBoxInterface, EmptyBuyBoxInterface } from "interfaces/BuyBoxInterface";
-import { TransactionPromiseInterface } from "interfaces/TransactionPromiseInterface";
 
 interface CancelInterface {
   buyBox: BuyBoxInterface | EmptyBuyBoxInterface;
@@ -11,25 +8,24 @@ interface CancelInterface {
 
 
 export const delistNft = async ({ buyBox, userAddresses }: CancelInterface) => {
-  const builtTx = await delistNftApi({ buyBox, userAddresses });
-
-  console.log(builtTx)
-  return await signWalletTx(builtTx.transaction_to_sign);
+  // Use local WASM function for delisting
+  return await refund(buyBox);
 };
 
-export const delistNftApi = async ({ buyBox, userAddresses }: CancelInterface): Promise<TransactionPromiseInterface> => {
-  try {
-    const res = await axios.post(
-      `${skyHarborTestApi}/api/transactions/delist`,
-      {
-        userAddresses: userAddresses,
-        cancelBox: buyBox,
-      }
-    );
-    const transaction_to_sign: TransactionPromiseInterface = res.data;
+// Legacy API function - kept for reference but not used
+// export const delistNftApi = async ({ buyBox, userAddresses }: CancelInterface): Promise<TransactionPromiseInterface> => {
+//   try {
+//     const res = await axios.post(
+//       `${skyHarborTestApi}/api/transactions/delist`,
+//       {
+//         userAddresses: userAddresses,
+//         cancelBox: buyBox,
+//       }
+//     );
+//     const transaction_to_sign: TransactionPromiseInterface = res.data;
 
-    return transaction_to_sign;
-  } catch (err: any) {
-    throw err?.response?.data;
-  }
-};
+//     return transaction_to_sign;
+//   } catch (err: any) {
+//     throw err?.response?.data;
+//   }
+// };

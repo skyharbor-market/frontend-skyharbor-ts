@@ -1,73 +1,46 @@
-import React, { useEffect } from "react";
-import { useQuery, gql } from "@apollo/client";
-import { withApollo } from "../../lib/withApollo";
+import React, { useEffect, useState } from "react";
+import { getUserListedNFTsFromChain } from "../../ergofunctions/getUserListedNFTsFromChain";
 import NFTCard from "../NFTCard/NFTCard";
 import LoadingCard from "../NFTCard/LoadingCard";
 
-const GET_USER_SALES = gql`
-  query getUserSales($addresses: [String!]) {
-    sales(
-      where: {
-        _and: { seller_address: { _in: $addresses }, status: { _eq: "active" } }
-      }
-      order_by: { list_time: desc }
-    ) {
-      box_id
-      box_json
-      buyer_address
-      buyer_ergotree
-      currency
-      completion_time
-      creation_height
-      currency
-      creation_tx
-      id
-      list_time
-      nerg_royalty_value
-      nerg_sale_value
-      nerg_service_value
-      sales_address_id
-      seller_address
-      seller_ergotree
-      spent_tx
-      status
-      token_amount
-      token_id
-      sales_address {
-        id
-        address
-      }
-      token {
-        ipfs_art_hash
-        ipfs_art_url
-        nft_type
-        nft_name
-        nft_desc
-        royalty_int
-        royalty_address
-        token_collection {
-          sys_name
-          name
-          verified
-        }
-      }
-    }
-  }
-`;
+// GraphQL query removed - now using direct blockchain query
 
 function UserListedTokens({ addresses }) {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [data, setData] = useState({ sales: [] });
   let mounted = true;
-
-  // Hasura
-  const { loading, error, data } = useQuery(GET_USER_SALES, {
-    variables: {
-      addresses: addresses,
-    },
-    fetchPolicy: "no-cache",
-  });
 
   useEffect(() => {
     mounted = true;
+    
+    // Fetch listed NFTs from blockchain
+    const fetchListedNFTs = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        const listedNFTs = await getUserListedNFTsFromChain(addresses);
+        
+        if (mounted) {
+          setData({ sales: listedNFTs });
+          setLoading(false);
+        }
+      } catch (err) {
+        console.error("Error fetching listed NFTs:", err);
+        if (mounted) {
+          setError(err);
+          setLoading(false);
+        }
+      }
+    };
+    
+    if (addresses && addresses.length > 0) {
+      fetchListedNFTs();
+    } else {
+      setLoading(false);
+      setData({ sales: [] });
+    }
 
     return () => {
       mounted = false;
@@ -163,4 +136,4 @@ function UserListedTokens({ addresses }) {
   );
 }
 
-export default withApollo()(UserListedTokens);
+export default UserListedTokens;

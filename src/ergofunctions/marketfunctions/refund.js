@@ -9,6 +9,7 @@ import {
   getWalletUUID,
   getWalletType,
 } from "../helpers";
+import { get_utxos } from "../ergolibUtils";
 import { txFee, CHANGE_BOX_ASSET_LIMIT, skyHarborApi } from "../consts";
 import { min_value } from "../conf";
 import { currentBlock } from "../explorer";
@@ -35,7 +36,6 @@ const minterServiceAddress =
 
 export async function refund(cancelBox) {
   return refundFleet(cancelBox);
-  return;
 
   const wasm = await ergolib;
 
