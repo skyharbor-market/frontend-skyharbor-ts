@@ -1,6 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 
 const ShutdownNotice: React.FC = () => {
   const router = useRouter();
@@ -10,53 +12,67 @@ const ShutdownNotice: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-2xl w-full space-y-8">
-        <div className="bg-white dark:bg-gray-800 shadow-2xl rounded-lg p-8 md:p-12">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
-              Important Notice
-            </h1>
-            
-            <div className="space-y-4 mb-8">
-              <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300">
-                SkyHarbor is shutting down
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md space-y-8">
+        <div className="flex flex-col items-center">
+           <div className="relative w-24 h-24 mb-6">
+            <img
+              src="/assets/images/skyharborlogo.png"
+              alt="SkyHarbor Logo"
+              // fill
+              style={{ objectFit: 'contain' }}
+              className="mx-auto"
+              // priority
+            />
+          </div>
+          <h2 className="mt-2 text-center text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
+            SkyHarbor is Shutting Down
+          </h2>
+          <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
+            Thank you for being a part of our journey.
+          </p>
+        </div>
+
+        <div className="bg-white dark:bg-gray-800 py-8 px-4 shadow sm:rounded-lg sm:px-10 border border-gray-100 dark:border-gray-700">
+          <div className="space-y-6">
+            <div>
+               <p className="text-base text-gray-700 dark:text-gray-300 text-center">
+                We appreciate every user who has supported our platform. As we wind down operations, please ensure you retrieve your assets.
               </p>
-              
-              <p className="text-lg text-gray-600 dark:text-gray-400">
-                Thank you for being part of our journey. We appreciate every user who has supported and used our platform.
-              </p>
-              
-              <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4 mt-6">
-                <p className="text-base font-semibold text-yellow-800 dark:text-yellow-200 mb-2">
-                  Action Required
-                </p>
-                <p className="text-sm text-yellow-700 dark:text-yellow-300">
-                  Please visit your wallet to delist any NFTs you currently have listed on the marketplace.
-                </p>
+            </div>
+
+            <div className="rounded-md bg-yellow-50 dark:bg-yellow-900/30 p-4 border border-yellow-200 dark:border-yellow-800">
+              <div className="flex">
+                <div className="flex-shrink-0">
+                  <ExclamationTriangleIcon className="h-5 w-5 text-yellow-400" aria-hidden="true" />
+                </div>
+                <div className="ml-3">
+                  <h3 className="text-sm font-medium text-yellow-800 dark:text-yellow-200">
+                    Action Required
+                  </h3>
+                  <div className="mt-2 text-sm text-yellow-700 dark:text-yellow-300">
+                    <p>
+                      Please visit your wallet page to delist any NFTs you currently have listed on the marketplace before the platform goes offline.
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div className="space-y-4">
+            <div>
               <button
                 onClick={handleGoToWallet}
-                className="w-full sm:w-auto inline-flex justify-center items-center px-8 py-4 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-colors duration-200 shadow-lg hover:shadow-xl"
+                className="flex w-full justify-center rounded-md border border-transparent bg-blue-600 py-3 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 transition-colors duration-200"
               >
                 Go to Wallet to Delist NFTs
               </button>
-              
-              <p className="text-sm text-gray-500 dark:text-gray-400 mt-4">
-                If you have any questions, please contact support.
-              </p>
             </div>
           </div>
         </div>
         
-        <div className="text-center">
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            Thank you for using SkyHarbor
-          </p>
-        </div>
+        <p className="text-center text-xs text-gray-500 dark:text-gray-500">
+          &copy; {new Date().getFullYear()} SkyHarbor. All rights reserved.
+        </p>
       </div>
     </div>
   );
