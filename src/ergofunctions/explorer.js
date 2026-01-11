@@ -35,11 +35,22 @@ export function unspentBoxesFor(address) {
 }
 
 export async function unspentBoxesForV1(address) {
-  return getRequest(`/boxes/unspent/byAddress/${address}`, explorerApiV1).then(
-    (res) => {
-      return res.items;
-    }
-  );
+  const limit = 100;
+  let offset = 0;
+  let allItems = [];
+
+  while (true) {
+    const res = await getRequest(
+      `/boxes/unspent/byAddress/${address}?limit=${limit}&offset=${offset}`,
+      explorerApiV1
+    );
+    if (!res || !res.items || res.items.length === 0) break;
+    allItems = allItems.concat(res.items);
+    if (res.items.length < limit) break; // No more pages
+    offset += limit;
+  }
+
+  return allItems;
 }
 
 export function getBoxesForAsset(asset) {

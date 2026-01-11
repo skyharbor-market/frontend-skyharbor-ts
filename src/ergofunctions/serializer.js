@@ -264,11 +264,21 @@ export async function decodeArtwork(box, tokenId, considerArtist = true) {
             inf.audioUrl = resolveIpfs(await decodeStr(inf.ipfs_art_url));
             inf.ipfs_art_url = null;
           }
-        } else if (inf.ipfs_art_url)
-          inf.ipfs_art_url = resolveIpfs(
-            await decodeStr(inf.ipfs_art_url),
-            inf.isVideo
-          ).replace("http://", "https://");
+        } else if (inf.ipfs_art_url) {
+          try {
+            // First try tuple format (for 3D NFTs with model + preview image)
+            const two = await decodeColTuple(inf.ipfs_art_url);
+            // Use the second URL (preview image) for display
+            inf.ipfs_art_url = resolveIpfs(two[1], inf.isVideo).replace("http://", "https://");
+            inf.modelUrl = resolveIpfs(two[0]); // Store 3D model URL if needed
+          } catch (e) {
+            // Fallback to single URL format
+            inf.ipfs_art_url = resolveIpfs(
+              await decodeStr(inf.ipfs_art_url),
+              inf.isVideo
+            ).replace("http://", "https://");
+          }
+        }
       }
     } catch (e) {
       console.error("decodeArtwork error: ", e);
@@ -365,11 +375,21 @@ export async function decodeNFT(box, tokenId) {
             inf.audioUrl = resolveIpfs(await decodeStr(inf.ipfs_art_url));
             inf.ipfs_art_url = null;
           }
-        } else if (inf.ipfs_art_url)
-          inf.ipfs_art_url = resolveIpfs(
-            await decodeStr(inf.ipfs_art_url),
-            inf.isVideo
-          ).replace("http://", "https://");
+        } else if (inf.ipfs_art_url) {
+          try {
+            // First try tuple format (for 3D NFTs with model + preview image)
+            const two = await decodeColTuple(inf.ipfs_art_url);
+            // Use the second URL (preview image) for display
+            inf.ipfs_art_url = resolveIpfs(two[1], inf.isVideo).replace("http://", "https://");
+            inf.modelUrl = resolveIpfs(two[0]); // Store 3D model URL if needed
+          } catch (e) {
+            // Fallback to single URL format
+            inf.ipfs_art_url = resolveIpfs(
+              await decodeStr(inf.ipfs_art_url),
+              inf.isVideo
+            ).replace("http://", "https://");
+          }
+        }
       }
     } catch (e) {
       inf.isArtwork = false;
