@@ -10,6 +10,16 @@ function UserListedTokens({ addresses }) {
   if (isLoading) {
     return (
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5">
+        <p className="text-center text-gray-600 dark:text-gray-400 mb-4">
+          Fetching all tokens on the marketplace smart contract and filtering yours, this may
+          take a while...
+        </p>
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5">
+          {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((item) => {
+            return <LoadingCard key={item} />;
+          })}
+        </div>
+
         {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((item) => {
           return <LoadingCard key={item} />;
         })}
