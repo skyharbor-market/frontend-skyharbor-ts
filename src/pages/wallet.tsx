@@ -1,204 +1,44 @@
 // @ts-nocheck
 
-import React, { Fragment, useEffect, useRef, useState } from "react";
-import { useRouter } from "next/router";
-import Head from "next/head";
-import Link from "next/link";
+import React, { Fragment, useEffect, useState } from "react";
 import { setTokens } from "../redux/reducers/walletSlice";
 import { useSelector, useDispatch } from "react-redux";
-import axios from "axios";
-// import {Button, Col, Row,} from 'reactstrap';
 import {
-  getWalletAddress,
-  isAssembler,
   isWalletSaved,
-  getWalletConnector,
-  friendlyToken,
   friendlyAddress,
 } from "../ergofunctions/helpers";
-// import {css} from '@emotion/core';
-// import 'react-h5-audio-player/lib/styles.css';
-// import ArtworkMedia from "../components/artworkMedia";
-import { getTokens } from "../ergofunctions/walletUtils";
-
-import { decodeArtwork, decodeNFT } from "../ergofunctions/serializer";
-// import PropagateLoader from "react-spinners/PropagateLoader";
-import { getBalance } from "../ergofunctions/explorer";
 import UserListedTokens from "../components/WalletComponents/UserListedTokens";
 import WalletList from "../components/WalletComponents/WalletList";
 
-import { motion } from "framer-motion";
 import UserActivity from "../components/WalletComponents/UserActivity";
 import Tabs from "@/components/Tabs/Tabs";
-import { FaChevronDown, FaChevronUp, FaImage, FaUserMd } from "react-icons/fa";
-import { ImPriceTag } from "react-icons/im";
+import { FaChevronDown, FaChevronUp, FaImage } from "react-icons/fa";
 import { MdOutlineSell, MdSell } from "react-icons/md";
 import SEO from '@/components/SEO/SEO';
+import { useOwnedNFTs } from "@/hooks/useWalletQueries";
 
 export default function WalletPage() {
-  let mounted = true;
-
-  // const { colorMode, toggleColorMode } = useColorMode()
-
-  // const router = useRouter();
-  // const toast = useToast()
-
   // Redux
-  const {addresses: userAddresses, tokens: userTokens} = useSelector((state) => state.wallet);
+  const { addresses: userAddresses } = useSelector((state) => state.wallet);
   const dispatch = useDispatch();
-  // const userAddresses = useSelector((state) => state.wallet.addresses);
-  console.log("userAddresses,", userAddresses)
 
-  const [loading, setLoading] = React.useState(false);
-  const [artworks, setArtworks] = React.useState(userTokens);
-  const [filteredArtworks, setFilteredArtworks] = React.useState(userTokens);
-  const [walletSaved, setWalletSaved] = React.useState(false);
-  const [totalArtworks, setTotalArtworks] = React.useState(0);
-  const [LoadingCount, setLoadingCount] = React.useState(0);
-
-  const [openAddresses, setOpenAddresses] = React.useState(false);
-
+  const [walletSaved, setWalletSaved] = useState(false);
+  const [openAddresses, setOpenAddresses] = useState(false);
   const [currentTab, setCurrentTab] = useState("for_sale");
 
-  // for loading counter
-  const countRef = useRef(LoadingCount);
-  countRef.current = LoadingCount;
+  // Fetch owned NFTs using TanStack Query
+  const { data: artworks = [], isLoading: loading } = useOwnedNFTs(userAddresses);
 
-  async function getTokensFromAddress(addr) {
-    let tokens = {}(
-      await getBalance(addr).tokens.forEach((ass) => {
-        if (!Object.keys(tokens).includes(ass.tokenId))
-          tokens[ass.tokenId] = {
-            amount: 0,
-            name: ass.name,
-            tokenId: ass.tokenId,
-          };
-        tokens[ass.tokenId].amount += parseInt(ass.amount);
-      })
-    );
-  }
-
-  async function gqlGetTokens() {
-    setLoading(true);
-    let ids = [];
-    let amounts = {};
-
-    try {
-      // Get wallet address/addresses
-      const dappConnector = getWalletConnector();
-      if (dappConnector === "nautilus" || dappConnector === "safew") {
-        const tokens = await getTokens();
-        ids = Object.keys(tokens);
-        ids.forEach((key) => (amounts[key] = tokens[key].amount));
-      } else {
-        ids = (await getBalance(getWalletAddress())).tokens.map((tok) => {
-          amounts[tok.tokenId] = tok.amount;
-          return tok.tokenId;
-        });
-      }
-
-      let decoded = [];
-      let apiCalls = [];
-
-      // Create array of promises for each token decode attempt
-      for (let i = 0; i < ids.length; i++) {
-        apiCalls.push(
-          decodeArtwork(null, ids[i], false)
-            .then(result => ({
-              status: 'fulfilled',
-              value: result
-            }))
-            .catch(error => ({
-              status: 'rejected',
-              tokenId: ids[i],
-              error
-            }))
-        );
-      }
-
-      // Wait for all promises to settle
-      const results = await Promise.all(apiCalls);
-
-      // Filter successful decodes and log errors
-      decoded = results
-        .filter(result => result.status === 'fulfilled')
-        .map(result => result.value)
-        .flat();
-
-      // Log failed decodes for debugging
-      const failedDecodes = results.filter(result => result.status === 'rejected');
-      if (failedDecodes.length > 0) {
-        console.warn('Failed to decode some tokens:', failedDecodes);
-      }
-
-      // Add amounts to successfully decoded tokens
-      for (let d of decoded) {
-        if (d?.tokenId) {
-          d.amount = amounts[d.tokenId];
-        }
-      }
-
-      // Filter NFTs and save to redux
-      const filteredNFTs = decoded.filter((bx) => bx?.isArtwork);
-      
-      console.log("Decoded NFTs:", filteredNFTs);
-      
-      dispatch(setTokens(filteredNFTs));
-      setArtworks(filteredNFTs);
-      setLoading(false);
-
-    } catch (err) {
-      console.error("Error getting tokens:", err);
-      // Still update state with any tokens we managed to decode
-      if (decoded?.length > 0) {
-        const filteredNFTs = decoded.filter((bx) => bx?.isArtwork);
-        dispatch(setTokens(filteredNFTs));
-        setArtworks(filteredNFTs);
-      }
-      setLoading(false);
+  // Sync to Redux when data changes
+  useEffect(() => {
+    if (artworks.length > 0) {
+      dispatch(setTokens(artworks));
     }
-  }
+  }, [artworks, dispatch]);
 
-  // const searchFilter = () => {
-  //     if(search === "") {
-  //         setFilteredArtworks(artworks)
-  //         return
-  //     }
-
-  //     setFilteredArtworks(artworks.filter(filterBy(search)))
-  //     return
-  // }
-
-  // const filterBy = (term) => {
-  //     const escapeRegExp = (str) => str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")
-
-  //     const re = new RegExp(escapeRegExp(term), 'i')
-  //     return item => {
-  //       for (let prop in item) {
-  //         if (!item.hasOwnProperty(prop)) {
-  //           continue;
-  //         }
-  //         if (re.test(item[prop])) {
-  //           return true;
-  //         }
-  //       }
-  //       return false;
-  //     }
-  // }
-
-  React.useEffect(() => {
-    mounted = true;
-
+  // Check if wallet is saved
+  useEffect(() => {
     setWalletSaved(isWalletSaved());
-
-    if (isWalletSaved() && !loading) {
-      // loadArtworks()
-      gqlGetTokens();
-    }
-
-    return function cleanup() {
-      mounted = false;
-    };
   }, [userAddresses]);
 
   const renderTabs = () => {

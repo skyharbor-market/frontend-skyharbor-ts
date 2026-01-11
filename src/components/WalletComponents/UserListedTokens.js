@@ -1,53 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { getUserListedNFTsFromChain } from "../../ergofunctions/getUserListedNFTsFromChain";
+import React from "react";
 import NFTCard from "../NFTCard/NFTCard";
 import LoadingCard from "../NFTCard/LoadingCard";
-
-// GraphQL query removed - now using direct blockchain query
+import { useListedNFTs } from "../../hooks/useWalletQueries";
 
 function UserListedTokens({ addresses }) {
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [data, setData] = useState({ sales: [] });
-  let mounted = true;
+  // Fetch listed NFTs using TanStack Query
+  const { data: listedNFTs = [], isLoading, error } = useListedNFTs(addresses);
 
-  useEffect(() => {
-    mounted = true;
-    
-    // Fetch listed NFTs from blockchain
-    const fetchListedNFTs = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        
-        const listedNFTs = await getUserListedNFTsFromChain(addresses);
-        
-        if (mounted) {
-          setData({ sales: listedNFTs });
-          setLoading(false);
-        }
-      } catch (err) {
-        console.error("Error fetching listed NFTs:", err);
-        if (mounted) {
-          setError(err);
-          setLoading(false);
-        }
-      }
-    };
-    
-    if (addresses && addresses.length > 0) {
-      fetchListedNFTs();
-    } else {
-      setLoading(false);
-      setData({ sales: [] });
-    }
-
-    return () => {
-      mounted = false;
-    };
-  }, [addresses]);
-
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5">
         {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((item) => {
@@ -73,7 +33,7 @@ function UserListedTokens({ addresses }) {
         </p>
       </div>
     );
-  } else if (data.sales.length === 0) {
+  } else if (listedNFTs.length === 0) {
     return (
       <div>
         <strong
@@ -92,7 +52,7 @@ function UserListedTokens({ addresses }) {
   return (
     <div>
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5">
-        {data.sales.map((item, index) => {
+        {listedNFTs.map((item, index) => {
           const cardItem = {
             token_id: item.token_id,
             box_id: item.box_id,

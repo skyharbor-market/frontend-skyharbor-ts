@@ -13,8 +13,21 @@ import { ApolloProvider } from "@apollo/client";
 import createApolloClient from "@/lib/apolloClient";
 import { resolveValue, Toaster, ToastIcon } from "react-hot-toast";
 import { Transition } from "@headlessui/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const client = createApolloClient();
+
+// TanStack Query client with blockchain-appropriate defaults
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 30 * 1000, // 30 seconds - blockchain data doesn't change instantly
+      gcTime: 5 * 60 * 1000, // 5 minutes cache
+      refetchOnWindowFocus: false, // Prevent unnecessary blockchain calls
+      retry: 2, // Retry failed requests twice
+    },
+  },
+});
 
 // Store must be made here for next.js or else it wont work
 export const store = configureStore({
@@ -96,18 +109,20 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <Provider store={store}>
-      <ApolloProvider client={client}>
-        <Layout setTheme={setTheme} theme={theme}>
-          {/* <button
-            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-          >
-            Toggle Theme
-          </button> */}
-          <Component {...pageProps} />
-          {/* <Analytics /> */}
-          <TailwindToaster />
-        </Layout>
-      </ApolloProvider>
+      <QueryClientProvider client={queryClient}>
+        <ApolloProvider client={client}>
+          <Layout setTheme={setTheme} theme={theme}>
+            {/* <button
+              onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+            >
+              Toggle Theme
+            </button> */}
+            <Component {...pageProps} />
+            {/* <Analytics /> */}
+            <TailwindToaster />
+          </Layout>
+        </ApolloProvider>
+      </QueryClientProvider>
     </Provider>
   );
 }
