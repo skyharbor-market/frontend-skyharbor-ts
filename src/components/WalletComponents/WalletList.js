@@ -33,6 +33,7 @@ import { useQuery, gql, useApolloClient } from "@apollo/client";
 import { GET_ALL_MINT_ADDRESSES } from "../../lib/gqlQueries";
 import Fade from "../Fade/Fade";
 import LoadingCard from "../NFTCard/LoadingCard";
+import SkyHarborLoader from "../SkyHarborLoader/SkyHarborLoader";
 
 function WalletList({ artworks, tokensLoading }) {
   let mounted = true;
@@ -210,10 +211,12 @@ function WalletList({ artworks, tokensLoading }) {
       <div>
         {/* {loading && <Text fontSize={"sm"} color="gray.500" mb="4" textAlign={"center"}>Reloading NFTs... {LoadingCount} loaded.</Text>} */}
         {tokensLoading && (
-          <p className="my-3 text-center text-gray-500">
-            Loading NFTs, this may take a while. You can view the{" "}
-            <span>For Sale</span> and <span>Sold</span> tabs while you wait.
-          </p>
+          <div className="mb-8">
+            <SkyHarborLoader text="Loading your NFTs..." />
+            <p className="text-center text-sm text-gray-500 mt-2">
+              You can view the <span>For Sale</span> tab while you wait.
+            </p>
+          </div>
         )}
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-5">

@@ -17,6 +17,8 @@ import { MdOutlineSell, MdSell } from "react-icons/md";
 import SEO from '@/components/SEO/SEO';
 import { useOwnedNFTs } from "@/hooks/useWalletQueries";
 
+import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+
 export default function WalletPage() {
   // Redux
   const { addresses: userAddresses } = useSelector((state) => state.wallet);
@@ -120,8 +122,26 @@ export default function WalletPage() {
         description="View and manage your NFTs on SkyHarbor"
         url="https://skyharbor.io/wallet"
       />
-      <div>
-        {/* <div className="mb-6">{renderWalletAddresses()}</div> */}
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 min-h-screen">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">My Wallet</h1>
+        
+        <div className="mb-8 rounded-md bg-yellow-50 dark:bg-yellow-900/30 p-4 border border-yellow-200 dark:border-yellow-800">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <ExclamationTriangleIcon className="h-5 w-5 text-yellow-400" aria-hidden="true" />
+            </div>
+            <div className="ml-3">
+              <h3 className="text-sm font-medium text-yellow-800 dark:text-yellow-200">
+                Action Required: SkyHarbor Shutdown
+              </h3>
+              <div className="mt-2 text-sm text-yellow-700 dark:text-yellow-300">
+                <p>
+                  Please ensure you delist all your NFTs from the marketplace.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <Tabs
           tabs={[
@@ -135,7 +155,7 @@ export default function WalletPage() {
             setCurrentTab(val);
           }}
         />
-        <div className="mt-6">{renderTabs()}</div>
+        <div className="mt-8">{renderTabs()}</div>
       </div>
     </>
   );
