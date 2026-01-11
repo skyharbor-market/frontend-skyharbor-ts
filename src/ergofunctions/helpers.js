@@ -19,6 +19,7 @@ import moment from "moment";
 import { get } from "./rest";
 // import { theme } from "../components/theme";
 import { currencyToLong, getEncodedBoxSer, longToCurrency } from "./serializer";
+import { parseUtxo } from "./utxos";
 // const toast = createStandaloneToast({ theme: theme });
 import toast from "react-hot-toast";
 
@@ -381,36 +382,68 @@ export function visualizoMetadata(obj) {
 }
 
 export async function signTx(transaction_to_sign) {
-  // let sellerTx;
   let tx;
   console.log("Transaction To Sign", transaction_to_sign);
 
   try {
     tx = await ergo.sign_tx(transaction_to_sign);
   } catch (e) {
-    console.log(e);
-    showMsg("Error while sending funds!", true);
+    console.error("Sign error:", e);
+    showMsg("Error while signing transaction!", true);
     return;
   }
-  const txId = await ergo.submit_tx(tx);
 
-  console.log("tx id", txId);
-  if (true) {
-    if (txId !== undefined && txId.length > 0)
-      // showMsg("Necessary funds were sent. Now we wait until it's confirmed!");
+  console.log("Signed transaction:", JSON.stringify(tx));
+
+  try {
+    const txId = await ergo.submit_tx(tx);
+    console.log("tx id", txId);
+    if (txId !== undefined && txId.length > 0) {
       showMsgSuccess(
-        "Necessary funds were sent. Now we wait until it's confirmed!"
+        "Transaction submitted! Waiting for confirmation..."
       );
-    else showMsg("Error while sending funds!", true);
+    } else {
+      showMsg("Error: Transaction submission returned empty result", true);
+    }
+    return txId;
+  } catch (submitError) {
+    console.error("Submit error (full):", submitError);
+    console.error("Submit error type:", typeof submitError);
+    console.error("Submit error keys:", submitError ? Object.keys(submitError) : 'null');
+
+    // Decode error message - wallet extension may return character-by-character JSON
+    // like {"0":"T","1":"r","2":"a",...} which decodes to "Transaction..."
+    let errorMsg;
+    if (typeof submitError === 'object' && submitError !== null && '0' in submitError) {
+      // Reconstruct string from character-by-character object
+      const keys = Object.keys(submitError).filter(k => !isNaN(parseInt(k))).sort((a, b) => parseInt(a) - parseInt(b));
+      errorMsg = keys.map(k => submitError[k]).join('');
+    } else if (submitError?.message) {
+      errorMsg = submitError.message;
+    } else if (submitError?.info) {
+      errorMsg = submitError.info;
+    } else if (typeof submitError === 'string') {
+      errorMsg = submitError;
+    } else {
+      try {
+        errorMsg = JSON.stringify(submitError);
+      } catch {
+        errorMsg = String(submitError);
+      }
+    }
+
+    console.error("Decoded error message:", errorMsg);
+    showMsg(`Error submitting transaction: ${errorMsg}`, true);
+    throw submitError;
   }
-  return txId;
 }
 
 export async function getListedBox(buyBox) {
-  // Get listed Box from explorer
+  // Get listed Box from explorer or use cached box_json
   let listedBox;
   if (!buyBox.box_json) {
     let tempBox = await axios.get(`${explorerApiV1}/boxes/${buyBox.box_id}`);
+    // Use raw explorer data directly (matches working version)
     listedBox = tempBox.data;
   } else {
     listedBox = JSON.parse(JSON.stringify(buyBox.box_json));
@@ -432,7 +465,7 @@ export async function getListedBox(buyBox) {
     );
 
     let blockObject = nodeResp.data.transactions;
-    for (tx of blockObject) {
+    for (let tx of blockObject) {
       for (let i = 0; i < tx.outputs.length; i++) {
         if (tx.outputs[i].boxId === listedBox.boxId) {
           listedBox.additionalRegisters.R6 =

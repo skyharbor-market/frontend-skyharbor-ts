@@ -24,6 +24,15 @@ let ergolib = import("ergo-lib-wasm-browser");
 // const nodeUrl = "https://paidincrypto.io";
 // const nodeUrl = "https://www.test-skyharbor-server.net:9053/";
 const nodeUrl = "https://node.ergo.watch";
+
+// Convert ergo tree hex to address using ergo-lib-wasm
+async function ergoTreeToAddress(ergoTreeHex) {
+  const wasm = await ergolib;
+  const ergoTreeBytes = Uint8Array.from(Buffer.from(ergoTreeHex, 'hex'));
+  const ergoTree = wasm.ErgoTree.from_bytes(ergoTreeBytes);
+  const address = wasm.Address.recreate_from_ergo_tree(ergoTree);
+  return address.to_base58(wasm.NetworkPrefix.Mainnet);
+}
 // new open node at https://node.ergo.watch/
 
 const serviceAddress = "9h9ssEYyHaosFg6BjZRRr2zxzdPPvdb7Gt7FA8x7N9492nUjpsd";
@@ -194,10 +203,40 @@ export async function refundFleet(cancelBox) {
     return;
   }
 
-  const refundIssuer = await getWalletAddress();
   const blockHeight = await currentBlock();
 
   let listedBox = await getListedBox(cancelBox);
+
+  // Get seller's address from R5 (the original listing address)
+  // R5 contains the seller's proposition bytes (ergoTree) wrapped in Coll[Byte]
+  const r5Raw = listedBox.additionalRegisters.R5?.renderedValue ||
+                listedBox.additionalRegisters.R5?.serializedValue ||
+                listedBox.additionalRegisters.R5;
+
+  // renderedValue is the raw ergoTree hex, serializedValue has 0e24 prefix
+  let sellerErgoTree;
+  if (typeof r5Raw === 'string' && r5Raw.startsWith('0e')) {
+    // Serialized format: skip first 4 chars (type + length prefix: 0e24)
+    sellerErgoTree = r5Raw.slice(4);
+  } else {
+    sellerErgoTree = r5Raw;
+  }
+
+  const refundIssuer = await ergoTreeToAddress(sellerErgoTree);
+  console.log("Seller address from R5:", refundIssuer);
+
+  // Verify current wallet can sign this refund (has the seller's key)
+  try {
+    const walletAddresses = await ergo.get_used_addresses();
+    if (!walletAddresses.includes(refundIssuer)) {
+      showMsg("You can only refund NFTs you listed. Connect the wallet that listed this NFT.", true);
+      return;
+    }
+  } catch (e) {
+    console.error("Error checking wallet addresses:", e);
+    // Continue anyway - let Nautilus handle the signing check
+  }
+
   listedBox.additionalRegisters.R4 =
     listedBox.additionalRegisters.R4?.serializedValue ||
     listedBox.additionalRegisters.R4;
@@ -210,13 +249,12 @@ export async function refundFleet(cancelBox) {
 
   // IF BOX HAS ENOUGH VALUE TO COVER FEES
   console.log("txFee + min_value", txFee + min_value);
+
   if (listedBox.value === txFee + min_value) {
     // ChangeBox is change + refunded box
     let changeBox = {
       value: min_value.toString(),
-      ergoTree: wasm.Address.from_mainnet_str(refundIssuer)
-        .to_ergo_tree()
-        .to_base16_bytes(),
+      ergoTree: wasm.Address.from_mainnet_str(refundIssuer).to_ergo_tree().to_base16_bytes(),
       assets: [
         {
           tokenId: listedBox.assets[0].tokenId,
@@ -333,10 +371,8 @@ export async function refundFleet(cancelBox) {
 
     // ChangeBox is change + refunded box
     let changeBox = {
-      value: (-have["ERG"] + min_value + listedBox.value).toString(),
-      ergoTree: wasm.Address.from_mainnet_str(refundIssuer)
-        .to_ergo_tree()
-        .to_base16_bytes(),
+      value: ((-have["ERG"]) + min_value + listedBox.value).toString(),
+      ergoTree: wasm.Address.from_mainnet_str(refundIssuer).to_ergo_tree().to_base16_bytes(),
       assets: Object.keys(have)
         .filter((key) => key !== "ERG")
         .filter((key) => have[key] < 0)

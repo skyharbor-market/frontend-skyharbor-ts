@@ -79,7 +79,7 @@ export function boxByAddress(id) {
 }
 
 export function boxById(id) {
-  return getRequest(`/transactions/boxes/${id}`);
+  return getRequest(`/boxes/${id}`, explorerApiV1);
 }
 
 export function txByAddress(addr) {
