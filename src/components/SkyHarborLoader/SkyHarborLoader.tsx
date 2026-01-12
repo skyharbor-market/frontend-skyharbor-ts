@@ -62,7 +62,7 @@ const SkyHarborLoader = ({ text = "Loading..." }: { text?: string }) => {
           {text}
         </h3>
         <p className="text-sm text-gray-500 dark:text-gray-400 max-w-xs mx-auto">
-          We're fetching your assets from the SkyHarbor marketplace contract. This process can take a while.
+          We&apos;re fetching your assets from the SkyHarbor marketplace contract. This process can take a while.
         </p>
       </div>
     </div>
