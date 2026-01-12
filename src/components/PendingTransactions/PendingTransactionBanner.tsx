@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { usePendingTransactions } from "@/hooks/usePendingTransactions";
 import { HiOutlineExternalLink, HiX } from "react-icons/hi";
-import { cloudinaryOptimizerUrl, ipfsGateway } from "@/ergofunctions/consts";
+import { ipfsGateway } from "@/ergofunctions/consts";
 
 export default function PendingTransactionBanner() {
   const { addresses: userAddresses } = useSelector(
@@ -17,7 +17,7 @@ export default function PendingTransactionBanner() {
 
   const getImageUrl = (ipfsHash?: string) => {
     if (!ipfsHash) return null;
-    return `${cloudinaryOptimizerUrl}/f_auto,q_auto,w_40/${ipfsGateway}/${ipfsHash}`;
+    return `${ipfsGateway}/${ipfsHash}`;
   };
 
   return (

@@ -7,7 +7,7 @@ import {
   MdImageNotSupported,
   MdOutlineImageNotSupported,
 } from "react-icons/md";
-import { cloudinaryOptimizerUrl, ipfsGateway } from "../ergofunctions/consts";
+import { ipfsGateway } from "../ergofunctions/consts";
 import LoadingCircle from "./LoadingCircle/LoadingCircle";
 
 // Cache for loaded image states
@@ -15,7 +15,6 @@ const loadedImages = new Map();
 
 export default function ArtworkMedia({
   box,
-  cloudinary = true,
   ratio = "square",
   thumbnail = true,
   lazyLoad = false,

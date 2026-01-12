@@ -25,7 +25,6 @@ import { withApollo } from "../../lib/withApollo";
 import { useQuery, gql, useApolloClient } from "@apollo/client";
 
 import {
-  cloudinaryOptimizerUrl,
   globalMeta,
   ipfsGateway,
   supportedCurrencies,

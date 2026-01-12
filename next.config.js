@@ -5,7 +5,6 @@ module.exports = {
       "ipfs.io",
       "ipfs.blockfrost.dev",
       "skyharbor.mypinata.cloud",
-      "skyharbor.mo.cloudinary.net",
       "skyharbor-storage.fra1.cdn.digitaloceanspaces.com",
       "skyharbor.imgix.net",
       "cdn.discordapp.com",

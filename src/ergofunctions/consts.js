@@ -38,8 +38,7 @@ export const explorerApiUrl = ergoExplorer;
 export const explorerApiV1Url = ergoExplorerV1;
 
 // IMAGE URLS
-export const cloudinaryOptimizerUrl = "https://skyharbor.mo.cloudinary.net";
-export const ipfsGateway = "https://gateway.ipfs.io/ipfs";
+export const ipfsGateway = "https://ipfs.io/ipfs";
 
 // FEES
 export const serviceFee = 0.02;
