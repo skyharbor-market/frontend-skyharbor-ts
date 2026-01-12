@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { supportedCurrencies, v1ErgAddress } from "../../ergofunctions/consts";
 import { buyTokenNFT } from "../../ergofunctions/marketfunctions/buyTokenNFT";
 import { relist_NFT } from "../../ergofunctions/marketfunctions/relistNFT";
@@ -10,6 +11,8 @@ import toast from "react-hot-toast";
 import { buyNft } from "api-calls/buy";
 import { getWalletAddresses } from "@/ergofunctions/walletUtils";
 import { delistNft } from "api-calls/delist";
+import { addPendingTransaction } from "@/lib/pendingTransactions";
+import { queryKeys } from "@/lib/queryKeys";
 
 interface BuyNFTButtonProps {
   box: any;
@@ -26,6 +29,7 @@ export default function BuyNFTButton({
   editButton,
   loadingButton,
 }: BuyNFTButtonProps) {
+  const queryClient = useQueryClient();
   const [submitting, setSubmitting] = useState(false);
   const [selectedFunction, setSelectedFunction] = useState<UserActionType | null>(null);
   const [transactionId, setTransactionId] = useState<string | null>(null);
@@ -59,13 +63,31 @@ export default function BuyNFTButton({
     setSubmitting(true);
 
     try {
+      const walletAddresses = await getWalletAddresses();
       const cancelTxId = await delistNft({
         buyBox: box,
-        userAddresses: await getWalletAddresses(),
+        userAddresses: walletAddresses,
       });
 
       if (cancelTxId) {
         setTransactionId(cancelTxId);
+
+        // Add to pending transactions for polling
+        const primaryAddress = walletAddresses?.[0] || "";
+        addPendingTransaction({
+          txId: cancelTxId,
+          type: "delist",
+          tokenId: box.token_id,
+          nftName: box.nft_name || "NFT",
+          walletAddress: primaryAddress,
+          ipfsArtHash: box.ipfs_art_hash,
+          collectionName: box.collection_name,
+        });
+
+        // Invalidate pending transactions query to show banner immediately
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.transactions.pending(primaryAddress),
+        });
       }
     } catch (err: any) {
       console.error(err);

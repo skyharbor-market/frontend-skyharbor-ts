@@ -5,6 +5,7 @@ import Footer from "./Footer/Footer";
 import { Dispatch } from "react";
 // import { Anek_Latin, Open_Sans } from "next/font/google";
 import InitializeWallet from "./InitializeWallet/InitializeWallet";
+import { PendingTransactionBanner } from "./PendingTransactions";
 import "@fontsource/noto-sans";
 
 // const robotoslab = Open_Sans({ subsets: ["latin"] });
@@ -25,6 +26,7 @@ export default function Layout({ children, setTheme, theme }: LayoutProps) {
         <InitializeWallet />
       </div>
       <Navbar setTheme={setTheme} theme={theme} />
+      <PendingTransactionBanner />
       <main className="min-h-screen max-w-screen-xl px-2 sm:px-6 lg:px-8 mx-auto mt-8">
         {children}
       </main>

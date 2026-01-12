@@ -22,6 +22,7 @@ import {
   isWalletSaved,
   getWholeWallet,
 } from "../../ergofunctions/helpers";
+import { clearPendingTransactionsForWallet } from "@/lib/pendingTransactions";
 import {
   getWalletAddresses,
   getWalletErgs,
@@ -75,6 +76,11 @@ function InitializeWallet({}) {
   }
 
   function clearWallet(message = true) {
+    // Clear pending transactions for this wallet before disconnecting
+    if (userAddress) {
+      clearPendingTransactionsForWallet(userAddress);
+    }
+
     sessionStorage.removeItem("wallet");
     localStorage.removeItem("wallet");
     dispatch(setWallet(undefined));
